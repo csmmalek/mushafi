@@ -8,5 +8,16 @@
     <string name="btn_quran">القرآن</string>
     <string name="btn_bookmarks">المحفوظات</string>
     <string name="btn_settings">الإعدادات</string>
-    <string name="stage_note">المرحلة الثانية: الشاشة الرئيسية فقط. الأزرار قيد التطوير.</string>
+    <string name="btn_retry">إعادة المحاولة</string>
+    <string name="btn_back">رجوع</string>
+    <string name="quran_loading">جارٍ التحقق من النص القرآني...</string>
+    <string name="quran_ready">تم التحقق من بنية النص واستيراده.</string>
+    <string name="quran_error_generic">تعذّر تجهيز النص القرآني. أعد المحاولة.</string>
+    <string name="verification_notice">تنبيه: تم التحقق من بنية النص (6236 آية، 114 سورة)، لكن المقارنة الحرفية مع المرجع الرسمي لم تكتمل. النص غير معتمد للإنتاج بعد.</string>
+    <string name="index_title">القرآن الكريم</string>
+    <string name="surah_number_format">سورة رقم %1$s</string>
+    <string name="ayah_count_format">%1$s آية</string>
+    <string name="reader_position_format">سورة %1$s · الآية %2$s من %3$s</string>
+    <string name="font_minus">أصغر</string>
+    <string name="font_plus">أكبر</string>
 </resources>

@@ -32,12 +32,31 @@
             android:textColor="@color/text_muted_dark"
             android:textSize="14sp" />
 
+        <TextView
+            android:id="@+id/status_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:gravity="center"
+            android:text="@string/quran_loading"
+            android:textColor="@color/text_on_dark"
+            android:textSize="14sp" />
+
+        <Button
+            android:id="@+id/btn_retry"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:layout_marginTop="12dp"
+            android:text="@string/btn_retry"
+            android:visibility="gone" />
+
         <Button
             android:id="@+id/btn_continue"
             android:layout_width="match_parent"
             android:layout_height="56dp"
-            android:layout_marginTop="32dp"
+            android:layout_marginTop="24dp"
             android:background="@drawable/bg_gold_button"
+            android:enabled="false"
             android:text="@string/btn_continue"
             android:textColor="@color/emerald_rich"
             android:textSize="18sp"
@@ -58,6 +77,7 @@
             <Button
                 android:id="@+id/btn_quran"
                 style="@style/FeatureCard"
+                android:enabled="false"
                 android:text="@string/btn_quran" />
 
             <Button
@@ -76,8 +96,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="32dp"
             android:gravity="center"
-            android:text="@string/stage_note"
-            android:textColor="@color/text_muted_dark"
+            android:text="@string/verification_notice"
+            android:textColor="@color/gold_light"
             android:textSize="12sp" />
     </LinearLayout>
 </ScrollView>
