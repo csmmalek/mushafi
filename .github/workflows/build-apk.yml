@@ -2,7 +2,7 @@ name: Build and test
 
 on:
   push:
-    branches: [build-apk, stage-3, main]
+    branches: [build-apk, stage-3, stage-4, main]
   workflow_dispatch:
 
 jobs:
