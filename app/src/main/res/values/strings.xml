@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">مصحفي</string>
+    <string name="app_title">مصحفي</string>
+    <string name="app_tagline">رفيقك في القرآن الكريم ... دائماً وأبداً</string>
+    <string name="btn_continue">متابعة القراءة</string>
+    <string name="btn_recitations">التلاوات</string>
+    <string name="btn_quran">القرآن</string>
+    <string name="btn_bookmarks">المحفوظات</string>
+    <string name="btn_settings">الإعدادات</string>
+    <string name="stage_note">المرحلة الثانية: الشاشة الرئيسية فقط. الأزرار قيد التطوير.</string>
+</resources>

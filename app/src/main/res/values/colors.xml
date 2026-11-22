@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="emerald_deep">#0B3B2A</color>
+    <color name="emerald_rich">#06291E</color>
+    <color name="emerald_mid">#145A40</color>
+    <color name="gold">#C9A24A</color>
+    <color name="gold_light">#E3C57A</color>
+    <color name="ivory">#F7F1E1</color>
+    <color name="text_on_dark">#F7F1E1</color>
+    <color name="text_muted_dark">#B9C7BE</color>
+</resources>
