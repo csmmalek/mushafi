@@ -20,6 +20,15 @@
         <activity
             android:name=".ReaderActivity"
             android:exported="false" />
+        <activity
+            android:name=".BookmarksActivity"
+            android:exported="false" />
+        <activity
+            android:name=".SearchActivity"
+            android:exported="false" />
+        <activity
+            android:name=".KhatmahActivity"
+            android:exported="false" />
     </application>
 
 </manifest>

@@ -2,6 +2,7 @@ package com.csm.mushafi.data;
 
 import android.content.Context;
 
+import com.csm.mushafi.quran.ArabicNormalizer;
 import com.csm.mushafi.quran.QuranIntegrityException;
 import com.csm.mushafi.quran.QuranVerifier;
 
@@ -17,6 +18,7 @@ import java.util.List;
  */
 public final class QuranRepository {
 
+    public static final int SURAH_TOTAL = QuranVerifier.EXPECTED_SURAHS;
     static final String ASSET_NAME = "quran-simple.txt";
     private static final int BATCH = 500;
 
@@ -41,27 +43,34 @@ public final class QuranRepository {
 
         QuranDao dao = db.quranDao();
         if (dao.countAyahs() == QuranVerifier.EXPECTED_RECORDS
-                && dao.countSurahs() == QuranVerifier.EXPECTED_SURAHS) {
+                && dao.countSurahs() == QuranVerifier.EXPECTED_SURAHS
+                && dao.countSearch() == QuranVerifier.EXPECTED_RECORDS) {
             return false;
         }
         db.runInTransaction(() -> {
             dao.clearAyahs();
             dao.clearSurahs();
+            dao.clearSearch();
             List<SurahEntity> surahs = new ArrayList<>();
             for (int i = 0; i < result.ayahCounts.length; i++) {
                 surahs.add(new SurahEntity(i + 1, result.ayahCounts[i]));
             }
             dao.insertSurahs(surahs);
             List<AyahEntity> batch = new ArrayList<>(BATCH);
+            List<SearchEntity> searchBatch = new ArrayList<>(BATCH);
             for (QuranVerifier.Verse v : result.verses) {
                 batch.add(new AyahEntity(v.surah, v.ayah, v.text));
+                searchBatch.add(new SearchEntity(v.surah, v.ayah, ArabicNormalizer.normalize(v.text)));
                 if (batch.size() == BATCH) {
                     dao.insertAyahs(batch);
+                    dao.insertSearch(searchBatch);
                     batch = new ArrayList<>(BATCH);
+                    searchBatch = new ArrayList<>(BATCH);
                 }
             }
             if (!batch.isEmpty()) {
                 dao.insertAyahs(batch);
+                dao.insertSearch(searchBatch);
             }
         });
         return true;

@@ -6,6 +6,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
@@ -41,10 +42,12 @@ public class MainActivity extends AppCompatActivity {
         btnContinue = findViewById(R.id.btn_continue);
         btnQuran = findViewById(R.id.btn_quran);
         btnRetry = findViewById(R.id.btn_retry);
+        Button btnSearch = findViewById(R.id.btn_search);
+        Button btnKhatmah = findViewById(R.id.btn_khatmah);
+        Button btnBookmarks = findViewById(R.id.btn_bookmarks);
 
         int[] disabledControls = {
                 R.id.btn_recitations,
-                R.id.btn_bookmarks,
                 R.id.btn_settings
         };
         for (int id : disabledControls) {
@@ -57,6 +60,9 @@ public class MainActivity extends AppCompatActivity {
         btnQuran.setOnClickListener(v ->
                 startActivity(new Intent(this, SurahListActivity.class)));
         btnRetry.setOnClickListener(v -> loadQuran());
+        btnSearch.setOnClickListener(v -> startActivity(new Intent(this, SearchActivity.class)));
+        btnKhatmah.setOnClickListener(v -> startActivity(new Intent(this, KhatmahActivity.class)));
+        btnBookmarks.setOnClickListener(v -> startActivity(new Intent(this, BookmarksActivity.class)));
 
         loadQuran();
     }
@@ -113,5 +119,8 @@ public class MainActivity extends AppCompatActivity {
         btnQuran.setEnabled(enabled);
         btnContinue.setAlpha(enabled ? 1f : 0.55f);
         btnQuran.setAlpha(enabled ? 1f : 0.55f);
+        findViewById(R.id.btn_search).setEnabled(enabled);
+        findViewById(R.id.btn_khatmah).setEnabled(enabled);
+        findViewById(R.id.btn_bookmarks).setEnabled(enabled);
     }
 }

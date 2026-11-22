@@ -3,12 +3,13 @@ package com.csm.mushafi;
 import android.content.Context;
 import android.content.SharedPreferences;
 
-/** تفضيلات القراءة المحلية: آخر موضع وحجم الخط. */
+/** تفضيلات القراءة المحلية: آخر موضع، حجم الخط، ومدة الختمة. */
 final class ReadingPrefs {
     private static final String FILE = "mushafi_reading";
     private static final String KEY_SURAH = "last_surah";
     private static final String KEY_AYAH = "last_ayah";
     private static final String KEY_FONT = "font_sp";
+    private static final String KEY_KHATMAH_DAYS = "khatmah_days";
 
     static final int DEFAULT_FONT = 24;
     static final int MIN_FONT = 16;
@@ -38,5 +39,13 @@ final class ReadingPrefs {
 
     void saveFontSp(int sp) {
         prefs.edit().putInt(KEY_FONT, Math.max(MIN_FONT, Math.min(MAX_FONT, sp))).apply();
+    }
+
+    int khatmahDays() {
+        return prefs.getInt(KEY_KHATMAH_DAYS, 0);
+    }
+
+    void saveKhatmahDays(int days) {
+        prefs.edit().putInt(KEY_KHATMAH_DAYS, days).apply();
     }
 }
