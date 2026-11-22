@@ -8,7 +8,7 @@ public class KhatmahPlannerTest {
 
     @Test
     public void dailyAmountRoundsUp() {
-        assertEquals(892, KhatmahPlanner.dailyAyahs(6236, 7));
+        assertEquals(891, KhatmahPlanner.dailyAyahs(6236, 7));
         assertEquals(208, KhatmahPlanner.dailyAyahs(6236, 30));
     }
 
