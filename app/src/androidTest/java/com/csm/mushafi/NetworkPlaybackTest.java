@@ -1,6 +1,5 @@
 package com.csm.mushafi;
 
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
@@ -76,6 +75,5 @@ public class NetworkPlaybackTest {
         assertTrue("surah must reach STATE_READY from the network within 90 seconds", ok);
         assertTrue("duration must be known", duration.get() > 0);
         assertTrue(playing.get());
-        assertEquals(true, true);
     }
 }
