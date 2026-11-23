@@ -36,11 +36,11 @@ import java.util.Locale;
 /** شاشة المشغل: تتصل بخدمة التشغيل. الإيقاف والاستئناف يعملان حتى عند إغلاق الشاشة. */
 public class PlayerActivity extends AppCompatActivity {
 
-    static final String EXTRA_RECITER = "reciter";
-    static final String EXTRA_MOSHAF = "moshaf";
-    static final String EXTRA_SERVER = "server";
-    static final String EXTRA_SURAHS = "surahs";
-    static final String EXTRA_START_INDEX = "startIndex";
+    public static final String EXTRA_RECITER = "reciter";
+    public static final String EXTRA_MOSHAF = "moshaf";
+    public static final String EXTRA_SERVER = "server";
+    public static final String EXTRA_SURAHS = "surahs";
+    public static final String EXTRA_START_INDEX = "startIndex";
 
     private static final float[] SPEEDS = {1.0f, 1.25f, 1.5f, 0.75f};
     private static final int[] SLEEP_MINUTES = {0, 15, 30, 60};
