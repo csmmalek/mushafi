@@ -1,0 +1,29 @@
+name: API probe (temporary)
+
+on:
+  workflow_dispatch:
+
+jobs:
+  probe:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Fetch reciters (Arabic)
+        run: |
+          curl -sS -m 30 -w "\nHTTP:%{http_code}\n" "https://mp3quran.net/api/v3/reciters?language=ar" | head -c 3000
+      - name: Fetch reciters (Arabic) shape
+        run: |
+          curl -sS -m 30 "https://mp3quran.net/api/v3/reciters?language=ar" > r.json
+          python3 -c "
+import json
+d=json.load(open('r.json'))
+print('top keys:', list(d.keys()) if isinstance(d,dict) else type(d))
+rec=d.get('reciters') if isinstance(d,dict) else d
+print('count:', len(rec))
+r0=rec[0]
+print('reciter keys:', list(r0.keys()))
+for m in r0.get('moshaf',[])[:2]:
+    print('moshaf keys:', list(m.keys()))
+    print('moshaf sample:', {k:m[k] for k in m if k!='surah_list'})
+    print('surah_list sample:', m.get('surah_list'))
+print('server sample:', r0.get('moshaf',[{}])[0].get('server'))
+"
