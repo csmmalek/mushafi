@@ -46,4 +46,26 @@
     <string name="khatmah_14">14 يوماً</string>
     <string name="khatmah_30">30 يوماً</string>
     <string name="khatmah_reset">إعادة ضبط الختمة وموضع القراءة</string>
+    <string name="library_loading">جارٍ تحميل فهرس القراء...</string>
+    <string name="library_search_hint">ابحث عن قارئ</string>
+    <string name="library_count_format">عدد القراء: %1$s</string>
+    <string name="library_skipped_format">تم تجاهل %1$s عنصر غير صالح</string>
+    <string name="library_source">المصدر: MP3Quran API v3. الصوت يُبث من خادم القارئ.</string>
+    <string name="library_choose_moshaf">اختر الرواية</string>
+    <string name="reciter_moshaf_count_format">%1$s رواية أو مصحف</string>
+    <string name="reciter_source_format">السور المتاحة: %1$s من 114</string>
+    <string name="play_surah_hint">تشغيل من الشبكة</string>
+    <string name="player_play">تشغيل</string>
+    <string name="player_pause">إيقاف مؤقت</string>
+    <string name="player_prev">السابقة</string>
+    <string name="player_next">التالية</string>
+    <string name="player_back10">-10</string>
+    <string name="player_forward10">+10</string>
+    <string name="player_speed_format">السرعة %1$sx</string>
+    <string name="player_repeat_off">بلا تكرار</string>
+    <string name="player_repeat_one">تكرار السورة</string>
+    <string name="player_sleep_off">مؤقت النوم: معطّل</string>
+    <string name="player_sleep_format">مؤقت النوم: %1$s د</string>
+    <string name="player_error">تعذّر الاتصال بخدمة التشغيل.</string>
+    <string name="player_source_note">التشغيل يحتاج إنترنت حالياً. التنزيل للاستماع دون اتصال في المرحلة السادسة.</string>
 </resources>

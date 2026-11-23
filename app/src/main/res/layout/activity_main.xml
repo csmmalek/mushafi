@@ -72,6 +72,7 @@
             <Button
                 android:id="@+id/btn_recitations"
                 style="@style/FeatureCard"
+                android:enabled="false"
                 android:text="@string/btn_recitations" />
 
             <Button
