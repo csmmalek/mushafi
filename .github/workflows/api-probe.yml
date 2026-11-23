@@ -9,23 +9,26 @@ jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
-      - name: Fetch reciters (Arabic)
+      - name: Fetch reciters (Arabic) raw head
+        run: curl -sS -m 30 "https://mp3quran.net/api/v3/reciters?language=ar" | head -c 2500; echo
+
+      - name: Fetch reciters shape
         run: |
-          curl -sS -m 30 -w "\nHTTP:%{http_code}\n" "https://mp3quran.net/api/v3/reciters?language=ar" | head -c 3000
-      - name: Fetch reciters (Arabic) shape
+          curl -sS -m 30 "https://mp3quran.net/api/v3/reciters?language=ar" -o r.json
+          python3 probe_shape.py r.json
+
+      - name: Write shape script
         run: |
-          curl -sS -m 30 "https://mp3quran.net/api/v3/reciters?language=ar" > r.json
-          python3 -c "
-import json
-d=json.load(open('r.json'))
-print('top keys:', list(d.keys()) if isinstance(d,dict) else type(d))
-rec=d.get('reciters') if isinstance(d,dict) else d
-print('count:', len(rec))
-r0=rec[0]
-print('reciter keys:', list(r0.keys()))
-for m in r0.get('moshaf',[])[:2]:
-    print('moshaf keys:', list(m.keys()))
-    print('moshaf sample:', {k:m[k] for k in m if k!='surah_list'})
-    print('surah_list sample:', m.get('surah_list'))
-print('server sample:', r0.get('moshaf',[{}])[0].get('server'))
-"
+          printf '%s\n' \
+            "import json, sys" \
+            "d = json.load(open(sys.argv[1]))" \
+            "print('top keys:', list(d.keys()) if isinstance(d, dict) else type(d))" \
+            "rec = d.get('reciters', d) if isinstance(d, dict) else d" \
+            "print('count:', len(rec))" \
+            "r0 = rec[0]" \
+            "print('reciter keys:', list(r0.keys()))" \
+            "m0 = r0.get('moshaf', [{}])[0]" \
+            "print('moshaf keys:', list(m0.keys()))" \
+            "print('moshaf values:', {k: v for k, v in m0.items() if k != 'surah_list'})" \
+            "print('surah_list:', m0.get('surah_list'))" > probe_shape.py
+          python3 probe_shape.py r.json
