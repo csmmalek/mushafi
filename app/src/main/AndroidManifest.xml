@@ -36,6 +36,9 @@
             android:name=".KhatmahActivity"
             android:exported="false" />
         <activity
+            android:name=".SettingsActivity"
+            android:exported="false" />
+        <activity
             android:name=".DownloadsActivity"
             android:exported="false" />
         <activity

@@ -88,4 +88,15 @@
     <string name="download_state_failed">فشل</string>
     <string name="play_surah_local">محمّلة، تعمل دون إنترنت</string>
     <string name="play_needs_network">غير محمّلة. تحتاج اتصالاً بالإنترنت</string>
+    <string name="settings_storage_format">ملفات محمّلة: %1$s · الحجم: %2$s ميغابايت</string>
+    <string name="settings_clear_button">حذف كل الملفات الصوتية المحمّلة</string>
+    <string name="settings_clear_title">حذف كل الملفات الصوتية؟</string>
+    <string name="settings_clear_message">ستُحذف كل السور المحمّلة من الجهاز. يمكنك تنزيلها مجدداً لاحقاً. لا تُحذف العلامات ولا النص القرآني.</string>
+    <string name="settings_cleared">تم حذف الملفات الصوتية</string>
+    <string name="settings_section_storage">التخزين</string>
+    <string name="settings_section_sources">المصادر والحقوق</string>
+    <string name="settings_sources_text">النص القرآني: Tanzil Quran Text (Simple، الإصدار 1.1)، © Tanzil Project، مرخّص بموجب Creative Commons Attribution 3.0. المصدر: https://tanzil.net\n\nالفهرس والصوت: MP3Quran API v3. الصوت يُبث ويُنزّل من خوادم القراء الأصلية. المصدر: https://www.mp3quran.net/ar/api\n\nأسماء القراء والروايات مملوكة لأصحابها ومصدرها الفهرس المذكور.\n\nالتطبيق لا يعيد استضافة أي ملف صوتي.</string>
+    <string name="settings_section_privacy">الخصوصية</string>
+    <string name="settings_privacy_text">التطبيق لا يطلب حساباً ولا يجمع بيانات شخصية. الاتصال بالإنترنت يذهب فقط إلى مزود الفهرس والصوت لجلب القوائم والملفات. العلامات وآخر موضع وحجم الخط ومدة الختمة محفوظة على الجهاز فقط.</string>
+    <string name="settings_version">الإصدار 0.5.0 (المرحلة الخامسة والسادسة). لم يُنشر بعد.</string>
 </resources>

@@ -47,10 +47,9 @@ public class MainActivity extends AppCompatActivity {
         Button btnBookmarks = findViewById(R.id.btn_bookmarks);
         Button btnRecitations = findViewById(R.id.btn_recitations);
         Button btnDownloads = findViewById(R.id.btn_downloads);
+        Button btnSettings = findViewById(R.id.btn_settings);
 
-        int[] disabledControls = {
-                R.id.btn_settings
-        };
+        int[] disabledControls = {};
         for (int id : disabledControls) {
             View v = findViewById(id);
             v.setEnabled(false);
@@ -70,6 +69,7 @@ public class MainActivity extends AppCompatActivity {
         btnRecitations.setAlpha(1f);
         btnDownloads.setOnClickListener(v -> startActivity(new Intent(this, DownloadsActivity.class)));
         btnDownloads.setEnabled(true);
+        btnSettings.setOnClickListener(v -> startActivity(new Intent(this, SettingsActivity.class)));
         btnDownloads.setAlpha(1f);
 
         loadQuran();

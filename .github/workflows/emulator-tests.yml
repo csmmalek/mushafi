@@ -2,7 +2,7 @@ name: Emulator tests (Android 10)
 
 on:
   push:
-    branches: [stage-5, stage-6]
+    branches: [stage-5, stage-6, stage-8]
   workflow_dispatch:
 
 jobs:
@@ -16,6 +16,11 @@ jobs:
         with:
           distribution: temurin
           java-version: '17'
+
+      - name: Install Android SDK packages
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0"
 
       - name: Enable KVM
         run: |
