@@ -12,7 +12,7 @@ public class Mp3CheckTest {
     @Test
     public void recognisesId3AndFrameSync() {
         assertTrue(Mp3Check.looksLikeMp3(new byte[]{'I', 'D', '3', 4}));
-        assertTrue(Mp3Check.looksLikeMp3(new byte[]{(byte) 0xFF, (byte) 0xFB, 0x90, 0x00}));
+        assertTrue(Mp3Check.looksLikeMp3(new byte[]{(byte) 0xFF, (byte) 0xFB, (byte) 0x90, 0x00}));
     }
 
     @Test
