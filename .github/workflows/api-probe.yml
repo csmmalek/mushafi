@@ -9,25 +9,26 @@ jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
-      - name: Write shape script
+      - name: Audio URL pattern and range support
         run: |
-          printf '%s\n' \
-            "import json, sys" \
-            "d = json.load(open(sys.argv[1]))" \
-            "print('top keys:', list(d.keys()) if isinstance(d, dict) else type(d))" \
-            "rec = d.get('reciters', d) if isinstance(d, dict) else d" \
-            "print('count:', len(rec))" \
-            "r0 = rec[0]" \
-            "print('reciter keys:', list(r0.keys()))" \
-            "m0 = r0.get('moshaf', [{}])[0]" \
-            "print('moshaf keys:', list(m0.keys()))" \
-            "print('moshaf values:', {k: v for k, v in m0.items() if k != 'surah_list'})" \
-            "print('surah_list:', m0.get('surah_list'))" > probe_shape.py
+          S="https://cdn.mp3quran.net/audio/ibrahim-akhdar/r1/"
+          for f in 001 002 114; do
+            curl -sSIL -m 30 "${S}${f}.mp3" | grep -iE "^HTTP|content-length|accept-ranges|content-type|content-disposition" | tail -6
+            echo ---
+          done
+          curl -sS -m 30 -r 0-99 -o /dev/null -w "range_status=%{http_code} range_bytes=%{size_download}\n" "${S}001.mp3"
 
-      - name: Fetch reciters (follow redirects)
+      - name: API docs page terms hints
         run: |
-          curl -sSL -m 30 -o r.json -w "final=%{url_effective} http=%{http_code} bytes=%{size_download}\n" "https://mp3quran.net/api/v3/reciters?language=ar"
-          head -c 300 r.json; echo
-
-      - name: Reciters shape
-        run: python3 probe_shape.py r.json
+          curl -sSL -m 30 "https://www.mp3quran.net/ar/api" -o api.html -w "docs_http=%{http_code} bytes=%{size_download}\n"
+          python3 - <<'PY'
+          import re,html
+          t=open('api.html',encoding='utf-8',errors='ignore').read()
+          t=re.sub(r'<script.*?</script>|<style.*?</style>','',t,flags=re.S)
+          t=html.unescape(re.sub(r'<[^>]+>',' ',t))
+          t=re.sub(r'\s+',' ',t)
+          for kw in ['شرو','ترخيص','license','حقوق','مجاني','الاستخدام','Terms','key','مفتاح']:
+              i=t.find(kw)
+              if i>=0: print(kw, '=>', t[max(0,i-120):i+200])
+          print('len', len(t))
+          PY
