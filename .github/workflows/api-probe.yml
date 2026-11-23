@@ -1,6 +1,8 @@
 name: API probe (temporary)
 
 on:
+  push:
+    branches: [stage-5]
   workflow_dispatch:
 
 jobs:
