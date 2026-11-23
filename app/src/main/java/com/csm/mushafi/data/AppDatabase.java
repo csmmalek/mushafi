@@ -5,18 +5,20 @@ import androidx.room.Room;
 import androidx.room.RoomDatabase;
 
 /**
- * الإصدار 2 أضاف فهرس البحث والعلامات المرجعية.
+ * الإصدار 2 أضاف فهرس البحث والعلامات المرجعية، والإصدار 3 أضاف التنزيلات.
  * الترقية تحذف قاعدة الإصدار 1، وهي نسخ مستوردة من الملف وليس فيها بيانات يدوية.
  */
 @Database(
-        entities = {SurahEntity.class, AyahEntity.class, SearchEntity.class, BookmarkEntity.class},
-        version = 2,
+        entities = {SurahEntity.class, AyahEntity.class, SearchEntity.class, BookmarkEntity.class, DownloadEntity.class},
+        version = 3,
         exportSchema = false)
 public abstract class AppDatabase extends RoomDatabase {
 
     private static volatile AppDatabase instance;
 
     public abstract QuranDao quranDao();
+
+    public abstract DownloadDao downloadDao();
 
     public static AppDatabase get(android.content.Context context) {
         if (instance == null) {

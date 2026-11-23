@@ -68,4 +68,24 @@
     <string name="player_sleep_format">مؤقت النوم: %1$s د</string>
     <string name="player_error">تعذّر الاتصال بخدمة التشغيل.</string>
     <string name="player_source_note">التشغيل يحتاج إنترنت حالياً. التنزيل للاستماع دون اتصال في المرحلة السادسة.</string>
+    <string name="btn_downloads">التنزيلات</string>
+    <string name="download_all">تنزيل كل السور المتاحة</string>
+    <string name="download_all_title">تنزيل جميع السور</string>
+    <string name="download_all_message">سيتم وضع %1$s سورة في قائمة التنزيل. التنزيل يحتاج اتصالاً بالإنترنت، ويتوقف إذا انقطع.</string>
+    <string name="download_surah">تنزيل هذه السورة</string>
+    <string name="download_delete_file">حذف الملف المحمّل</string>
+    <string name="download_delete">حذف</string>
+    <string name="download_pause">إيقاف مؤقت</string>
+    <string name="download_resume">استئناف أو إعادة المحاولة</string>
+    <string name="download_added_format">أُضيف %1$s إلى قائمة التنزيل</string>
+    <string name="download_no_space">المساحة المتاحة غير كافية للتنزيل</string>
+    <string name="download_empty">لا توجد تنزيلات بعد. نزّل سورة من صفحة القارئ.</string>
+    <string name="download_row_format">سورة %1$s · %2$s</string>
+    <string name="download_state_queued">في الانتظار</string>
+    <string name="download_state_running">جارٍ التنزيل</string>
+    <string name="download_state_paused">متوقف</string>
+    <string name="download_state_completed">مكتمل ومحفوظ على الجهاز</string>
+    <string name="download_state_failed">فشل</string>
+    <string name="play_surah_local">محمّلة، تعمل دون إنترنت</string>
+    <string name="play_needs_network">غير محمّلة. تحتاج اتصالاً بالإنترنت</string>
 </resources>

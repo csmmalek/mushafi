@@ -46,6 +46,7 @@ public class MainActivity extends AppCompatActivity {
         Button btnKhatmah = findViewById(R.id.btn_khatmah);
         Button btnBookmarks = findViewById(R.id.btn_bookmarks);
         Button btnRecitations = findViewById(R.id.btn_recitations);
+        Button btnDownloads = findViewById(R.id.btn_downloads);
 
         int[] disabledControls = {
                 R.id.btn_settings
@@ -67,6 +68,9 @@ public class MainActivity extends AppCompatActivity {
         // التلاوات تعتمد على الإنترنت فقط، ولا تتعطل بسبب تحميل النص القرآني.
         btnRecitations.setEnabled(true);
         btnRecitations.setAlpha(1f);
+        btnDownloads.setOnClickListener(v -> startActivity(new Intent(this, DownloadsActivity.class)));
+        btnDownloads.setEnabled(true);
+        btnDownloads.setAlpha(1f);
 
         loadQuran();
     }

@@ -41,10 +41,12 @@ dependencies {
     implementation 'androidx.activity:activity:1.9.2'
     implementation 'androidx.core:core:1.13.1'
     implementation 'com.google.code.gson:gson:2.11.0'
+    implementation 'androidx.work:work-runtime:2.9.1'
 
     testImplementation 'junit:junit:4.13.2'
     androidTestImplementation 'androidx.test.ext:junit:1.2.1'
     androidTestImplementation 'androidx.test:runner:1.6.2'
+    androidTestImplementation 'androidx.work:work-testing:2.9.1'
 }
 
 configurations.all {

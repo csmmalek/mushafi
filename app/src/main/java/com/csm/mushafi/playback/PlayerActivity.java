@@ -29,9 +29,17 @@ import com.csm.mushafi.audio.AudioUrls;
 import com.csm.mushafi.quran.ArabicDigits;
 import com.google.common.util.concurrent.ListenableFuture;
 
+import com.csm.mushafi.data.AppDatabase;
+import com.csm.mushafi.data.DownloadEntity;
+
+import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 /** شاشة المشغل: تتصل بخدمة التشغيل. الإيقاف والاستئناف يعملان حتى عند إغلاق الشاشة. */
 public class PlayerActivity extends AppCompatActivity {
@@ -47,6 +55,7 @@ public class PlayerActivity extends AppCompatActivity {
     private static final String PREFS = "mushafi_audio";
 
     private final Handler main = new Handler(Looper.getMainLooper());
+    private final ExecutorService io = Executors.newSingleThreadExecutor();
     private final Runnable ticker = new Runnable() {
         @Override
         public void run() {
@@ -201,12 +210,27 @@ public class PlayerActivity extends AppCompatActivity {
             try {
                 controller = future.get();
                 controller.addListener(listener);
-                loadQueueIfNeeded();
-                updateTitle();
-                refreshProgress();
             } catch (Exception e) {
                 title.setText(R.string.player_error);
+                return;
             }
+            io.execute(() -> {
+                Map<Integer, String> local = new HashMap<>();
+                for (DownloadEntity d : AppDatabase.get(getApplicationContext()).downloadDao()
+                        .completedFor(server)) {
+                    if (new File(d.path).exists()) {
+                        local.put(d.surah, d.path);
+                    }
+                }
+                main.post(() -> {
+                    if (isFinishing() || controller == null) {
+                        return;
+                    }
+                    loadQueueIfNeeded(local);
+                    updateTitle();
+                    refreshProgress();
+                });
+            });
         }, ContextCompat.getMainExecutor(this));
     }
 
@@ -225,19 +249,24 @@ public class PlayerActivity extends AppCompatActivity {
         if (future != null) {
             MediaController.releaseFuture(future);
         }
+        io.shutdownNow();
         super.onDestroy();
     }
 
-    private void loadQueueIfNeeded() {
+    private void loadQueueIfNeeded(Map<Integer, String> local) {
         if (controller.getMediaItemCount() == surahs.length
                 && server.equals(currentServer())) {
             return;
         }
         List<MediaItem> items = new ArrayList<>(surahs.length);
         for (int surah : surahs) {
+            String remote = AudioUrls.surahUrl(server, surah);
+            String localPath = local.get(surah);
+            // المحمّل يعمل من الملف المحلي دون شبكة؛ معرّف العنصر يبقى رابط الخادم لتحديد الخادم لاحقاً.
+            String uri = localPath != null ? new File(localPath).toURI().toString() : remote;
             items.add(new MediaItem.Builder()
-                    .setMediaId(AudioUrls.surahUrl(server, surah))
-                    .setUri(AudioUrls.surahUrl(server, surah))
+                    .setMediaId(remote)
+                    .setUri(uri)
                     .setMediaMetadata(new MediaMetadata.Builder()
                             .setTitle(getString(R.string.surah_number_format, ArabicDigits.format(surah)))
                             .setArtist(reciter)
@@ -262,9 +291,8 @@ public class PlayerActivity extends AppCompatActivity {
         if (controller.getMediaItemCount() == 0) {
             return "";
         }
-        MediaItem item = controller.getMediaItemAt(0);
-        String uri = item.localConfiguration == null ? "" : item.localConfiguration.uri.toString();
-        return uri.isEmpty() ? "" : uri.substring(0, uri.lastIndexOf('/') + 1);
+        String id = controller.getMediaItemAt(0).mediaId;
+        return id == null || id.isEmpty() ? "" : id.substring(0, id.lastIndexOf('/') + 1);
     }
 
     private void seekBy(long deltaMs) {
