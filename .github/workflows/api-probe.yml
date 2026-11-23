@@ -9,14 +9,6 @@ jobs:
   probe:
     runs-on: ubuntu-latest
     steps:
-      - name: Fetch reciters (Arabic) raw head
-        run: curl -sS -m 30 "https://mp3quran.net/api/v3/reciters?language=ar" | head -c 2500; echo
-
-      - name: Fetch reciters shape
-        run: |
-          curl -sS -m 30 "https://mp3quran.net/api/v3/reciters?language=ar" -o r.json
-          python3 probe_shape.py r.json
-
       - name: Write shape script
         run: |
           printf '%s\n' \
@@ -31,4 +23,11 @@ jobs:
             "print('moshaf keys:', list(m0.keys()))" \
             "print('moshaf values:', {k: v for k, v in m0.items() if k != 'surah_list'})" \
             "print('surah_list:', m0.get('surah_list'))" > probe_shape.py
-          python3 probe_shape.py r.json
+
+      - name: Fetch reciters (follow redirects)
+        run: |
+          curl -sSL -m 30 -o r.json -w "final=%{url_effective} http=%{http_code} bytes=%{size_download}\n" "https://mp3quran.net/api/v3/reciters?language=ar"
+          head -c 300 r.json; echo
+
+      - name: Reciters shape
+        run: python3 probe_shape.py r.json
