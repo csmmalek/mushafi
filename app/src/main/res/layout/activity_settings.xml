@@ -27,6 +27,7 @@
                 android:textStyle="bold" />
 
             <Button
+                style="@style/ChipButton"
                 android:id="@+id/btn_back"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -49,6 +50,7 @@
             android:textColor="@color/text_on_dark" />
 
         <Button
+            style="@style/ChipButton"
             android:id="@+id/btn_clear_audio"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
