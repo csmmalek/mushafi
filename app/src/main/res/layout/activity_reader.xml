@@ -48,6 +48,7 @@
         android:layout_weight="1"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
+        android:background="#F5EDD6"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
         android:clipToPadding="false" />

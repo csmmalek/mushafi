@@ -7,8 +7,9 @@
     android:paddingBottom="14dp"
     android:paddingStart="8dp"
     android:paddingEnd="8dp"
+    android:fontFamily="@font/hafs_uthmanic"
     android:textColor="#1B1B17"
     android:textDirection="rtl"
     android:textAlignment="viewStart"
-    android:lineSpacingMultiplier="1.9"
+    android:lineSpacingMultiplier="1.7"
     android:includeFontPadding="false" />
