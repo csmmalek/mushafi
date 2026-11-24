@@ -1,11 +1,14 @@
 package com.csm.mushafi;
 
+import android.content.ClipData;
+import android.content.ClipboardManager;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
 import android.widget.Button;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -40,6 +43,9 @@ public class ReaderActivity extends AppCompatActivity {
     private Button fontPlus;
     private Button prevSurah;
     private Button nextSurah;
+    private LinearLayout selectionBar;
+    private TextView selectionText;
+    private int selectedAyah;
     private ReadingPrefs prefs;
     private QuranRepository repo;
     private int surah;
@@ -62,6 +68,11 @@ public class ReaderActivity extends AppCompatActivity {
         fontPlus = findViewById(R.id.btn_font_plus);
         prevSurah = findViewById(R.id.btn_prev_surah);
         nextSurah = findViewById(R.id.btn_next_surah);
+        selectionBar = findViewById(R.id.selection_bar);
+        selectionText = findViewById(R.id.selection_text);
+        findViewById(R.id.btn_copy_ayah).setOnClickListener(v -> copySelectedAyah());
+        findViewById(R.id.btn_bookmark_ayah).setOnClickListener(v -> bookmarkSelectedAyah());
+        findViewById(R.id.btn_clear_selection).setOnClickListener(v -> selectAyah(0));
         list = findViewById(R.id.ayah_list);
         layout = new LinearLayoutManager(this);
         list.setLayoutManager(layout);
@@ -77,6 +88,7 @@ public class ReaderActivity extends AppCompatActivity {
 
         titleText.setText(getString(R.string.surah_number_format, ArabicDigits.format(surah)));
         adapter = new AyahAdapter(prefs.fontSp());
+        adapter.setOnAyahClick(this::selectAyah);
         list.setAdapter(adapter);
         list.addOnScrollListener(new RecyclerView.OnScrollListener() {
             @Override
@@ -137,7 +149,17 @@ public class ReaderActivity extends AppCompatActivity {
     }
 
     private void saveBookmark() {
-        int ayah = firstVisibleAyah();
+        // إن وُجدت آية محددة تُحفظ علامتها، وإلا تُحفظ أول آية ظاهرة.
+        bookmarkAyah(selectedAyah > 0 ? selectedAyah : firstVisibleAyah());
+    }
+
+    private void bookmarkSelectedAyah() {
+        if (selectedAyah > 0) {
+            bookmarkAyah(selectedAyah);
+        }
+    }
+
+    private void bookmarkAyah(int ayah) {
         io.execute(() -> {
             long id = repo.dao().insertBookmark(new BookmarkEntity(
                     surah, ayah, "", System.currentTimeMillis()));
@@ -145,6 +167,32 @@ public class ReaderActivity extends AppCompatActivity {
                     id == -1 ? R.string.bookmark_exists : R.string.bookmark_saved,
                     Toast.LENGTH_SHORT).show());
         });
+    }
+
+    /** يحدد آية بالضغط عليها، ويلغي التحديد عند الضغط مرة أخرى أو عند القيمة 0. */
+    private void selectAyah(int ayah) {
+        selectedAyah = (ayah == selectedAyah) ? 0 : ayah;
+        adapter.setSelectedAyah(selectedAyah);
+        if (selectedAyah > 0) {
+            selectionText.setText(getString(R.string.reader_selected_format,
+                    ArabicDigits.format(selectedAyah)));
+            selectionBar.setVisibility(View.VISIBLE);
+        } else {
+            selectionBar.setVisibility(View.GONE);
+        }
+    }
+
+    private void copySelectedAyah() {
+        String text = selectedAyah > 0 ? adapter.rawTextOf(selectedAyah) : null;
+        if (text == null) {
+            return;
+        }
+        String full = text + "  ﴿" + ArabicDigits.format(selectedAyah) + "﴾";
+        ClipboardManager cm = (ClipboardManager) getSystemService(CLIPBOARD_SERVICE);
+        if (cm != null) {
+            cm.setPrimaryClip(ClipData.newPlainText("ayah", full));
+            Toast.makeText(this, R.string.reader_copied, Toast.LENGTH_SHORT).show();
+        }
     }
 
     private void openSurah(int target) {

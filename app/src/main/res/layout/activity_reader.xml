@@ -49,6 +49,45 @@
         android:clipToPadding="false" />
 
     <LinearLayout
+        android:id="@+id/selection_bar"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/emerald_mid"
+        android:gravity="center_vertical"
+        android:orientation="horizontal"
+        android:paddingStart="12dp"
+        android:paddingEnd="12dp"
+        android:visibility="gone">
+
+        <TextView
+            android:id="@+id/selection_text"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:textColor="@color/gold_light"
+            android:textSize="14sp"
+            android:textStyle="bold" />
+
+        <Button
+            android:id="@+id/btn_copy_ayah"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:text="@string/reader_copy_ayah" />
+
+        <Button
+            android:id="@+id/btn_bookmark_ayah"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:text="@string/reader_bookmark_ayah" />
+
+        <Button
+            android:id="@+id/btn_clear_selection"
+            android:layout_width="wrap_content"
+            android:layout_height="48dp"
+            android:text="@string/reader_clear_selection" />
+    </LinearLayout>
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/emerald_deep"

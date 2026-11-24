@@ -99,4 +99,9 @@
     <string name="settings_section_privacy">الخصوصية</string>
     <string name="settings_privacy_text">التطبيق لا يطلب حساباً ولا يجمع بيانات شخصية. الاتصال بالإنترنت يذهب فقط إلى مزود الفهرس والصوت لجلب القوائم والملفات. العلامات وآخر موضع وحجم الخط ومدة الختمة محفوظة على الجهاز فقط.</string>
     <string name="settings_version">الإصدار 0.5.0 (المرحلة الخامسة والسادسة). لم يُنشر بعد.</string>
+    <string name="reader_selected_format">الآية %1$s محددة</string>
+    <string name="reader_copy_ayah">نسخ</string>
+    <string name="reader_bookmark_ayah">علامة</string>
+    <string name="reader_clear_selection">إلغاء</string>
+    <string name="reader_copied">تم نسخ الآية</string>
 </resources>

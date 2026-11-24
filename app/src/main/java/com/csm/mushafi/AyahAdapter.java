@@ -1,5 +1,6 @@
 package com.csm.mushafi;
 
+import android.graphics.Color;
 import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -7,6 +8,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.csm.mushafi.data.AyahEntity;
@@ -20,6 +22,32 @@ final class AyahAdapter extends RecyclerView.Adapter<AyahAdapter.Holder> {
 
     private final List<AyahEntity> ayahs = new ArrayList<>();
     private int fontSp;
+    private int selectedAyah;
+    private OnAyahClick clickListener;
+
+    /** يُستدعى عند الضغط على آية، برقمها داخل السورة. */
+    interface OnAyahClick {
+        void onAyahClick(int ayahNumber);
+    }
+
+    void setOnAyahClick(OnAyahClick listener) {
+        clickListener = listener;
+    }
+
+    void setSelectedAyah(int ayahNumber) {
+        selectedAyah = ayahNumber;
+        notifyDataSetChanged();
+    }
+
+    /** نص الآية الخام من قاعدة البيانات (بدون رقم العرض)، أو null إن لم تكن موجودة. */
+    String rawTextOf(int ayahNumber) {
+        for (AyahEntity a : ayahs) {
+            if (a.ayah == ayahNumber) {
+                return a.text;
+            }
+        }
+        return null;
+    }
 
     AyahAdapter(int fontSp) {
         this.fontSp = fontSp;
@@ -48,6 +76,15 @@ final class AyahAdapter extends RecyclerView.Adapter<AyahAdapter.Holder> {
         AyahEntity a = ayahs.get(position);
         holder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSp);
         holder.text.setText(a.text + "  ﴿" + ArabicDigits.format(a.ayah) + "﴾");
+        boolean selected = a.ayah == selectedAyah;
+        holder.text.setBackgroundColor(selected
+                ? ContextCompat.getColor(holder.text.getContext(), R.color.gold_soft)
+                : Color.TRANSPARENT);
+        holder.text.setOnClickListener(v -> {
+            if (clickListener != null) {
+                clickListener.onAyahClick(a.ayah);
+            }
+        });
     }
 
     @Override
