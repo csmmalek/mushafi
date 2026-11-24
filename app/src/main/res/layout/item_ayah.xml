@@ -3,9 +3,12 @@
     android:id="@+id/ayah_text"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:paddingTop="10dp"
-    android:paddingBottom="10dp"
+    android:paddingTop="14dp"
+    android:paddingBottom="14dp"
+    android:paddingStart="8dp"
+    android:paddingEnd="8dp"
     android:textColor="#1B1B17"
     android:textDirection="rtl"
     android:textAlignment="viewStart"
-    android:lineSpacingMultiplier="1.6" />
+    android:lineSpacingMultiplier="1.9"
+    android:includeFontPadding="false" />
