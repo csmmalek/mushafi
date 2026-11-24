@@ -86,18 +86,21 @@
             android:textStyle="bold" />
 
         <Button
+            style="@style/ChipButton"
             android:id="@+id/btn_copy_ayah"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:text="@string/reader_copy_ayah" />
 
         <Button
+            style="@style/ChipButton"
             android:id="@+id/btn_bookmark_ayah"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
             android:text="@string/reader_bookmark_ayah" />
 
         <Button
+            style="@style/ChipButton"
             android:id="@+id/btn_clear_selection"
             android:layout_width="wrap_content"
             android:layout_height="48dp"
@@ -108,49 +111,77 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:background="@color/emerald_deep"
-        android:gravity="center_vertical"
-        android:orientation="horizontal"
+        android:orientation="vertical"
         android:paddingStart="12dp"
         android:paddingEnd="12dp"
-        android:paddingTop="8dp"
-        android:paddingBottom="12dp">
+        android:paddingTop="10dp"
+        android:paddingBottom="16dp">
 
         <TextView
             android:id="@+id/reader_position"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:gravity="center"
-            android:paddingBottom="6dp"
             android:textColor="@color/text_on_dark"
             android:textSize="13sp" />
 
-        <Button
-            style="@style/ChipButton"
-            android:id="@+id/btn_prev_surah"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="@string/surah_prev" />
+            android:layout_marginTop="8dp"
+            android:orientation="horizontal">
 
-        <Button
-            style="@style/ChipButton"
-            android:id="@+id/btn_next_surah"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/surah_next" />
+            <Button
+                android:id="@+id/btn_prev_surah"
+                style="@style/ChipButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:text="@string/surah_prev"
+                android:textSize="13sp" />
 
-        <Button
-            style="@style/ChipButton"
-            android:id="@+id/btn_font_minus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/font_minus" />
+            <Button
+                android:id="@+id/btn_next_surah"
+                style="@style/ChipButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:text="@string/surah_next"
+                android:textSize="13sp" />
 
+            <Button
+                android:id="@+id/btn_font_minus"
+                style="@style/ChipButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:text="@string/font_minus"
+                android:textSize="13sp" />
 
-        <Button
-            style="@style/ChipButton"
-            android:id="@+id/btn_font_plus"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/font_plus" />
+            <Button
+                android:id="@+id/btn_font_plus"
+                style="@style/ChipButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_margin="4dp"
+                android:layout_weight="1"
+                android:maxLines="1"
+                android:paddingStart="4dp"
+                android:paddingEnd="4dp"
+                android:text="@string/font_plus"
+                android:textSize="13sp" />
+        </LinearLayout>
     </LinearLayout>
 </LinearLayout>
