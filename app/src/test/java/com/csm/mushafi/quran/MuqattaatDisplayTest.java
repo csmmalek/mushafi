@@ -30,7 +30,8 @@ public class MuqattaatDisplayTest {
         }
         MuqattaatDisplay display = MuqattaatDisplay.parse(new String(Files.readAllBytes(
                 Paths.get("src/main/assets/muqattaat-display.json")), StandardCharsets.UTF_8));
-        assertEquals(30, display.size());
+        // 28 سورة بعلامات مد، مع آيتين في الشورى (حم، عسق). سورة طه تُكتب بلا علامة فلا استبدال لها.
+        assertEquals(29, display.size());
         for (String[] e : display.all()) {
             int s = Integer.parseInt(e[0]);
             int a = Integer.parseInt(e[1]);
