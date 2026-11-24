@@ -95,7 +95,7 @@
     <string name="settings_cleared">تم حذف الملفات الصوتية</string>
     <string name="settings_section_storage">التخزين</string>
     <string name="settings_section_sources">المصادر والحقوق</string>
-    <string name="settings_sources_text">النص القرآني: Tanzil Quran Text (Simple، الإصدار 1.1)، © Tanzil Project، مرخّص بموجب Creative Commons Attribution 3.0. المصدر: https://tanzil.net\n\nالفهرس والصوت: MP3Quran API v3. الصوت يُبث ويُنزّل من خوادم القراء الأصلية. المصدر: https://www.mp3quran.net/ar/api\n\nأسماء القراء والروايات مملوكة لأصحابها ومصدرها الفهرس المذكور.\n\nالتطبيق لا يعيد استضافة أي ملف صوتي.</string>
+    <string name="settings_sources_text">النص القرآني: Tanzil Quran Text (Simple، الإصدار 1.1)، © Tanzil Project، مرخّص بموجب Creative Commons Attribution 3.0. المصدر: https://tanzil.net\n\nالفهرس والصوت: MP3Quran API v3. الصوت يُبث ويُنزّل من خوادم القراء الأصلية. المصدر: https://www.mp3quran.net/ar/api\n\nأسماء القراء والروايات مملوكة لأصحابها ومصدرها الفهرس المذكور.\n\nالتطبيق لا يعيد استضافة أي ملف صوتي.\n\nأسماء السور وترقيم صفحات مصحف المدينة (604 صفحة): مأخوذة من مستودع quran-library (ahmadmounir، رخصة MIT للشيفرة)، وهي مبنية على بيانات Tarteel QUL ومجمع الملك فهد. حقوق البيانات لأصحابها.</string>
     <string name="settings_section_privacy">الخصوصية</string>
     <string name="settings_privacy_text">التطبيق لا يطلب حساباً ولا يجمع بيانات شخصية. الاتصال بالإنترنت يذهب فقط إلى مزود الفهرس والصوت لجلب القوائم والملفات. العلامات وآخر موضع وحجم الخط ومدة الختمة محفوظة على الجهاز فقط.</string>
     <string name="settings_version">الإصدار 0.6.0 (نسخة تجريبية). لم يُنشر بعد.</string>
@@ -107,4 +107,6 @@
     <string name="reader_surah_header">سورة رقم %1$s</string>
     <string name="continue_position">سورة %1$s · الآية %2$s</string>
     <string name="continue_from_start">ابدأ من بداية المصحف</string>
+    <string name="page_position">الصفحة %1$s من %2$s</string>
+    <string name="surah_name_format">سورة %1$s</string>
 </resources>

@@ -74,7 +74,7 @@ public class SearchActivity extends AppCompatActivity {
                         ? getString(R.string.search_no_results)
                         : getString(R.string.search_results_format, ArabicDigits.format(hits.size())));
                 list.setAdapter(new SearchAdapter(hits, hit -> {
-                    Intent intent = new Intent(this, ReaderActivity.class);
+                    Intent intent = new Intent(this, PageReaderActivity.class);
                     intent.putExtra(ReaderActivity.EXTRA_SURAH, hit.surah);
                     intent.putExtra(ReaderActivity.EXTRA_AYAH, hit.ayah);
                     startActivity(intent);

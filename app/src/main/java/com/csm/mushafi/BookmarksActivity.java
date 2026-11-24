@@ -64,7 +64,7 @@ public class BookmarksActivity extends AppCompatActivity {
                 list.setAdapter(new BookmarkAdapter(items, new BookmarkAdapter.Listener() {
                     @Override
                     public void onOpen(BookmarkEntity b) {
-                        Intent intent = new Intent(BookmarksActivity.this, ReaderActivity.class);
+                        Intent intent = new Intent(BookmarksActivity.this, PageReaderActivity.class);
                         intent.putExtra(ReaderActivity.EXTRA_SURAH, b.surah);
                         intent.putExtra(ReaderActivity.EXTRA_AYAH, b.ayah);
                         startActivity(intent);

@@ -106,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openContinueReading() {
-        Intent intent = new Intent(this, ReaderActivity.class);
+        Intent intent = new Intent(this, PageReaderActivity.class);
         int surah = prefs.lastSurah();
         if (surah > 0) {
             intent.putExtra(ReaderActivity.EXTRA_SURAH, surah);

@@ -40,6 +40,17 @@ public class ScreenshotTest {
             shell("screencap -p /sdcard/shots/reader.png");
         }
 
+        int[][] pagesToShoot = {{1, 1}, {2, 1}, {36, 1}, {114, 1}};
+        for (int[] sa : pagesToShoot) {
+            Intent page = new Intent(ctx, PageReaderActivity.class);
+            page.putExtra(ReaderActivity.EXTRA_SURAH, sa[0]);
+            page.putExtra(ReaderActivity.EXTRA_AYAH, sa[1]);
+            try (ActivityScenario<PageReaderActivity> s = ActivityScenario.launch(page)) {
+                Thread.sleep(3500);
+                shell("screencap -p /sdcard/shots/page_" + sa[0] + ".png");
+            }
+        }
+
         try (ActivityScenario<SettingsActivity> s =
                      ActivityScenario.launch(new Intent(ctx, SettingsActivity.class))) {
             Thread.sleep(2000);
