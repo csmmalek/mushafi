@@ -30,6 +30,7 @@ import com.csm.mushafi.data.AyahEntity;
 import com.csm.mushafi.data.BookmarkEntity;
 import com.csm.mushafi.data.QuranRepository;
 import com.csm.mushafi.mushaf.MushafMeta;
+import com.csm.mushafi.mushaf.MuqattaatDisplay;
 import com.csm.mushafi.quran.ArabicDigits;
 
 import java.io.ByteArrayOutputStream;
@@ -59,6 +60,7 @@ public class PageReaderActivity extends AppCompatActivity {
     private QuranRepository repo;
 
     private MushafMeta meta;
+    private MuqattaatDisplay muqattaat;
     private String[][] texts;
     private String basmala;
     private int currentPage = 1;
@@ -83,6 +85,7 @@ public class PageReaderActivity extends AppCompatActivity {
         io.execute(() -> {
             try {
                 MushafMeta loaded = MushafMeta.parse(readAsset("mushaf-meta.json"));
+                MuqattaatDisplay loadedMuq = MuqattaatDisplay.parse(readAsset("muqattaat-display.json"));
                 String[][] loadedTexts = new String[MushafMeta.SURAHS + 1][];
                 for (int s = 1; s <= MushafMeta.SURAHS; s++) {
                     List<AyahEntity> rows = repo.dao().ayahsOfSurah(s);
@@ -94,7 +97,10 @@ public class PageReaderActivity extends AppCompatActivity {
                         loadedTexts[s][row.ayah - 1] = row.text;
                     }
                 }
-                main.post(() -> start(loaded, loadedTexts, surah, ayah));
+                main.post(() -> {
+                    muqattaat = loadedMuq;
+                    start(loaded, loadedTexts, surah, ayah);
+                });
             } catch (Exception e) {
                 main.post(() -> positionText.setText(R.string.quran_error_generic));
             }
@@ -211,7 +217,7 @@ public class PageReaderActivity extends AppCompatActivity {
             if (a == 1 && s != 1 && s != 9 && text.startsWith(basmala)) {
                 text = text.substring(basmala.length()).trim();
             }
-            sb.append(text);
+            sb.append(muqattaat.apply(s, a, text));
             int markerStart = sb.length();
             sb.append(" ﴿").append(ArabicDigits.format(a)).append("﴾");
             sb.setSpan(new ForegroundColorSpan(MARKER_COLOR), markerStart, sb.length(),
