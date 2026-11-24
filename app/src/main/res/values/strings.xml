@@ -105,4 +105,6 @@
     <string name="reader_clear_selection">إلغاء</string>
     <string name="reader_copied">تم نسخ الآية</string>
     <string name="reader_surah_header">سورة رقم %1$s</string>
+    <string name="continue_position">سورة %1$s · الآية %2$s</string>
+    <string name="continue_from_start">ابدأ من بداية المصحف</string>
 </resources>
