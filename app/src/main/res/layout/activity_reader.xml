@@ -17,12 +17,14 @@
         android:paddingBottom="8dp">
 
         <Button
+            style="@style/ChipButton"
             android:id="@+id/btn_back"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/btn_back" />
 
         <Button
+            style="@style/ChipButton"
             android:id="@+id/btn_bookmark"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
@@ -99,33 +101,29 @@
         android:paddingBottom="12dp">
 
         <Button
+            style="@style/ChipButton"
             android:id="@+id/btn_prev_surah"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/surah_prev" />
 
         <Button
+            style="@style/ChipButton"
             android:id="@+id/btn_next_surah"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/surah_next" />
 
         <Button
+            style="@style/ChipButton"
             android:id="@+id/btn_font_minus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="@string/font_minus" />
 
-        <TextView
-            android:id="@+id/reader_position"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:gravity="center"
-            android:textColor="@color/text_on_dark"
-            android:textSize="13sp" />
 
         <Button
+            style="@style/ChipButton"
             android:id="@+id/btn_font_plus"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
