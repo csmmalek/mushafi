@@ -75,7 +75,7 @@ final class AyahAdapter extends RecyclerView.Adapter<AyahAdapter.Holder> {
     public void onBindViewHolder(@NonNull Holder holder, int position) {
         AyahEntity a = ayahs.get(position);
         holder.text.setTextSize(TypedValue.COMPLEX_UNIT_SP, fontSp);
-        holder.text.setText(a.text + "  ﴿" + ArabicDigits.format(a.ayah) + "﴾");
+        holder.text.setText(a.text + "\u00A0﴿" + ArabicDigits.format(a.ayah) + "﴾");
         boolean selected = a.ayah == selectedAyah;
         holder.text.setBackgroundColor(selected
                 ? ContextCompat.getColor(holder.text.getContext(), R.color.gold_soft)

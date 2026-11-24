@@ -108,6 +108,9 @@
             <Button
                 android:id="@+id/btn_settings"
                 style="@style/FeatureCard"
+                android:layout_height="72dp"
+                android:layout_columnSpan="2"
+                android:layout_gravity="fill_horizontal"
                 android:text="@string/btn_settings" />
         </GridLayout>
 

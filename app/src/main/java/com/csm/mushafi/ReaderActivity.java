@@ -88,7 +88,7 @@ public class ReaderActivity extends AppCompatActivity {
         prevSurah.setEnabled(surah > 1);
         nextSurah.setEnabled(surah < QuranRepository.SURAH_TOTAL);
 
-        titleText.setText(getString(R.string.surah_number_format, ArabicDigits.format(surah)));
+        titleText.setText(R.string.app_name);
         adapter = new AyahAdapter(prefs.fontSp());
         adapter.setOnAyahClick(this::selectAyah);
         list.setAdapter(adapter);
