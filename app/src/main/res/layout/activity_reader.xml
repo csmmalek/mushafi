@@ -100,6 +100,15 @@
         android:paddingTop="8dp"
         android:paddingBottom="12dp">
 
+        <TextView
+            android:id="@+id/reader_position"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingBottom="6dp"
+            android:textColor="@color/text_on_dark"
+            android:textSize="13sp" />
+
         <Button
             style="@style/ChipButton"
             android:id="@+id/btn_prev_surah"
