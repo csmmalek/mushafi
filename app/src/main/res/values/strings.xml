@@ -104,4 +104,5 @@
     <string name="reader_bookmark_ayah">علامة</string>
     <string name="reader_clear_selection">إلغاء</string>
     <string name="reader_copied">تم نسخ الآية</string>
+    <string name="reader_surah_header">سورة رقم %1$s</string>
 </resources>

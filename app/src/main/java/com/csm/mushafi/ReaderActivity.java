@@ -68,6 +68,8 @@ public class ReaderActivity extends AppCompatActivity {
         fontPlus = findViewById(R.id.btn_font_plus);
         prevSurah = findViewById(R.id.btn_prev_surah);
         nextSurah = findViewById(R.id.btn_next_surah);
+        ((TextView) findViewById(R.id.surah_header)).setText(
+                getString(R.string.reader_surah_header, ArabicDigits.format(surah)));
         selectionBar = findViewById(R.id.selection_bar);
         selectionText = findViewById(R.id.selection_text);
         findViewById(R.id.btn_copy_ayah).setOnClickListener(v -> copySelectedAyah());

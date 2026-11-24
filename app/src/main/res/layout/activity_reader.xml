@@ -41,6 +41,18 @@
             android:textStyle="bold" />
     </LinearLayout>
 
+        <TextView
+            android:id="@+id/surah_header"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:background="@drawable/bg_surah_header"
+            android:gravity="center"
+            android:padding="12dp"
+            android:textColor="@color/gold_light"
+            android:textSize="18sp"
+            android:textStyle="bold" />
+
     <androidx.recyclerview.widget.RecyclerView
         android:id="@+id/ayah_list"
         android:layout_width="match_parent"
@@ -48,7 +60,7 @@
         android:layout_weight="1"
         android:paddingStart="20dp"
         android:paddingEnd="20dp"
-        android:background="#F5EDD6"
+        android:background="@drawable/bg_page_frame"
         android:paddingTop="8dp"
         android:paddingBottom="8dp"
         android:clipToPadding="false" />
