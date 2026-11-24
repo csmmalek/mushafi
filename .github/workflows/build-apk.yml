@@ -34,6 +34,15 @@ jobs:
       - name: Build debug APK
         run: ./gradlew :app:assembleDebug --no-daemon
 
+      - name: Build unsigned release bundle
+        run: ./gradlew :app:bundleRelease --no-daemon
+
+      - name: Upload unsigned bundle
+        uses: actions/upload-artifact@v4
+        with:
+          name: mushafi-release-unsigned-aab
+          path: app/build/outputs/bundle/release/*.aab
+
       - name: Upload test report
         if: always()
         uses: actions/upload-artifact@v4
