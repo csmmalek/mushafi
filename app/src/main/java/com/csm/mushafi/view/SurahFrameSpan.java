@@ -2,6 +2,7 @@ package com.csm.mushafi.view;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.graphics.Path;
 import android.graphics.RectF;
 import android.text.style.ReplacementSpan;
@@ -45,9 +46,11 @@ public final class SurahFrameSpan extends ReplacementSpan {
                      int top, int y, int bottom, @NonNull Paint paint) {
         float size = paint.getTextSize();
         float w = Math.max(1, host.contentWidth() - 6);
-        float t = top + size * 0.1f;
-        float b = bottom - size * 0.1f;
-        float h = b - t;
+        // الارتفاع من حجم الخط لا من صندوق السطر، حتى لا تتضخم الراية مع تباعد الأسطر
+        float h = Math.min(bottom - top - size * 0.2f, size * 2.1f);
+        float cyLine = (top + bottom) / 2f;
+        float t = cyLine - h / 2f;
+        float b = cyLine + h / 2f;
         float left = x + 3;
         float right = left + w;
         RectF box = new RectF(left, t, right, b);
@@ -153,8 +156,9 @@ public final class SurahFrameSpan extends ReplacementSpan {
             label.setTextSize(label.getTextSize() * maxW / cw);
         }
         canvas.drawText(caption, cx, cy - r * 0.18f, label);
+        label.setTypeface(Typeface.create("sans-serif", Typeface.BOLD));
         label.setTextSize(r * 0.62f);
-        label.setFakeBoldText(true);
+        label.setFakeBoldText(false);
         float vw = label.measureText(value);
         if (vw > maxW) {
             label.setTextSize(label.getTextSize() * maxW / vw);

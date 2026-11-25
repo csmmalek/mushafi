@@ -92,7 +92,7 @@ public class FitPageTextView extends AppCompatTextView {
         float extra = 0;
         if (lines > 1) {
             extra = (height - layout.getHeight()) / (float) (lines - 1);
-            extra = Math.max(0, Math.min(extra, lo * 1.6f));
+            extra = Math.max(0, Math.min(extra, lo * 0.55f));
             Layout spaced = build(text, lo, extra, width);
             if (spaced.getHeight() > height) {
                 extra = Math.max(0, extra - (spaced.getHeight() - height) / (float) (lines - 1));
