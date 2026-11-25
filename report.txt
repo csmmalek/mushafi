@@ -1,0 +1,5 @@
+glyphs in cmap: 121 missing surahs: []
+unitsPerEm 2500
+name 0 King Fahad Complex, All rights reserved.
+name 1 QCF_SurahHeader_COLOR
+advance of surah 1 glyph: (8256, 67) surah 112: (8256, 67)
