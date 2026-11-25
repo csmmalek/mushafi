@@ -1,5 +1,8 @@
 package com.csm.mushafi;
 
+import com.csm.mushafi.view.SurahHeaderSpan;
+import androidx.core.content.res.ResourcesCompat;
+import android.graphics.Typeface;
 import android.Manifest;
 import android.content.ComponentName;
 import android.content.pm.PackageManager;
@@ -138,6 +141,7 @@ public class PageReaderActivity extends AppCompatActivity {
     private int appliedTheme = -1;
     private boolean appliedMuq;
     private int appliedFont;
+    private boolean appliedKashida;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -205,12 +209,13 @@ public class PageReaderActivity extends AppCompatActivity {
         int theme = prefs.pageTheme();
         boolean muq = prefs.muqattaatUthmani();
         if (adapter != null && (theme != appliedTheme || muq != appliedMuq
-                || prefs.pageFontPercent() != appliedFont)) {
+                || prefs.pageFontPercent() != appliedFont || prefs.kashida() != appliedKashida)) {
             adapter.notifyDataSetChanged();
         }
         appliedTheme = theme;
         appliedMuq = muq;
         appliedFont = prefs.pageFontPercent();
+        appliedKashida = prefs.kashida();
     }
 
     @Override
@@ -637,8 +642,18 @@ public class PageReaderActivity extends AppCompatActivity {
         int start = sb.length();
         String name = "سُورَةُ " + meta.name(surah);
         sb.append(name);
-        sb.setSpan(new SurahFrameSpan(name, ArabicDigits.format(surah), ArabicDigits.format(meta.ayahCount(surah)), host, theme), start, sb.length(),
-                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        Typeface headerFont = null;
+        try {
+            headerFont = ResourcesCompat.getFont(this, R.font.surah_header);
+        } catch (Exception ignored) {
+            // يُستعمل الإطار المرسوم بالكود إن تعذّر تحميل الخط
+        }
+        Object frame = headerFont != null
+                ? new SurahHeaderSpan(surah, ArabicDigits.format(surah),
+                        ArabicDigits.format(meta.ayahCount(surah)), headerFont, host, theme)
+                : new SurahFrameSpan(name, ArabicDigits.format(surah),
+                        ArabicDigits.format(meta.ayahCount(surah)), host, theme);
+        sb.setSpan(frame, start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         sb.setSpan(new RelativeSizeSpan(1.0f), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         sb.append('\n');
         sb.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER),
@@ -683,6 +698,7 @@ public class PageReaderActivity extends AppCompatActivity {
             paper.setStroke((int) (4 * getResources().getDisplayMetrics().density), theme.frame);
             holder.root.setBackground(paper);
             holder.text.setTextColor(theme.ink);
+            holder.text.setKashidaEnabled(prefs.kashida());
             holder.text.setFontScale(prefs.pageFontPercent() / 100f);
             holder.text.setText(buildPage(position + 1, holder.text, theme, prefs.muqattaatUthmani()));
         }

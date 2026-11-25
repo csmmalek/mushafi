@@ -131,4 +131,5 @@
     <string name="settings_font_size">حجم خط الصفحة: %s٪ (١٠٠٪ = يملأ الصفحة)</string>
     <string name="font_smaller">أ−</string>
     <string name="font_larger">أ+</string>
+    <string name="settings_kashida">مدّ الكلمات لملء السطر (للعرض فقط، النص لا يتغير)</string>
 </resources>

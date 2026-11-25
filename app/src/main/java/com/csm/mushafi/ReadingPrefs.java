@@ -50,6 +50,14 @@ final class ReadingPrefs {
         prefs.edit().putInt("page_font_percent", Math.max(60, Math.min(160, percent))).apply();
     }
 
+    boolean kashida() {
+        return prefs.getBoolean("kashida", true);
+    }
+
+    void saveKashida(boolean on) {
+        prefs.edit().putBoolean("kashida", on).apply();
+    }
+
     String readerReciter() {
         return prefs.getString("reader_reciter", "alafasy");
     }
