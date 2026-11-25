@@ -41,7 +41,7 @@ public class SurahListActivity extends AppCompatActivity {
                     return;
                 }
                 list.setAdapter(new SurahAdapter(surahs, number -> {
-                    Intent intent = new Intent(this, ReaderActivity.class);
+                    Intent intent = new Intent(this, PageReaderActivity.class);
                     intent.putExtra(ReaderActivity.EXTRA_SURAH, number);
                     intent.putExtra(ReaderActivity.EXTRA_AYAH, 1);
                     startActivity(intent);

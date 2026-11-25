@@ -5,13 +5,16 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.view.View;
-import android.widget.Button;
+import android.text.SpannableString;
+import android.text.Spanned;
+import android.text.style.RelativeSizeSpan;
 import android.widget.Button;
 import android.widget.TextView;
 
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.csm.mushafi.data.QuranRepository;
+import com.csm.mushafi.quran.ArabicDigits;
 import com.csm.mushafi.quran.QuranIntegrityException;
 
 import java.util.concurrent.ExecutorService;
@@ -72,7 +75,28 @@ public class MainActivity extends AppCompatActivity {
         btnSettings.setOnClickListener(v -> startActivity(new Intent(this, SettingsActivity.class)));
         btnDownloads.setAlpha(1f);
 
+        showContinueLabel();
         loadQuran();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        showContinueLabel();
+    }
+
+    /** يعرض آخر موضع قراءة محفوظ تحت عنوان زر المتابعة، أو نصاً بديلاً إن لم توجد قراءة سابقة. */
+    private void showContinueLabel() {
+        int surah = prefs.lastSurah();
+        String second = surah > 0
+                ? getString(R.string.continue_position,
+                        ArabicDigits.format(surah), ArabicDigits.format(prefs.lastAyah()))
+                : getString(R.string.continue_from_start);
+        String title = getString(R.string.btn_continue);
+        SpannableString label = new SpannableString(title + "\n" + second);
+        label.setSpan(new RelativeSizeSpan(0.7f), title.length() + 1, label.length(),
+                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        btnContinue.setText(label);
     }
 
     @Override
@@ -82,7 +106,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void openContinueReading() {
-        Intent intent = new Intent(this, ReaderActivity.class);
+        Intent intent = new Intent(this, PageReaderActivity.class);
         int surah = prefs.lastSurah();
         if (surah > 0) {
             intent.putExtra(ReaderActivity.EXTRA_SURAH, surah);

@@ -41,6 +41,31 @@ final class ReadingPrefs {
         prefs.edit().putInt(KEY_FONT, Math.max(MIN_FONT, Math.min(MAX_FONT, sp))).apply();
     }
 
+    int pageTheme() {
+        return prefs.getInt("page_theme", 0);
+    }
+
+    void savePageTheme(int index) {
+        prefs.edit().putInt("page_theme", index).apply();
+    }
+
+    boolean keepScreenOn() {
+        return prefs.getBoolean("keep_screen_on", false);
+    }
+
+    void saveKeepScreenOn(boolean on) {
+        prefs.edit().putBoolean("keep_screen_on", on).apply();
+    }
+
+    /** عرض الحروف المقطعة بعلامات المد العثمانية (مفعّل افتراضياً؛ عند الإيقاف يُعرض نص الملف حرفياً). */
+    boolean muqattaatUthmani() {
+        return prefs.getBoolean("muqattaat_uthmani", true);
+    }
+
+    void saveMuqattaatUthmani(boolean on) {
+        prefs.edit().putBoolean("muqattaat_uthmani", on).apply();
+    }
+
     int khatmahDays() {
         return prefs.getInt(KEY_KHATMAH_DAYS, 0);
     }

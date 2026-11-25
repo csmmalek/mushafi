@@ -4,11 +4,13 @@ import android.os.Bundle;
 import android.os.Handler;
 import android.os.Looper;
 import android.widget.Button;
+import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SwitchCompat;
 
 import com.csm.mushafi.data.AppDatabase;
 import com.csm.mushafi.data.DownloadDao;
@@ -37,6 +39,7 @@ public class SettingsActivity extends AppCompatActivity {
         storage = findViewById(R.id.settings_storage);
         clear = findViewById(R.id.btn_clear_audio);
         findViewById(R.id.btn_back).setOnClickListener(v -> finish());
+        bindReadingSettings();
         clear.setOnClickListener(v -> confirmClear());
         refreshStorage();
     }
@@ -94,5 +97,25 @@ public class SettingsActivity extends AppCompatActivity {
                 }))
                 .setNegativeButton(R.string.btn_cancel, null)
                 .show();
+    }
+
+    private void bindReadingSettings() {
+        ReadingPrefs reading = new ReadingPrefs(this);
+        int[] themeIds = {R.id.theme_0, R.id.theme_1, R.id.theme_2, R.id.theme_3};
+        RadioGroup group = findViewById(R.id.settings_page_theme);
+        group.check(themeIds[Math.max(0, Math.min(themeIds.length - 1, reading.pageTheme()))]);
+        group.setOnCheckedChangeListener((g, id) -> {
+            for (int i = 0; i < themeIds.length; i++) {
+                if (themeIds[i] == id) {
+                    reading.savePageTheme(i);
+                }
+            }
+        });
+        SwitchCompat keep = findViewById(R.id.switch_keep_screen);
+        keep.setChecked(reading.keepScreenOn());
+        keep.setOnCheckedChangeListener((b, on) -> reading.saveKeepScreenOn(on));
+        SwitchCompat muq = findViewById(R.id.switch_muqattaat);
+        muq.setChecked(reading.muqattaatUthmani());
+        muq.setOnCheckedChangeListener((b, on) -> reading.saveMuqattaatUthmani(on));
     }
 }
