@@ -5,6 +5,7 @@ import android.os.Handler;
 import android.os.Looper;
 import android.widget.Button;
 import android.widget.RadioGroup;
+import android.widget.SeekBar;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -109,6 +110,28 @@ public class SettingsActivity extends AppCompatActivity {
                 if (themeIds[i] == id) {
                     reading.savePageTheme(i);
                 }
+            }
+        });
+        TextView fontLabel = findViewById(R.id.settings_font_label);
+        SeekBar fontSeek = findViewById(R.id.settings_font_seek);
+        fontSeek.setProgress((reading.pageFontPercent() - 60) / 5);
+        fontLabel.setText(getString(R.string.settings_font_size, com.csm.mushafi.quran.ArabicDigits.format(reading.pageFontPercent())));
+        fontSeek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
+            @Override
+            public void onProgressChanged(SeekBar bar, int progress, boolean fromUser) {
+                int percent = 60 + progress * 5;
+                fontLabel.setText(getString(R.string.settings_font_size, com.csm.mushafi.quran.ArabicDigits.format(percent)));
+                if (fromUser) {
+                    reading.savePageFontPercent(percent);
+                }
+            }
+
+            @Override
+            public void onStartTrackingTouch(SeekBar bar) {
+            }
+
+            @Override
+            public void onStopTrackingTouch(SeekBar bar) {
             }
         });
         SwitchCompat keep = findViewById(R.id.switch_keep_screen);

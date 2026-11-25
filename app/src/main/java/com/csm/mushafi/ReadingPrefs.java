@@ -41,6 +41,23 @@ final class ReadingPrefs {
         prefs.edit().putInt(KEY_FONT, Math.max(MIN_FONT, Math.min(MAX_FONT, sp))).apply();
     }
 
+    /** مقياس خط الصفحة بالنسبة المئوية (60–160)، 100 = الحجم الذي يملأ الصفحة. */
+    int pageFontPercent() {
+        return Math.max(60, Math.min(160, prefs.getInt("page_font_percent", 100)));
+    }
+
+    void savePageFontPercent(int percent) {
+        prefs.edit().putInt("page_font_percent", Math.max(60, Math.min(160, percent))).apply();
+    }
+
+    String readerReciter() {
+        return prefs.getString("reader_reciter", "alafasy");
+    }
+
+    void saveReaderReciter(String id) {
+        prefs.edit().putString("reader_reciter", id).apply();
+    }
+
     int pageTheme() {
         return prefs.getInt("page_theme", 0);
     }

@@ -9,6 +9,7 @@ import android.text.TextPaint;
 import android.text.method.LinkMovementMethod;
 import android.util.AttributeSet;
 import android.util.TypedValue;
+import android.view.View;
 
 import androidx.appcompat.widget.AppCompatTextView;
 
@@ -23,6 +24,43 @@ public class FitPageTextView extends AppCompatTextView {
     private float minPx;
     private float maxPx;
     private boolean fitting;
+    private float fontScale = 1f;
+    private int viewportHeight;
+    private View.OnLayoutChangeListener parentListener;
+
+    /** مقياس الخط بالنسبة للحجم الذي يملأ الصفحة: أقل من 1 يصغّر، وأكثر من 1 يكبّر مع تمرير عمودي. */
+    public void setFontScale(float scale) {
+        float clamped = Math.max(0.6f, Math.min(1.6f, scale));
+        if (clamped != fontScale) {
+            fontScale = clamped;
+            fit();
+        }
+    }
+
+    @Override
+    protected void onAttachedToWindow() {
+        super.onAttachedToWindow();
+        if (getParent() instanceof View) {
+            final View parent = (View) getParent();
+            parentListener = (v, l, t, r, b, ol, ot, or, ob) -> {
+                if (b - t != viewportHeight) {
+                    viewportHeight = b - t;
+                    fit();
+                }
+            };
+            parent.addOnLayoutChangeListener(parentListener);
+            viewportHeight = parent.getHeight();
+        }
+    }
+
+    @Override
+    protected void onDetachedFromWindow() {
+        if (parentListener != null && getParent() instanceof View) {
+            ((View) getParent()).removeOnLayoutChangeListener(parentListener);
+        }
+        parentListener = null;
+        super.onDetachedFromWindow();
+    }
 
     public FitPageTextView(Context context, AttributeSet attrs) {
         super(context, attrs);
@@ -69,7 +107,7 @@ public class FitPageTextView extends AppCompatTextView {
     private void fit() {
         CharSequence text = getText();
         int width = contentWidth();
-        int height = getHeight() - getPaddingTop() - getPaddingBottom();
+        int height = (viewportHeight > 0 ? viewportHeight : getHeight()) - getPaddingTop() - getPaddingBottom();
         if (maxPx <= 0 || text == null || text.length() == 0 || width <= 0 || height <= 0) {
             return;
         }
@@ -87,10 +125,16 @@ public class FitPageTextView extends AppCompatTextView {
                 }
             }
         }
+        lo = lo * fontScale;
         Layout layout = build(text, lo, 0, width);
         int lines = layout.getLineCount();
         float extra = 0;
-        if (lines > 1) {
+        if (fontScale > 1f) {
+            setMinHeight(0);
+        } else {
+            setMinHeight(viewportHeight > 0 ? viewportHeight : getHeight());
+        }
+        if (lines > 1 && fontScale <= 1f) {
             extra = (height - layout.getHeight()) / (float) (lines - 1);
             extra = Math.max(0, Math.min(extra, lo * 0.55f));
             Layout spaced = build(text, lo, extra, width);

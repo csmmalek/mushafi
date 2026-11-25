@@ -1,0 +1,16 @@
+name: Inspect speech models
+on:
+  push:
+    branches: [stage-9]
+    paths: [.github/workflows/inspect-model.yml, tools/speech/verify_model.py]
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Install
+        run: |
+          sudo apt-get install -y ffmpeg >/dev/null
+          pip install onnxruntime numpy transformers >/dev/null
+      - name: Run the Apache-2.0 Quran Whisper ONNX model on real recitations
+        run: python3 tools/speech/verify_model.py

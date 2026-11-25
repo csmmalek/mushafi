@@ -128,6 +128,44 @@
         android:paddingTop="8dp"
         android:paddingBottom="12dp">
 
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="6dp"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btn_font_smaller"
+                style="@style/ChipButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/font_smaller" />
+
+            <Button
+                android:id="@+id/btn_font_larger"
+                style="@style/ChipButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/font_larger" />
+
+            <Button
+                android:id="@+id/btn_listen"
+                style="@style/ChipButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:text="@string/listen_play" />
+
+            <Button
+                android:id="@+id/btn_reciter"
+                style="@style/ChipButton"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="2"
+                android:ellipsize="end"
+                android:maxLines="1" />
+        </LinearLayout>
+
         <TextView
             android:id="@+id/page_position"
             android:layout_width="match_parent"
