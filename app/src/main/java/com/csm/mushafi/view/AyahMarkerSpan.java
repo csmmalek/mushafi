@@ -2,6 +2,7 @@ package com.csm.mushafi.view;
 
 import android.graphics.Canvas;
 import android.graphics.Paint;
+import android.graphics.Typeface;
 import android.text.style.ReplacementSpan;
 
 import androidx.annotation.NonNull;
@@ -52,9 +53,10 @@ public final class AyahMarkerSpan extends ReplacementSpan {
         Paint label = new Paint(paint);
         label.setColor(theme.markerText);
         label.setTextAlign(Paint.Align.CENTER);
-        label.setFakeBoldText(false);
+        // رقم بخط عادي: خط Hafs يرسم أرقامه داخل حلقته الخاصة فتتكرر الزخرفة
+        label.setTypeface(Typeface.create("sans-serif", Typeface.BOLD));
         int len = number.length();
-        label.setTextSize(r * (len == 1 ? 1.05f : len == 2 ? 0.9f : 0.72f));
+        label.setTextSize(r * (len == 1 ? 1.0f : len == 2 ? 0.85f : 0.68f));
         Paint.FontMetrics m = label.getFontMetrics();
         canvas.drawText(number, cx, cy - (m.ascent + m.descent) / 2f, label);
     }

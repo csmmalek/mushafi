@@ -26,7 +26,7 @@ public final class SurahFrameSpan extends ReplacementSpan {
     public int getSize(@NonNull Paint paint, CharSequence text, int start, int end,
                        @Nullable Paint.FontMetricsInt fm) {
         if (fm != null) {
-            int pad = (int) (paint.getTextSize() * 0.45f);
+            int pad = (int) (paint.getTextSize() * 0.28f);
             fm.ascent -= pad;
             fm.top -= pad;
             fm.descent += pad;
@@ -64,10 +64,10 @@ public final class SurahFrameSpan extends ReplacementSpan {
 
         // زخارف طرفي الراية: معيّن تحيط به نقطتان
         float cy = (t + b) / 2f;
-        float s = h * 0.17f;
+        float s = h * 0.13f;
         p.setStyle(Paint.Style.FILL);
         for (int side = -1; side <= 1; side += 2) {
-            float cx = side < 0 ? box.left + h * 0.85f : box.right - h * 0.85f;
+            float cx = side < 0 ? box.left + h * 0.62f : box.right - h * 0.62f;
             Path diamond = new Path();
             diamond.moveTo(cx, cy - s * 1.5f);
             diamond.lineTo(cx + s * 1.5f, cy);
@@ -83,6 +83,12 @@ public final class SurahFrameSpan extends ReplacementSpan {
         label.setColor(0xFFF0D98C);
         label.setTextAlign(Paint.Align.CENTER);
         label.setFakeBoldText(true);
+        // يُصغَّر الاسم عند الحاجة حتى لا يلامس الزخارف
+        float available = w - 2 * (h * 0.62f + s * 4.8f);
+        float measured = label.measureText(name);
+        if (available > 0 && measured > available) {
+            label.setTextSize(label.getTextSize() * available / measured);
+        }
         Paint.FontMetrics metrics = label.getFontMetrics();
         canvas.drawText(name, box.centerX(), cy - (metrics.ascent + metrics.descent) / 2f, label);
     }

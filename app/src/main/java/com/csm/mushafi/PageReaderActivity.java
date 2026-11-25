@@ -378,7 +378,7 @@ public class PageReaderActivity extends AppCompatActivity {
         sb.append(name);
         sb.setSpan(new SurahFrameSpan(name, host, theme), start, sb.length(),
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        sb.setSpan(new RelativeSizeSpan(1.2f), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        sb.setSpan(new RelativeSizeSpan(1.05f), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         sb.append('\n');
         sb.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER),
                 start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
