@@ -1,5 +1,23 @@
 package com.csm.mushafi;
 
+import android.Manifest;
+import android.content.ComponentName;
+import android.content.pm.PackageManager;
+import android.os.Build;
+import android.widget.Button;
+import androidx.activity.result.ActivityResultLauncher;
+import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.appcompat.app.AlertDialog;
+import androidx.core.content.ContextCompat;
+import androidx.media3.common.MediaItem;
+import androidx.media3.common.MediaMetadata;
+import androidx.media3.common.PlaybackException;
+import androidx.media3.common.Player;
+import androidx.media3.session.MediaController;
+import androidx.media3.session.SessionToken;
+import com.csm.mushafi.audio.AyahAudio;
+import com.csm.mushafi.playback.PlaybackService;
+import com.google.common.util.concurrent.ListenableFuture;
 import android.content.ClipData;
 import android.content.ClipboardManager;
 import android.content.Intent;
@@ -43,6 +61,7 @@ import com.csm.mushafi.view.SurahFrameSpan;
 import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -77,6 +96,45 @@ public class PageReaderActivity extends AppCompatActivity {
     private int selAyah;
     private int selPage;
 
+    private List<AyahAudio.Reciter> reciters;
+    private AyahAudio.Reciter reciter;
+    private ListenableFuture<MediaController> controllerFuture;
+    private MediaController controller;
+    private Button listenButton;
+    private Button reciterButton;
+    private int playSurah;
+    private int playAyah;
+
+    private final ActivityResultLauncher<String> notificationPermission =
+            registerForActivityResult(new ActivityResultContracts.RequestPermission(), granted -> { });
+
+    private final Player.Listener playerListener = new Player.Listener() {
+        @Override
+        public void onMediaItemTransition(MediaItem item, int reason) {
+            applyPlaying(item);
+        }
+
+        @Override
+        public void onIsPlayingChanged(boolean isPlaying) {
+            renderListenButton();
+        }
+
+        @Override
+        public void onPlaybackStateChanged(int state) {
+            if (state == Player.STATE_ENDED) {
+                setPlaying(0, 0);
+            }
+            renderListenButton();
+        }
+
+        @Override
+        public void onPlayerError(PlaybackException error) {
+            Toast.makeText(PageReaderActivity.this, R.string.listen_error, Toast.LENGTH_LONG).show();
+            setPlaying(0, 0);
+            renderListenButton();
+        }
+    };
+
     private int appliedTheme = -1;
     private boolean appliedMuq;
 
@@ -98,6 +156,10 @@ public class PageReaderActivity extends AppCompatActivity {
         findViewById(R.id.btn_sel_share).setOnClickListener(v -> shareSelected());
         findViewById(R.id.btn_sel_bookmark).setOnClickListener(v -> bookmarkSelected());
         findViewById(R.id.btn_sel_clear).setOnClickListener(v -> clearSelection());
+        listenButton = findViewById(R.id.btn_listen);
+        reciterButton = findViewById(R.id.btn_reciter);
+        listenButton.setOnClickListener(v -> toggleListen());
+        reciterButton.setOnClickListener(v -> chooseReciter());
         titleText.setOnClickListener(v -> startActivity(new Intent(this, SurahListActivity.class)));
         seek.setMax(MushafMeta.PAGES - 1);
 
@@ -171,6 +233,21 @@ public class PageReaderActivity extends AppCompatActivity {
         meta = loaded;
         texts = loadedTexts;
         basmala = texts[1][0];
+        try {
+            reciters = AyahAudio.parse(readAsset("reader-reciters.json"));
+        } catch (Exception e) {
+            reciters = new ArrayList<>();
+        }
+        reciter = null;
+        for (AyahAudio.Reciter r : reciters) {
+            if (r.id.equals(prefs.readerReciter())) {
+                reciter = r;
+            }
+        }
+        if (reciter == null && !reciters.isEmpty()) {
+            reciter = reciters.get(0);
+        }
+        renderReciter();
         int s = Math.max(1, Math.min(MushafMeta.SURAHS, surah));
         int a = Math.max(1, Math.min(meta.ayahCount(s), ayah));
         int startPage = meta.pageOf(s, a);
@@ -220,6 +297,171 @@ public class PageReaderActivity extends AppCompatActivity {
         titleText.setText(getString(R.string.surah_name_format, meta.name(first[0])));
         showPosition(page);
         seek.setProgress(page - 1);
+    }
+
+    // ---- الاستماع مع تظليل الآية الجارية ----
+
+    @Override
+    protected void onStart() {
+        super.onStart();
+        SessionToken token = new SessionToken(this, new ComponentName(this, PlaybackService.class));
+        controllerFuture = new MediaController.Builder(this, token).buildAsync();
+        final ListenableFuture<MediaController> f = controllerFuture;
+        f.addListener(() -> {
+            try {
+                if (f != controllerFuture || isDestroyed()) {
+                    return;
+                }
+                controller = f.get();
+                controller.addListener(playerListener);
+                if (controller.isPlaying() && controller.getCurrentMediaItem() != null) {
+                    applyPlaying(controller.getCurrentMediaItem());
+                }
+                renderListenButton();
+            } catch (Exception ignored) {
+                controller = null;
+            }
+        }, ContextCompat.getMainExecutor(this));
+    }
+
+    @Override
+    protected void onStop() {
+        super.onStop();
+        if (controller != null) {
+            controller.removeListener(playerListener);
+        }
+        if (controllerFuture != null) {
+            MediaController.releaseFuture(controllerFuture);
+        }
+        controllerFuture = null;
+        controller = null;
+        // التلاوة تستمر في الخدمة؛ يُزال التظليل هنا ويعود عند فتح الشاشة من جديد
+        setPlaying(0, 0);
+    }
+
+    private void renderReciter() {
+        reciterButton.setText(reciter == null
+                ? getString(R.string.listen_no_reciter)
+                : getString(R.string.listen_reciter_format, reciter.name));
+        reciterButton.setEnabled(reciter != null);
+        listenButton.setEnabled(reciter != null);
+    }
+
+    private void renderListenButton() {
+        boolean playing = controller != null && controller.isPlaying();
+        listenButton.setText(playing ? R.string.listen_pause : R.string.listen_play);
+    }
+
+    private void toggleListen() {
+        if (controller == null || reciter == null || meta == null) {
+            Toast.makeText(this, R.string.listen_not_ready, Toast.LENGTH_SHORT).show();
+            return;
+        }
+        if (controller.isPlaying()) {
+            controller.pause();
+            return;
+        }
+        if (playSurah != 0 && controller.getMediaItemCount() > 0
+                && controller.getPlaybackState() != Player.STATE_ENDED) {
+            controller.play();
+            return;
+        }
+        int s;
+        int a;
+        if (selSurah != 0) {
+            s = selSurah;
+            a = selAyah;
+        } else {
+            int[] first = meta.ayahsOnPage(currentPage).get(0);
+            s = first[0];
+            a = first[1];
+        }
+        startListening(s, a);
+    }
+
+    private void startListening(int surah, int ayah) {
+        if (Build.VERSION.SDK_INT >= 33 && ContextCompat.checkSelfPermission(this,
+                Manifest.permission.POST_NOTIFICATIONS) != PackageManager.PERMISSION_GRANTED) {
+            notificationPermission.launch(Manifest.permission.POST_NOTIFICATIONS);
+        }
+        List<MediaItem> items = new ArrayList<>();
+        for (int[] item : AyahAudio.playlist(meta, surah, ayah, 300)) {
+            MediaMetadata data = new MediaMetadata.Builder()
+                    .setTitle(getString(R.string.surah_name_format, meta.name(item[0]))
+                            + " - " + ArabicDigits.format(item[1]))
+                    .setArtist(reciter.name)
+                    .build();
+            items.add(new MediaItem.Builder()
+                    .setMediaId(item[0] + ":" + item[1])
+                    .setUri(AyahAudio.ayahUrl(reciter.folder, item[0], item[1]))
+                    .setMediaMetadata(data)
+                    .build());
+        }
+        playSurah = 0;
+        controller.setMediaItems(items, 0, 0L);
+        controller.prepare();
+        controller.play();
+        setPlaying(surah, ayah);
+    }
+
+    private void chooseReciter() {
+        if (reciters == null || reciters.isEmpty()) {
+            return;
+        }
+        String[] names = new String[reciters.size()];
+        int checked = 0;
+        for (int i = 0; i < names.length; i++) {
+            names[i] = reciters.get(i).name;
+            if (reciters.get(i) == reciter) {
+                checked = i;
+            }
+        }
+        new AlertDialog.Builder(this)
+                .setTitle(R.string.listen_choose_reciter)
+                .setSingleChoiceItems(names, checked, (dialog, which) -> {
+                    reciter = reciters.get(which);
+                    prefs.saveReaderReciter(reciter.id);
+                    renderReciter();
+                    dialog.dismiss();
+                    if (controller != null && playSurah != 0) {
+                        startListening(playSurah, playAyah);
+                    }
+                })
+                .show();
+    }
+
+    private void applyPlaying(MediaItem item) {
+        if (item == null || item.mediaId == null) {
+            return;
+        }
+        String[] parts = item.mediaId.split(":");
+        if (parts.length != 2) {
+            return;
+        }
+        try {
+            setPlaying(Integer.parseInt(parts[0]), Integer.parseInt(parts[1]));
+        } catch (NumberFormatException ignored) {
+            // عنصر ليس من هذا القارئ (مثلاً من شاشة السور)
+        }
+    }
+
+    private void setPlaying(int surah, int ayah) {
+        if (meta == null || adapter == null) {
+            return;
+        }
+        int oldPage = playSurah == 0 ? 0 : meta.pageOf(playSurah, playAyah);
+        playSurah = surah;
+        playAyah = ayah;
+        int newPage = surah == 0 ? 0 : meta.pageOf(surah, ayah);
+        if (newPage > 0 && newPage != currentPage && (oldPage == 0 || oldPage == currentPage)) {
+            pager.setCurrentItem(newPage - 1, true);
+        }
+        if (oldPage > 0 && oldPage != newPage) {
+            adapter.notifyItemChanged(oldPage - 1);
+        }
+        if (newPage > 0) {
+            adapter.notifyItemChanged(newPage - 1);
+        }
     }
 
     // ---- تحديد الآية ----
@@ -355,7 +597,7 @@ public class PageReaderActivity extends AppCompatActivity {
             sb.setSpan(new AyahMarkerSpan(number, theme), numberStart, sb.length(),
                     Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             sb.setSpan(new AyahClick(s, a), ayahStart, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-            if (s == selSurah && a == selAyah) {
+            if ((s == selSurah && a == selAyah) || (s == playSurah && a == playAyah)) {
                 sb.setSpan(new BackgroundColorSpan(theme.highlight), ayahStart, sb.length(),
                         Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
             }

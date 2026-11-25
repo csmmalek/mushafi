@@ -1,0 +1,40 @@
+{
+ "source": "أسماء مجلدات EveryAyah منقولة من tools/audio/reciters.config.json في مكتبة ahmadmounir/quran-library؛ استُبعد علي جابر لأن تسجيله يبدأ بالاستعاذة.",
+ "reciters": [
+  {
+   "id": "husary",
+   "name": "محمود خليل الحصري",
+   "folder": "Husary_64kbps"
+  },
+  {
+   "id": "minshawi",
+   "name": "محمد صديق المنشاوي",
+   "folder": "Minshawy_Murattal_128kbps"
+  },
+  {
+   "id": "shuraim",
+   "name": "سعود الشريم",
+   "folder": "Saood_ash-Shuraym_64kbps"
+  },
+  {
+   "id": "muaiqly",
+   "name": "ماهر المعيقلي",
+   "folder": "Maher_AlMuaiqly_64kbps"
+  },
+  {
+   "id": "dosari",
+   "name": "ياسر الدوسري",
+   "folder": "Yasser_Ad-Dussary_128kbps"
+  },
+  {
+   "id": "alafasy",
+   "name": "مشاري راشد العفاسي",
+   "folder": "Alafasy_64kbps"
+  },
+  {
+   "id": "abdulbasit",
+   "name": "عبد الباسط عبد الصمد",
+   "folder": "Abdul_Basit_Murattal_64kbps"
+  }
+ ]
+}

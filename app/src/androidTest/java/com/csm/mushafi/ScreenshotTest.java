@@ -51,6 +51,16 @@ public class ScreenshotTest {
             }
         }
 
+        Intent listen = new Intent(ctx, PageReaderActivity.class);
+        listen.putExtra(ReaderActivity.EXTRA_SURAH, 36);
+        listen.putExtra(ReaderActivity.EXTRA_AYAH, 1);
+        try (ActivityScenario<PageReaderActivity> s = ActivityScenario.launch(listen)) {
+            Thread.sleep(3500);
+            s.onActivity(a -> a.findViewById(com.csm.mushafi.R.id.btn_listen).performClick());
+            Thread.sleep(9000);
+            shell("screencap -p /sdcard/shots/page_listen.png");
+        }
+
         ReadingPrefs reading = new ReadingPrefs(ctx);
         reading.savePageTheme(3);
         Intent night = new Intent(ctx, PageReaderActivity.class);

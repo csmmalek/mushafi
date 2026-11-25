@@ -41,6 +41,14 @@ final class ReadingPrefs {
         prefs.edit().putInt(KEY_FONT, Math.max(MIN_FONT, Math.min(MAX_FONT, sp))).apply();
     }
 
+    String readerReciter() {
+        return prefs.getString("reader_reciter", "alafasy");
+    }
+
+    void saveReaderReciter(String id) {
+        prefs.edit().putString("reader_reciter", id).apply();
+    }
+
     int pageTheme() {
         return prefs.getInt("page_theme", 0);
     }
