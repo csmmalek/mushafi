@@ -134,6 +134,9 @@ public class SettingsActivity extends AppCompatActivity {
             public void onStopTrackingTouch(SeekBar bar) {
             }
         });
+        SwitchCompat kashida = findViewById(R.id.switch_kashida);
+        kashida.setChecked(reading.kashida());
+        kashida.setOnCheckedChangeListener((b, on) -> reading.saveKashida(on));
         SwitchCompat keep = findViewById(R.id.switch_keep_screen);
         keep.setChecked(reading.keepScreenOn());
         keep.setOnCheckedChangeListener((b, on) -> reading.saveKeepScreenOn(on));

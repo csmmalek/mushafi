@@ -138,6 +138,7 @@ public class PageReaderActivity extends AppCompatActivity {
     private int appliedTheme = -1;
     private boolean appliedMuq;
     private int appliedFont;
+    private boolean appliedKashida;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -205,12 +206,13 @@ public class PageReaderActivity extends AppCompatActivity {
         int theme = prefs.pageTheme();
         boolean muq = prefs.muqattaatUthmani();
         if (adapter != null && (theme != appliedTheme || muq != appliedMuq
-                || prefs.pageFontPercent() != appliedFont)) {
+                || prefs.pageFontPercent() != appliedFont || prefs.kashida() != appliedKashida)) {
             adapter.notifyDataSetChanged();
         }
         appliedTheme = theme;
         appliedMuq = muq;
         appliedFont = prefs.pageFontPercent();
+        appliedKashida = prefs.kashida();
     }
 
     @Override
@@ -683,6 +685,7 @@ public class PageReaderActivity extends AppCompatActivity {
             paper.setStroke((int) (4 * getResources().getDisplayMetrics().density), theme.frame);
             holder.root.setBackground(paper);
             holder.text.setTextColor(theme.ink);
+            holder.text.setKashidaEnabled(prefs.kashida());
             holder.text.setFontScale(prefs.pageFontPercent() / 100f);
             holder.text.setText(buildPage(position + 1, holder.text, theme, prefs.muqattaatUthmani()));
         }

@@ -104,6 +104,13 @@
             android:thumbTint="@color/gold_light" />
 
         <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_kashida"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:text="@string/settings_kashida"
+            android:textColor="@color/text_on_dark" />
+
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switch_keep_screen"
             android:layout_width="match_parent"
             android:layout_height="52dp"
