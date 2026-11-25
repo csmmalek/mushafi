@@ -88,6 +88,21 @@
                 android:textColor="@color/text_on_dark" />
         </RadioGroup>
 
+        <TextView
+            android:id="@+id/settings_font_label"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:textColor="@color/text_on_dark" />
+
+        <SeekBar
+            android:id="@+id/settings_font_seek"
+            android:layout_width="match_parent"
+            android:layout_height="48dp"
+            android:max="20"
+            android:progressTint="@color/gold"
+            android:thumbTint="@color/gold_light" />
+
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switch_keep_screen"
             android:layout_width="match_parent"

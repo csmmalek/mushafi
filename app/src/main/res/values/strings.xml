@@ -128,4 +128,7 @@
     <string name="listen_choose_reciter">اختر القارئ</string>
     <string name="listen_not_ready">المشغّل لم يجهز بعد، حاول بعد لحظة</string>
     <string name="listen_error">تعذّر تشغيل التلاوة. تحقق من الاتصال بالإنترنت.</string>
+    <string name="settings_font_size">حجم خط الصفحة: %s٪ (١٠٠٪ = يملأ الصفحة)</string>
+    <string name="font_smaller">أ−</string>
+    <string name="font_larger">أ+</string>
 </resources>

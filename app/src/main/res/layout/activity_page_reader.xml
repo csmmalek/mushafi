@@ -135,6 +135,20 @@
             android:orientation="horizontal">
 
             <Button
+                android:id="@+id/btn_font_smaller"
+                style="@style/ChipButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/font_smaller" />
+
+            <Button
+                android:id="@+id/btn_font_larger"
+                style="@style/ChipButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="@string/font_larger" />
+
+            <Button
                 android:id="@+id/btn_listen"
                 style="@style/ChipButton"
                 android:layout_width="0dp"

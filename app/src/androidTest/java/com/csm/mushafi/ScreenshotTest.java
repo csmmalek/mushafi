@@ -62,6 +62,17 @@ public class ScreenshotTest {
         }
 
         ReadingPrefs reading = new ReadingPrefs(ctx);
+        for (int pct : new int[]{80, 130}) {
+            reading.savePageFontPercent(pct);
+            Intent sized = new Intent(ctx, PageReaderActivity.class);
+            sized.putExtra(ReaderActivity.EXTRA_SURAH, 36);
+            sized.putExtra(ReaderActivity.EXTRA_AYAH, 1);
+            try (ActivityScenario<PageReaderActivity> s = ActivityScenario.launch(sized)) {
+                Thread.sleep(3500);
+                shell("screencap -p /sdcard/shots/page_font_" + pct + ".png");
+            }
+        }
+        reading.savePageFontPercent(100);
         reading.savePageTheme(3);
         Intent night = new Intent(ctx, PageReaderActivity.class);
         night.putExtra(ReaderActivity.EXTRA_SURAH, 36);

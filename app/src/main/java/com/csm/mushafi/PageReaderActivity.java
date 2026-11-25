@@ -137,6 +137,7 @@ public class PageReaderActivity extends AppCompatActivity {
 
     private int appliedTheme = -1;
     private boolean appliedMuq;
+    private int appliedFont;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -156,6 +157,8 @@ public class PageReaderActivity extends AppCompatActivity {
         findViewById(R.id.btn_sel_share).setOnClickListener(v -> shareSelected());
         findViewById(R.id.btn_sel_bookmark).setOnClickListener(v -> bookmarkSelected());
         findViewById(R.id.btn_sel_clear).setOnClickListener(v -> clearSelection());
+        findViewById(R.id.btn_font_smaller).setOnClickListener(v -> changeFont(-10));
+        findViewById(R.id.btn_font_larger).setOnClickListener(v -> changeFont(10));
         listenButton = findViewById(R.id.btn_listen);
         reciterButton = findViewById(R.id.btn_reciter);
         listenButton.setOnClickListener(v -> toggleListen());
@@ -201,11 +204,13 @@ public class PageReaderActivity extends AppCompatActivity {
         }
         int theme = prefs.pageTheme();
         boolean muq = prefs.muqattaatUthmani();
-        if (adapter != null && (theme != appliedTheme || muq != appliedMuq)) {
+        if (adapter != null && (theme != appliedTheme || muq != appliedMuq
+                || prefs.pageFontPercent() != appliedFont)) {
             adapter.notifyDataSetChanged();
         }
         appliedTheme = theme;
         appliedMuq = muq;
+        appliedFont = prefs.pageFontPercent();
     }
 
     @Override
@@ -337,6 +342,20 @@ public class PageReaderActivity extends AppCompatActivity {
         controller = null;
         // التلاوة تستمر في الخدمة؛ يُزال التظليل هنا ويعود عند فتح الشاشة من جديد
         setPlaying(0, 0);
+    }
+
+    private void changeFont(int delta) {
+        int now = prefs.pageFontPercent();
+        int next = Math.max(60, Math.min(160, now + delta));
+        if (next == now) {
+            return;
+        }
+        prefs.savePageFontPercent(next);
+        Toast.makeText(this, getString(R.string.settings_font_size,
+                ArabicDigits.format(next)), Toast.LENGTH_SHORT).show();
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
     }
 
     private void renderReciter() {
@@ -664,6 +683,7 @@ public class PageReaderActivity extends AppCompatActivity {
             paper.setStroke((int) (4 * getResources().getDisplayMetrics().density), theme.frame);
             holder.root.setBackground(paper);
             holder.text.setTextColor(theme.ink);
+            holder.text.setFontScale(prefs.pageFontPercent() / 100f);
             holder.text.setText(buildPage(position + 1, holder.text, theme, prefs.muqattaatUthmani()));
         }
 
