@@ -374,11 +374,11 @@ public class PageReaderActivity extends AppCompatActivity {
     private void appendHeader(SpannableStringBuilder sb, int surah, FitPageTextView host,
                               PageTheme theme) {
         int start = sb.length();
-        String name = getString(R.string.surah_name_format, meta.name(surah));
+        String name = "سُورَةُ " + meta.name(surah);
         sb.append(name);
-        sb.setSpan(new SurahFrameSpan(name, host, theme), start, sb.length(),
+        sb.setSpan(new SurahFrameSpan(name, ArabicDigits.format(surah), ArabicDigits.format(meta.ayahCount(surah)), host, theme), start, sb.length(),
                 Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
-        sb.setSpan(new RelativeSizeSpan(1.05f), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        sb.setSpan(new RelativeSizeSpan(1.0f), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         sb.append('\n');
         sb.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER),
                 start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);

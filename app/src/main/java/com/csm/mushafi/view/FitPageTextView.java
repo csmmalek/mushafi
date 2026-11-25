@@ -28,7 +28,7 @@ public class FitPageTextView extends AppCompatTextView {
         super(context, attrs);
         float density = getResources().getDisplayMetrics().scaledDensity;
         minPx = 10 * density;
-        maxPx = 30 * density;
+        maxPx = 22 * density;
         setMovementMethod(LinkMovementMethod.getInstance());
         setHighlightColor(Color.TRANSPARENT);
     }
@@ -92,7 +92,7 @@ public class FitPageTextView extends AppCompatTextView {
         float extra = 0;
         if (lines > 1) {
             extra = (height - layout.getHeight()) / (float) (lines - 1);
-            extra = Math.max(0, Math.min(extra, lo));
+            extra = Math.max(0, Math.min(extra, lo * 1.6f));
             Layout spaced = build(text, lo, extra, width);
             if (spaced.getHeight() > height) {
                 extra = Math.max(0, extra - (spaced.getHeight() - height) / (float) (lines - 1));
