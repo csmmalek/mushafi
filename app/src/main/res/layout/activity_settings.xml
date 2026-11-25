@@ -38,6 +38,81 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
+            android:text="@string/settings_section_reading"
+            android:textColor="@color/gold_light"
+            android:textStyle="bold" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/settings_page_theme"
+            android:textColor="@color/text_on_dark" />
+
+        <RadioGroup
+            android:id="@+id/settings_page_theme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/theme_0"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:buttonTint="@color/gold_light"
+                android:text="@string/theme_cream"
+                android:textColor="@color/text_on_dark" />
+
+            <RadioButton
+                android:id="@+id/theme_1"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:buttonTint="@color/gold_light"
+                android:text="@string/theme_white"
+                android:textColor="@color/text_on_dark" />
+
+            <RadioButton
+                android:id="@+id/theme_2"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:buttonTint="@color/gold_light"
+                android:text="@string/theme_sand"
+                android:textColor="@color/text_on_dark" />
+
+            <RadioButton
+                android:id="@+id/theme_3"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:buttonTint="@color/gold_light"
+                android:text="@string/theme_night"
+                android:textColor="@color/text_on_dark" />
+        </RadioGroup>
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_keep_screen"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:text="@string/settings_keep_screen"
+            android:textColor="@color/text_on_dark" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_muqattaat"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:text="@string/settings_muqattaat"
+            android:textColor="@color/text_on_dark" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/settings_muqattaat_note"
+            android:textColor="@color/text_muted_dark"
+            android:textSize="12sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
             android:text="@string/settings_section_storage"
             android:textColor="@color/gold_light"
             android:textStyle="bold" />

@@ -109,4 +109,16 @@
     <string name="continue_from_start">ابدأ من بداية المصحف</string>
     <string name="page_position">الصفحة %1$s من %2$s</string>
     <string name="surah_name_format">سورة %1$s</string>
+    <string name="settings_section_reading">القراءة</string>
+    <string name="settings_page_theme">لون الصفحة</string>
+    <string name="theme_cream">ورقي (كريمي)</string>
+    <string name="theme_white">أبيض</string>
+    <string name="theme_sand">رملي</string>
+    <string name="theme_night">ليلي</string>
+    <string name="settings_keep_screen">إبقاء الشاشة مضاءة أثناء القراءة</string>
+    <string name="settings_muqattaat">عرض الحروف المقطعة بعلامات المد العثمانية</string>
+    <string name="settings_muqattaat_note">عند الإيقاف يُعرض نص الملف الموثّق حرفياً. تحقق الاختبارات من تطابق حروف الشكلين.</string>
+    <string name="reader_share_ayah">مشاركة</string>
+    <string name="share_title">مشاركة الآية</string>
+    <string name="selection_ayah_format">%1$s · الآية %2$s</string>
 </resources>

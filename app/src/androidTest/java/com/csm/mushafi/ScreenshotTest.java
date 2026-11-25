@@ -51,6 +51,17 @@ public class ScreenshotTest {
             }
         }
 
+        ReadingPrefs reading = new ReadingPrefs(ctx);
+        reading.savePageTheme(3);
+        Intent night = new Intent(ctx, PageReaderActivity.class);
+        night.putExtra(ReaderActivity.EXTRA_SURAH, 36);
+        night.putExtra(ReaderActivity.EXTRA_AYAH, 1);
+        try (ActivityScenario<PageReaderActivity> s = ActivityScenario.launch(night)) {
+            Thread.sleep(3500);
+            shell("screencap -p /sdcard/shots/page_night.png");
+        }
+        reading.savePageTheme(0);
+
         try (ActivityScenario<SettingsActivity> s =
                      ActivityScenario.launch(new Intent(ctx, SettingsActivity.class))) {
             Thread.sleep(2000);
