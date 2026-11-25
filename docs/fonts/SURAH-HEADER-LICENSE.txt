@@ -1,0 +1,8 @@
+خط إطارات السور (surah_header.ttf)
+
+المصدر: خط «QCF Surah Header» لمجمع الملك فهد لطباعة المصحف الشريف، كما وزّعته مكتبة
+ahmadmounir/quran-library (data/fonts/surah-header.woff2). حُوِّل الحاوي فقط من woff2 إلى TTF
+دون أي تعديل على الرسومات (tools/fonts/convert_header_font.py).
+
+حقوق الخط لأصحابه (مجمع الملك فهد، وQUL/Tarteel). حقوق الطبع محفوظة وفق بيانات الخط:
+"King Fahad Complex, All rights reserved". يجب التأكد من إذن التضمين قبل النشر على المتجر.

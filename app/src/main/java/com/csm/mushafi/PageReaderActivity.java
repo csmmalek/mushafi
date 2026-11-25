@@ -1,5 +1,8 @@
 package com.csm.mushafi;
 
+import com.csm.mushafi.view.SurahHeaderSpan;
+import androidx.core.content.res.ResourcesCompat;
+import android.graphics.Typeface;
 import android.Manifest;
 import android.content.ComponentName;
 import android.content.pm.PackageManager;
@@ -639,8 +642,18 @@ public class PageReaderActivity extends AppCompatActivity {
         int start = sb.length();
         String name = "سُورَةُ " + meta.name(surah);
         sb.append(name);
-        sb.setSpan(new SurahFrameSpan(name, ArabicDigits.format(surah), ArabicDigits.format(meta.ayahCount(surah)), host, theme), start, sb.length(),
-                Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+        Typeface headerFont = null;
+        try {
+            headerFont = ResourcesCompat.getFont(this, R.font.surah_header);
+        } catch (Exception ignored) {
+            // يُستعمل الإطار المرسوم بالكود إن تعذّر تحميل الخط
+        }
+        Object frame = headerFont != null
+                ? new SurahHeaderSpan(surah, ArabicDigits.format(surah),
+                        ArabicDigits.format(meta.ayahCount(surah)), headerFont, host, theme)
+                : new SurahFrameSpan(name, ArabicDigits.format(surah),
+                        ArabicDigits.format(meta.ayahCount(surah)), host, theme);
+        sb.setSpan(frame, start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         sb.setSpan(new RelativeSizeSpan(1.0f), start, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
         sb.append('\n');
         sb.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER),
