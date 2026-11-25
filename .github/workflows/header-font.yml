@@ -1,0 +1,24 @@
+name: Header font check
+on:
+  push:
+    branches: [stage-10]
+    paths: [.github/workflows/header-font.yml, tools/fonts/**]
+permissions:
+  contents: write
+jobs:
+  convert:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - run: pip install fonttools brotli pillow >/dev/null
+      - name: Convert and preview
+        run: python3 tools/fonts/convert_header_font.py | tee /tmp/report.txt
+      - name: Publish to fontcheck branch
+        run: |
+          mkdir -p "$RUNNER_TEMP/out" && cp /tmp/surah-header.ttf /tmp/header-preview.png /tmp/report.txt "$RUNNER_TEMP/out/"
+          git config user.name "ci"; git config user.email "ci@users.noreply.github.com"
+          git checkout --orphan fontcheck-tmp
+          git rm -rf -q . || true
+          cp "$RUNNER_TEMP"/out/* .
+          git add -A && git commit -q -m "Header font check for ${GITHUB_SHA}"
+          git push -f origin HEAD:refs/heads/fontcheck
