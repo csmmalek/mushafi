@@ -31,8 +31,10 @@ print("encoder inputs", [i.name for i in enc.get_inputs()], "decoder inputs", [i
 
 quran = {}
 for line in open("app/src/main/assets/quran-simple.txt", encoding="utf-8"):
-    s, a, t = line.rstrip("\n").split("|", 2)
-    quran[(int(s), int(a))] = t
+    parts = line.rstrip("\n").split("|", 2)
+    if len(parts) != 3 or not parts[0].isdigit():
+        continue
+    quran[(int(parts[0]), int(parts[1]))] = parts[2]
 
 def strip(t):
     t = unicodedata.normalize("NFKD", t)
