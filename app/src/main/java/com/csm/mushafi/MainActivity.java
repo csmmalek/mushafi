@@ -71,6 +71,12 @@ public class MainActivity extends BaseActivity {
         btnRecitations.setAlpha(1f);
         btnDownloads.setOnClickListener(v -> startActivity(new Intent(this, DownloadsActivity.class)));
         btnDownloads.setEnabled(true);
+        findViewById(R.id.btn_tasbih).setOnClickListener(v ->
+                startActivity(new Intent(this, TasbihActivity.class)));
+        findViewById(R.id.btn_adhkar).setOnClickListener(v ->
+                startActivity(new Intent(this, AdhkarActivity.class)));
+        findViewById(R.id.btn_help).setOnClickListener(v ->
+                startActivity(new Intent(this, HelpActivity.class)));
         btnSettings.setOnClickListener(v -> startActivity(new Intent(this, SettingsActivity.class)));
         btnDownloads.setAlpha(1f);
 

@@ -136,7 +136,7 @@
     <string name="settings_kashida">مدّ الكلمات لملء السطر (للعرض فقط، النص لا يتغير)</string>
     <string name="btn_search_in_reader">بحث في القرآن</string>
     <string name="settings_section_appearance">مظهر التطبيق</string>
-    <string name="app_theme_emerald">زمردي زجاجي</string>
+    <string name="app_theme_emerald">نيلي وفيروزي زجاجي</string>
     <string name="app_theme_night">ليلي (أسود)</string>
     <string name="app_theme_sapphire">ياقوتي أزرق</string>
     <string name="app_theme_amber">كهرماني دافئ</string>
@@ -149,4 +149,16 @@
     <string name="quiz_wrong">أخطأت (تلوين أحمر)</string>
     <string name="quiz_hide">إخفاء الآية</string>
     <string name="quiz_score">أصبت %1$s · أخطأت %2$s</string>
+    <string name="btn_tasbih">التسبيح</string>
+    <string name="btn_adhkar">الأذكار</string>
+    <string name="btn_help">المساعدة والدعم</string>
+    <string name="tasbih_target">الهدف: %1$s</string>
+    <string name="tasbih_total">المجموع المحفوظ: %1$s</string>
+    <string name="tasbih_reset">تصفير</string>
+    <string name="tasbih_next">الذكر التالي</string>
+    <string name="adhkar_left">المتبقي %1$s من %2$s</string>
+    <string name="support_title">الدعم والتواصل</string>
+    <string name="support_empty">ستظهر هنا روابط التواصل عند إضافتها.</string>
+    <string name="support_open_failed">تعذّر فتح الرابط</string>
+    <string name="help_body">• القراءة: «متابعة القراءة» تفتح آخر موضع. اسحب يميناً ويساراً بين الصفحات، واضغط رقم الآية لاختيارها، والضغط المطوّل ينسخها.\n\n• مصحف المدينة: الصفحات تُعرض 15 سطراً كما في المطبوع. يمكنك إيقاف ذلك من الإعدادات لتكبير الخط وتصغيره.\n\n• الاستماع: زر «استماع» يقرأ الآيات بصوت القارئ ويظلّل الآية الجارية؛ يلزمه إنترنت.\n\n• الاختبار: زر «اختبار» يخفي الآيات لتتحقق من حفظك؛ اضغط رقم الآية لكشفها ثم قيّم نفسك.\n\n• التسبيح: اضغط الدائرة للعدّ؛ يهتزّ الجهاز عند بلوغ الهدف.\n\n• الأذكار: أبواب من «حصن المسلم»؛ اضغط البطاقة لإنقاص عدّاد التكرار.\n\n• الثيمات: من الإعدادات اختر ألوان التطبيق وورقة المصحف.</string>
 </resources>

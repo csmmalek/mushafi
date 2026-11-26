@@ -707,7 +707,7 @@ public class PageReaderActivity extends BaseActivity {
                 Object frame = headerFont != null
                         ? new SurahHeaderSpan(line.surah, ArabicDigits.format(line.surah),
                                 ArabicDigits.format(meta.ayahCount(line.surah)), headerFont, host, theme)
-                        : new SurahFrameSpan(sb.substring(lineStart),
+                        : new SurahFrameSpan(sb.subSequence(lineStart, sb.length()).toString(),
                                 ArabicDigits.format(line.surah),
                                 ArabicDigits.format(meta.ayahCount(line.surah)), host, theme);
                 sb.setSpan(frame, lineStart, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);

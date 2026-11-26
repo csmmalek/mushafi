@@ -9,17 +9,17 @@
     <style name="Theme.Mushafi.Emerald" parent="Theme.Mushafi">
         <item name="appBackground">@drawable/bg_app_emerald</item>
         <item name="android:windowBackground">@drawable/bg_app_emerald</item>
-        <item name="glassTop">#40FFFFFF</item>
-        <item name="glassBottom">#14FFFFFF</item>
-        <item name="glassStroke">#66E3C57A</item>
-        <item name="glassGloss">#38FFFFFF</item>
-        <item name="textPrimary">#F7F1E1</item>
-        <item name="textMuted">#B9C7BE</item>
-        <item name="accent">#E3C57A</item>
-        <item name="accentSoft">#F3E5BC</item>
-        <item name="onAccent">#06291E</item>
-        <item name="android:statusBarColor">#06291E</item>
-        <item name="android:navigationBarColor">#06291E</item>
+        <item name="glassTop">#5CFFFFFF</item>
+        <item name="glassBottom">#1CC8F4FF</item>
+        <item name="glassStroke">#9980F2E1</item>
+        <item name="glassGloss">#58FFFFFF</item>
+        <item name="textPrimary">#F4F6FF</item>
+        <item name="textMuted">#B4BFEA</item>
+        <item name="accent">#5EEAD4</item>
+        <item name="accentSoft">#C4FAF0</item>
+        <item name="onAccent">#150B4A</item>
+        <item name="android:statusBarColor">#150B4A</item>
+        <item name="android:navigationBarColor">#0A2F4A</item>
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowLightNavigationBar">false</item>
     </style>
@@ -127,6 +127,20 @@
         <item name="android:paddingTop">18dp</item>
         <item name="android:paddingBottom">14dp</item>
         <item name="android:drawablePadding">10dp</item>
+    </style>
+    <style name="TileCard" parent="Widget.AppCompat.Button.Borderless">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_height">104dp</item>
+        <item name="android:layout_columnWeight">1</item>
+        <item name="android:layout_margin">5dp</item>
+        <item name="android:background">@drawable/bg_feature_card</item>
+        <item name="android:textColor">?attr/textPrimary</item>
+        <item name="android:textSize">13sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:paddingTop">16dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:drawablePadding">8dp</item>
     </style>
     <style name="RowItem" parent="Widget.AppCompat.Button.Borderless">
         <item name="android:layout_width">match_parent</item>
