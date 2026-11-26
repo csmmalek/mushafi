@@ -14,7 +14,7 @@
         android:id="@+id/surah_title"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/text_on_dark"
+        android:textColor="?attr/textPrimary"
         android:textSize="17sp"
         android:textStyle="bold" />
 
@@ -22,6 +22,6 @@
         android:id="@+id/surah_subtitle"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textColor="@color/text_muted_dark"
+        android:textColor="?attr/textMuted"
         android:textSize="13sp" />
 </LinearLayout>

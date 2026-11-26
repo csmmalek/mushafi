@@ -46,7 +46,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.viewpager2.widget.ViewPager2;
 
@@ -74,7 +73,7 @@ import java.util.concurrent.Executors;
  * ويُقاس الخط ليملأ الصفحة بلا فراغ. راية السورة والبسملة في أول السورة فقط.
  * الضغط على آية يحددها ويفتح النسخ والمشاركة والعلامة.
  */
-public class PageReaderActivity extends AppCompatActivity {
+public class PageReaderActivity extends BaseActivity {
 
     private final ExecutorService io = Executors.newSingleThreadExecutor();
     private final Handler main = new Handler(Looper.getMainLooper());

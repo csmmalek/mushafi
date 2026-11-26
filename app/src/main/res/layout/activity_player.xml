@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/emerald_rich"
+    android:background="?attr/appBackground"
     android:gravity="center_horizontal"
     android:orientation="vertical"
     android:padding="20dp">
@@ -27,7 +27,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:gravity="center"
-        android:textColor="@color/gold_light"
+        android:textColor="?attr/accent"
         android:textSize="20sp"
         android:textStyle="bold" />
 
@@ -36,7 +36,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:gravity="center"
-        android:textColor="@color/text_muted_dark"
+        android:textColor="?attr/textMuted"
         android:textSize="13sp" />
 
     <TextView
@@ -45,7 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
         android:gravity="center"
-        android:textColor="@color/text_on_dark" />
+        android:textColor="?attr/textPrimary" />
 
     <SeekBar
         android:id="@+id/player_seek"
@@ -122,6 +122,6 @@
         android:layout_marginTop="24dp"
         android:gravity="center"
         android:text="@string/player_source_note"
-        android:textColor="@color/text_muted_dark"
+        android:textColor="?attr/textMuted"
         android:textSize="12sp" />
 </LinearLayout>

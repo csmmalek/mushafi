@@ -7,7 +7,6 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.csm.mushafi.data.QuranRepository;
 import com.csm.mushafi.data.SurahEntity;
@@ -23,7 +22,7 @@ import java.util.concurrent.Executors;
  * خطة الختمة: مدة تختارها، والورد اليومي يُحسب من عدد آيات المصحف المتحقق منه.
  * التقدم مشتق من آخر موضع قراءة محفوظ. لا إشعارات.
  */
-public class KhatmahActivity extends AppCompatActivity {
+public class KhatmahActivity extends BaseActivity {
 
     private static final int[] PRESETS = {7, 14, 30};
 

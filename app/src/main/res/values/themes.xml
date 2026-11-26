@@ -3,11 +3,93 @@
     <style name="Theme.Mushafi" parent="Theme.AppCompat.NoActionBar">
         <item name="colorPrimary">@color/emerald_deep</item>
         <item name="colorPrimaryDark">@color/emerald_rich</item>
-        <item name="colorAccent">@color/gold</item>
-        <item name="android:windowBackground">@color/emerald_rich</item>
-        <item name="android:statusBarColor">@color/emerald_rich</item>
-        <item name="android:navigationBarColor">@color/emerald_rich</item>
+        <item name="colorAccent">?attr/accent</item>
         <item name="android:layoutDirection">rtl</item>
+    </style>
+    <style name="Theme.Mushafi.Emerald" parent="Theme.Mushafi">
+        <item name="appBackground">@drawable/bg_app_emerald</item>
+        <item name="android:windowBackground">@drawable/bg_app_emerald</item>
+        <item name="glassTop">#40FFFFFF</item>
+        <item name="glassBottom">#14FFFFFF</item>
+        <item name="glassStroke">#66E3C57A</item>
+        <item name="glassGloss">#38FFFFFF</item>
+        <item name="textPrimary">#F7F1E1</item>
+        <item name="textMuted">#B9C7BE</item>
+        <item name="accent">#E3C57A</item>
+        <item name="accentSoft">#F3E5BC</item>
+        <item name="onAccent">#06291E</item>
+        <item name="android:statusBarColor">#06291E</item>
+        <item name="android:navigationBarColor">#06291E</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+    <style name="Theme.Mushafi.Night" parent="Theme.Mushafi">
+        <item name="appBackground">@drawable/bg_app_night</item>
+        <item name="android:windowBackground">@drawable/bg_app_night</item>
+        <item name="glassTop">#2EFFFFFF</item>
+        <item name="glassBottom">#0DFFFFFF</item>
+        <item name="glassStroke">#55AAB4FF</item>
+        <item name="glassGloss">#26FFFFFF</item>
+        <item name="textPrimary">#ECEEF5</item>
+        <item name="textMuted">#9AA0B4</item>
+        <item name="accent">#AEBBFF</item>
+        <item name="accentSoft">#D7DDFF</item>
+        <item name="onAccent">#05060C</item>
+        <item name="android:statusBarColor">#000000</item>
+        <item name="android:navigationBarColor">#000000</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+    <style name="Theme.Mushafi.Sapphire" parent="Theme.Mushafi">
+        <item name="appBackground">@drawable/bg_app_sapphire</item>
+        <item name="android:windowBackground">@drawable/bg_app_sapphire</item>
+        <item name="glassTop">#40FFFFFF</item>
+        <item name="glassBottom">#14FFFFFF</item>
+        <item name="glassStroke">#668CC8FF</item>
+        <item name="glassGloss">#38FFFFFF</item>
+        <item name="textPrimary">#EEF4FF</item>
+        <item name="textMuted">#A9B9D6</item>
+        <item name="accent">#8CC8FF</item>
+        <item name="accentSoft">#CFE6FF</item>
+        <item name="onAccent">#061233</item>
+        <item name="android:statusBarColor">#0A1D4A</item>
+        <item name="android:navigationBarColor">#0A1D4A</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+    <style name="Theme.Mushafi.Amber" parent="Theme.Mushafi">
+        <item name="appBackground">@drawable/bg_app_amber</item>
+        <item name="android:windowBackground">@drawable/bg_app_amber</item>
+        <item name="glassTop">#40FFFFFF</item>
+        <item name="glassBottom">#14FFFFFF</item>
+        <item name="glassStroke">#66FFC27A</item>
+        <item name="glassGloss">#38FFFFFF</item>
+        <item name="textPrimary">#FFF2E4</item>
+        <item name="textMuted">#D9BFA8</item>
+        <item name="accent">#FFC27A</item>
+        <item name="accentSoft">#FFE3BD</item>
+        <item name="onAccent">#1E0C06</item>
+        <item name="android:statusBarColor">#2A1209</item>
+        <item name="android:navigationBarColor">#2A1209</item>
+        <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
+    </style>
+    <style name="Theme.Mushafi.Pearl" parent="Theme.Mushafi">
+        <item name="appBackground">@drawable/bg_app_pearl</item>
+        <item name="android:windowBackground">@drawable/bg_app_pearl</item>
+        <item name="glassTop">#CCFFFFFF</item>
+        <item name="glassBottom">#80FFFFFF</item>
+        <item name="glassStroke">#661C6B50</item>
+        <item name="glassGloss">#99FFFFFF</item>
+        <item name="textPrimary">#12372A</item>
+        <item name="textMuted">#4F6A5F</item>
+        <item name="accent">#1C6B50</item>
+        <item name="accentSoft">#CFE8DD</item>
+        <item name="onAccent">#FFFFFF</item>
+        <item name="android:statusBarColor">#EAF1EC</item>
+        <item name="android:navigationBarColor">#EAF1EC</item>
+        <item name="android:windowLightStatusBar">true</item>
+        <item name="android:windowLightNavigationBar">true</item>
     </style>
 
     <style name="FeatureCard" parent="Widget.AppCompat.Button">
@@ -16,14 +98,14 @@
         <item name="android:layout_columnWeight">1</item>
         <item name="android:layout_margin">6dp</item>
         <item name="android:background">@drawable/bg_feature_card</item>
-        <item name="android:textColor">@color/text_on_dark</item>
+        <item name="android:textColor">?attr/textPrimary</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textAllCaps">false</item>
     </style>
     <style name="ChipButton" parent="Widget.AppCompat.Button.Borderless">
         <item name="android:background">@drawable/bg_chip</item>
-        <item name="android:textColor">@color/gold_light</item>
+        <item name="android:textColor">?attr/accent</item>
         <item name="android:textSize">14sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textAllCaps">false</item>
@@ -38,7 +120,7 @@
         <item name="android:layout_weight">1</item>
         <item name="android:layout_margin">6dp</item>
         <item name="android:background">@drawable/bg_feature_card</item>
-        <item name="android:textColor">@color/text_on_dark</item>
+        <item name="android:textColor">?attr/textPrimary</item>
         <item name="android:textSize">17sp</item>
         <item name="android:textStyle">bold</item>
         <item name="android:textAllCaps">false</item>
@@ -51,7 +133,7 @@
         <item name="android:layout_height">58dp</item>
         <item name="android:layout_marginTop">8dp</item>
         <item name="android:background">@drawable/bg_row</item>
-        <item name="android:textColor">@color/text_on_dark</item>
+        <item name="android:textColor">?attr/textPrimary</item>
         <item name="android:textSize">16sp</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:gravity">start|center_vertical</item>

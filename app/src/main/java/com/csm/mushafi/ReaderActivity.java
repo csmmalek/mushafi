@@ -12,7 +12,6 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -26,7 +25,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /** القارئ: يعرض آيات السورة من قاعدة البيانات المستوردة من الملف المعتمد فقط. */
-public class ReaderActivity extends AppCompatActivity {
+public class ReaderActivity extends BaseActivity {
 
     static final String EXTRA_SURAH = "surah";
     static final String EXTRA_AYAH = "ayah";

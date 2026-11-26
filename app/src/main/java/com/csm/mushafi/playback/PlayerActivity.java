@@ -15,7 +15,7 @@ import android.widget.TextView;
 
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
-import androidx.appcompat.app.AppCompatActivity;
+import com.csm.mushafi.BaseActivity;
 import androidx.core.content.ContextCompat;
 import androidx.media3.common.MediaItem;
 import androidx.media3.common.MediaMetadata;
@@ -42,7 +42,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /** شاشة المشغل: تتصل بخدمة التشغيل. الإيقاف والاستئناف يعملان حتى عند إغلاق الشاشة. */
-public class PlayerActivity extends AppCompatActivity {
+public class PlayerActivity extends BaseActivity {
 
     public static final String EXTRA_RECITER = "reciter";
     public static final String EXTRA_MOSHAF = "moshaf";

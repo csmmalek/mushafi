@@ -133,4 +133,10 @@
     <string name="font_larger">أ+</string>
     <string name="settings_kashida">مدّ الكلمات لملء السطر (للعرض فقط، النص لا يتغير)</string>
     <string name="btn_search_in_reader">بحث في القرآن</string>
+    <string name="settings_section_appearance">مظهر التطبيق</string>
+    <string name="app_theme_emerald">زمردي زجاجي</string>
+    <string name="app_theme_night">ليلي (أسود)</string>
+    <string name="app_theme_sapphire">ياقوتي أزرق</string>
+    <string name="app_theme_amber">كهرماني دافئ</string>
+    <string name="app_theme_pearl">لؤلؤي فاتح</string>
 </resources>

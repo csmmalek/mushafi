@@ -9,7 +9,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -30,7 +29,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /** تفاصيل القارئ: السور المتاحة، وحالة كل سورة (محمّلة أو لا)، والتنزيل لكل سورة أو للكل. */
-public class ReciterActivity extends AppCompatActivity {
+public class ReciterActivity extends BaseActivity {
 
     static final String EXTRA_RECITER_INDEX = "reciterIndex";
     static final String EXTRA_MOSHAF_INDEX = "moshafIndex";
