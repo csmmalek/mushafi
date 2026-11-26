@@ -66,6 +66,7 @@ public class PageLayoutTest {
                 }
             }
         }
+        android.util.Log.e("PAGECHECK", "bad=" + bad.size() + " " + bad);
         assertTrue("pages with wrong line count: " + bad, bad.isEmpty());
     }
 }

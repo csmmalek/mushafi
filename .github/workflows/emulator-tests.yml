@@ -50,7 +50,7 @@ jobs:
             ./gradlew :app:connectedDebugAndroidTest --no-daemon || echo "TESTS_FAILED" > tests_failed.flag
             mkdir -p shots
             adb pull /sdcard/shots/. ./shots/ || true
-            adb logcat -d -s AndroidRuntime:E ActivityManager:E libc:F DEBUG:F > shots/logcat.txt || true
+            adb logcat -d -s PAGECHECK:E AndroidRuntime:E ActivityManager:E libc:F DEBUG:F > shots/logcat.txt || true
             test ! -f tests_failed.flag
 
       - name: Publish screenshots branch
