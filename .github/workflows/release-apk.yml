@@ -5,6 +5,11 @@ on:
     branches: [main]
     tags: ['v*']
   workflow_dispatch:
+    inputs:
+      version:
+        description: 'رقم الإصدار الرسمي (مثل 0.8.0) أو اتركه فارغاً لتحديث أحدث نسخة تجريبية'
+        required: false
+        default: ''
 
 permissions:
   contents: write
@@ -38,14 +43,14 @@ jobs:
       - name: Publish the APK
         env:
           GH_TOKEN: ${{ github.token }}
+          INPUT_VERSION: ${{ github.event.inputs.version }}
         run: |
           cp app/build/outputs/apk/debug/app-debug.apk mushafi-latest.apk
-          if [[ "${GITHUB_REF}" == refs/tags/v* ]]; then
-            TAG="${GITHUB_REF#refs/tags/}"
-            VER="${TAG#v}"
+          if [[ "${GITHUB_REF}" == refs/tags/v* || -n "${INPUT_VERSION}" ]]; then
+            if [[ -n "${INPUT_VERSION}" ]]; then VER="${INPUT_VERSION#v}"; TAG="v${VER}"; else TAG="${GITHUB_REF#refs/tags/}"; VER="${TAG#v}"; fi
             cp mushafi-latest.apk "mushafi-${VER}.apk"
             awk -v v="$VER" '$0 ~ "^## "v" " {f=1; next} /^## / {f=0} f' CHANGELOG.md > notes.md
-            gh release create "$TAG" "mushafi-${VER}.apk" --title "مصحفي ${VER}" --notes-file notes.md
+            gh release create "$TAG" "mushafi-${VER}.apk" --target "$GITHUB_SHA" --title "مصحفي ${VER}" --notes-file notes.md
           else
             gh release delete latest --yes --cleanup-tag || true
             gh release create latest mushafi-latest.apk --prerelease \
