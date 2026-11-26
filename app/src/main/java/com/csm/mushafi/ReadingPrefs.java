@@ -59,6 +59,15 @@ final class ReadingPrefs {
         prefs.edit().putBoolean("exactLayout", on).apply();
     }
 
+    /** صوت تقليب الصفحة (الافتراضي مفعّل). */
+    boolean pageSound() {
+        return prefs.getBoolean("pageSound", true);
+    }
+
+    void savePageSound(boolean on) {
+        prefs.edit().putBoolean("pageSound", on).apply();
+    }
+
     boolean kashida() {
         return prefs.getBoolean("kashida", true);
     }

@@ -144,6 +144,9 @@ public class SettingsActivity extends BaseActivity {
             public void onStopTrackingTouch(SeekBar bar) {
             }
         });
+        SwitchCompat soundSwitch = findViewById(R.id.switch_page_sound);
+        soundSwitch.setChecked(reading.pageSound());
+        soundSwitch.setOnCheckedChangeListener((b, on) -> reading.savePageSound(on));
         SwitchCompat exactSwitch = findViewById(R.id.switch_exact);
         exactSwitch.setChecked(reading.exactLayout());
         exactSwitch.setOnCheckedChangeListener((b, on) -> reading.saveExactLayout(on));

@@ -93,6 +93,8 @@ public class PageReaderActivity extends BaseActivity {
     private MuqattaatDisplay muqattaat;
     private String[][] texts;
     private MushafLines lines;
+    private android.media.SoundPool soundPool;
+    private int flipSound;
     private String basmala;
     private int currentPage = 1;
 
@@ -239,8 +241,18 @@ public class PageReaderActivity extends BaseActivity {
         appliedExact = prefs.exactLayout();
     }
 
+    private void playFlip() {
+        if (soundPool != null && prefs.pageSound()) {
+            soundPool.play(flipSound, 0.8f, 0.8f, 1, 0, 1f);
+        }
+    }
+
     @Override
     protected void onDestroy() {
+        if (soundPool != null) {
+            soundPool.release();
+            soundPool = null;
+        }
         io.shutdownNow();
         super.onDestroy();
     }
@@ -286,10 +298,23 @@ public class PageReaderActivity extends BaseActivity {
         adapter = new PageAdapter();
         pager.setAdapter(adapter);
         pager.setOffscreenPageLimit(1);
+        pager.setPageTransformer(new com.csm.mushafi.view.BookPageTransformer());
+        soundPool = new android.media.SoundPool.Builder().setMaxStreams(2).build();
+        flipSound = soundPool.load(this, R.raw.page_flip, 1);
+        Button soundButton = findViewById(R.id.btn_sound);
+        soundButton.setText(prefs.pageSound() ? R.string.sound_on : R.string.sound_off);
+        soundButton.setOnClickListener(v -> {
+            boolean on = !prefs.pageSound();
+            prefs.savePageSound(on);
+            soundButton.setText(on ? R.string.sound_on : R.string.sound_off);
+        });
         pager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 updatePage(position + 1);
+                if (pager.getScrollState() != ViewPager2.SCROLL_STATE_IDLE) {
+                    playFlip();
+                }
             }
         });
         seek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
