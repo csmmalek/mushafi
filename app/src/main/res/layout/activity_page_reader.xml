@@ -16,6 +16,7 @@
         android:paddingBottom="8dp">
 
         <Button
+            style="@style/ChipButton"
             android:id="@+id/btn_back"
             style="@style/ChipButton"
             android:layout_width="wrap_content"
