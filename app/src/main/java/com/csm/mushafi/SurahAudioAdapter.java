@@ -52,8 +52,7 @@ final class SurahAudioAdapter extends RecyclerView.Adapter<SurahAudioAdapter.Hol
         int surah = surahs.get(position);
         boolean local = completed.containsKey(surah);
         boolean playable = local || online;
-        holder.title.setText(holder.itemView.getContext()
-                .getString(R.string.surah_number_format, ArabicDigits.format(surah)));
+        holder.title.setText(SurahNames.title(holder.itemView.getContext(), surah));
         int hint = local ? R.string.play_surah_local : (online ? R.string.play_surah_hint : R.string.play_needs_network);
         holder.subtitle.setText(hint);
         holder.itemView.setAlpha(playable ? 1f : 0.5f);

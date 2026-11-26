@@ -268,7 +268,7 @@ public class PlayerActivity extends AppCompatActivity {
                     .setMediaId(remote)
                     .setUri(uri)
                     .setMediaMetadata(new MediaMetadata.Builder()
-                            .setTitle(getString(R.string.surah_number_format, ArabicDigits.format(surah)))
+                            .setTitle(com.csm.mushafi.SurahNames.title(this, surah))
                             .setArtist(reciter)
                             .setAlbumTitle(moshaf)
                             .build())

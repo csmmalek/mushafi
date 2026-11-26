@@ -135,7 +135,7 @@ public class ReciterActivity extends AppCompatActivity {
         String download = getString(R.string.download_surah);
         String delete = getString(R.string.download_delete_file);
         new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.surah_number_format, ArabicDigits.format(surah)))
+                .setTitle(SurahNames.title(this, surah))
                 .setItems(new String[]{download, delete}, (d, which) -> {
                     if (which == 0) {
                         enqueue(java.util.Collections.singletonList(surah));

@@ -61,6 +61,12 @@ public class ScreenshotTest {
             shell("screencap -p /sdcard/shots/page_listen.png");
         }
 
+        Intent list = new Intent(ctx, SurahListActivity.class);
+        try (ActivityScenario<SurahListActivity> s = ActivityScenario.launch(list)) {
+            Thread.sleep(2500);
+            shell("screencap -p /sdcard/shots/surah_list.png");
+        }
+
         ReadingPrefs reading = new ReadingPrefs(ctx);
         for (int pct : new int[]{80, 130}) {
             reading.savePageFontPercent(pct);
