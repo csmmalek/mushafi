@@ -9,17 +9,17 @@
     <style name="Theme.Mushafi.Emerald" parent="Theme.Mushafi">
         <item name="appBackground">@drawable/bg_app_emerald</item>
         <item name="android:windowBackground">@drawable/bg_app_emerald</item>
-        <item name="glassTop">#5CFFFFFF</item>
-        <item name="glassBottom">#1CC8F4FF</item>
-        <item name="glassStroke">#9980F2E1</item>
-        <item name="glassGloss">#58FFFFFF</item>
-        <item name="textPrimary">#F4F6FF</item>
-        <item name="textMuted">#B4BFEA</item>
-        <item name="accent">#5EEAD4</item>
-        <item name="accentSoft">#C4FAF0</item>
-        <item name="onAccent">#150B4A</item>
-        <item name="android:statusBarColor">#150B4A</item>
-        <item name="android:navigationBarColor">#0A2F4A</item>
+        <item name="glassTop">#24FFFFFF</item>
+        <item name="glassBottom">#0FFFFFFF</item>
+        <item name="glassStroke">#4DE2C28B</item>
+        <item name="glassGloss">#14FFFFFF</item>
+        <item name="textPrimary">#F6EFE0</item>
+        <item name="textMuted">#A9BDBA</item>
+        <item name="accent">#E2C28B</item>
+        <item name="accentSoft">#F3E2BD</item>
+        <item name="onAccent">#0B2A30</item>
+        <item name="android:statusBarColor">#0B2A30</item>
+        <item name="android:navigationBarColor">#082126</item>
         <item name="android:windowLightStatusBar">false</item>
         <item name="android:windowLightNavigationBar">false</item>
     </style>
@@ -43,10 +43,10 @@
     <style name="Theme.Mushafi.Sapphire" parent="Theme.Mushafi">
         <item name="appBackground">@drawable/bg_app_sapphire</item>
         <item name="android:windowBackground">@drawable/bg_app_sapphire</item>
-        <item name="glassTop">#40FFFFFF</item>
-        <item name="glassBottom">#14FFFFFF</item>
+        <item name="glassTop">#26FFFFFF</item>
+        <item name="glassBottom">#10FFFFFF</item>
         <item name="glassStroke">#668CC8FF</item>
-        <item name="glassGloss">#38FFFFFF</item>
+        <item name="glassGloss">#14FFFFFF</item>
         <item name="textPrimary">#EEF4FF</item>
         <item name="textMuted">#A9B9D6</item>
         <item name="accent">#8CC8FF</item>
@@ -60,10 +60,10 @@
     <style name="Theme.Mushafi.Amber" parent="Theme.Mushafi">
         <item name="appBackground">@drawable/bg_app_amber</item>
         <item name="android:windowBackground">@drawable/bg_app_amber</item>
-        <item name="glassTop">#40FFFFFF</item>
-        <item name="glassBottom">#14FFFFFF</item>
+        <item name="glassTop">#26FFFFFF</item>
+        <item name="glassBottom">#10FFFFFF</item>
         <item name="glassStroke">#66FFC27A</item>
-        <item name="glassGloss">#38FFFFFF</item>
+        <item name="glassGloss">#14FFFFFF</item>
         <item name="textPrimary">#FFF2E4</item>
         <item name="textMuted">#D9BFA8</item>
         <item name="accent">#FFC27A</item>

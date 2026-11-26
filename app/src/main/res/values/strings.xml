@@ -136,7 +136,7 @@
     <string name="settings_kashida">مدّ الكلمات لملء السطر (للعرض فقط، النص لا يتغير)</string>
     <string name="btn_search_in_reader">بحث في القرآن</string>
     <string name="settings_section_appearance">مظهر التطبيق</string>
-    <string name="app_theme_emerald">نيلي وفيروزي زجاجي</string>
+    <string name="app_theme_emerald">فيروزي ورملي</string>
     <string name="app_theme_night">ليلي (أسود)</string>
     <string name="app_theme_sapphire">ياقوتي أزرق</string>
     <string name="app_theme_amber">كهرماني دافئ</string>
@@ -164,4 +164,5 @@
     <string name="settings_page_sound">صوت تقليب الصفحة</string>
     <string name="sound_on">🔊</string>
     <string name="sound_off">🔇</string>
+    <string name="reader_menu">قائمة التحكم</string>
 </resources>
