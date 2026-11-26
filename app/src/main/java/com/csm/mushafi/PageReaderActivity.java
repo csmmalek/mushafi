@@ -164,6 +164,7 @@ public class PageReaderActivity extends BaseActivity {
         positionText = findViewById(R.id.page_position);
         titleText = findViewById(R.id.reader_title);
         selectionBar = findViewById(R.id.page_selection_bar);
+        setupImmersive();
         selectionText = findViewById(R.id.page_selection_text);
         findViewById(R.id.btn_back).setOnClickListener(v -> finish());
         findViewById(R.id.btn_bookmark).setOnClickListener(v -> bookmarkPage());
@@ -239,6 +240,61 @@ public class PageReaderActivity extends BaseActivity {
         appliedFont = prefs.pageFontPercent();
         appliedKashida = prefs.kashida();
         appliedExact = prefs.exactLayout();
+    }
+
+
+    // ---- قراءة بملء الشاشة: لا شيء على الصفحة، والنقر يُظهر زر القائمة (ثلاثة خطوط) ----
+
+    private boolean menuOpen;
+    private final Runnable hideMenuButton = () -> {
+        View b = findViewById(R.id.btn_menu);
+        if (b != null && !menuOpen) {
+            b.setVisibility(View.GONE);
+        }
+    };
+
+    private void setupImmersive() {
+        androidx.core.view.WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
+        getWindow().getAttributes().layoutInDisplayCutoutMode =
+                WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES;
+        hideSystemBars();
+        findViewById(R.id.btn_menu).setOnClickListener(v -> setMenuOpen(!menuOpen));
+    }
+
+    private void hideSystemBars() {
+        androidx.core.view.WindowInsetsControllerCompat c =
+                androidx.core.view.WindowCompat.getInsetsController(getWindow(), getWindow().getDecorView());
+        c.hide(androidx.core.view.WindowInsetsCompat.Type.systemBars());
+        c.setSystemBarsBehavior(
+                androidx.core.view.WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE);
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            hideSystemBars();
+        }
+    }
+
+    private void revealMenuButton() {
+        View b = findViewById(R.id.btn_menu);
+        if (b == null || menuOpen) {
+            return;
+        }
+        b.setVisibility(View.VISIBLE);
+        main.removeCallbacks(hideMenuButton);
+        main.postDelayed(hideMenuButton, 4000);
+    }
+
+    private void setMenuOpen(boolean open) {
+        menuOpen = open;
+        findViewById(R.id.reader_top).setVisibility(open ? View.VISIBLE : View.GONE);
+        findViewById(R.id.reader_controls).setVisibility(open ? View.VISIBLE : View.GONE);
+        main.removeCallbacks(hideMenuButton);
+        if (!open) {
+            main.postDelayed(hideMenuButton, 4000);
+        }
     }
 
     private void playFlip() {
@@ -647,7 +703,7 @@ public class PageReaderActivity extends BaseActivity {
                 onQuizTap(surah, ayah);
                 return;
             }
-            selectAyah(surah, ayah);
+            revealMenuButton();
         }
 
         @Override
@@ -895,6 +951,7 @@ public class PageReaderActivity extends BaseActivity {
                 root = view.findViewById(R.id.page_root);
                 text = view.findViewById(R.id.page_text);
                 final float[] touch = new float[2];
+                text.setOnClickListener(v -> revealMenuButton());
                 text.setOnTouchListener((v, event) -> {
                     touch[0] = event.getX();
                     touch[1] = event.getY();
@@ -915,7 +972,6 @@ public class PageReaderActivity extends BaseActivity {
                         return false;
                     }
                     selectAyah(hit[0].surah, hit[0].ayah);
-                    copySelected();
                     return true;
                 });
             }
