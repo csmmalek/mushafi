@@ -83,39 +83,65 @@
                 android:text="@string/btn_recitations" />
         </LinearLayout>
 
+        <GridLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="6dp"
+            android:columnCount="3">
+
         <Button
             android:id="@+id/btn_search"
-            style="@style/RowItem"
-            android:drawableStart="@drawable/ic_search"
+            style="@style/TileCard"
+            android:drawableTop="@drawable/ic_search"
             android:enabled="false"
             android:text="@string/btn_search" />
 
         <Button
             android:id="@+id/btn_bookmarks"
-            style="@style/RowItem"
-            android:drawableStart="@drawable/ic_bookmarks"
+            style="@style/TileCard"
+            android:drawableTop="@drawable/ic_bookmarks"
             android:enabled="false"
             android:text="@string/btn_bookmarks" />
 
         <Button
             android:id="@+id/btn_khatmah"
-            style="@style/RowItem"
-            android:drawableStart="@drawable/ic_khatmah"
+            style="@style/TileCard"
+            android:drawableTop="@drawable/ic_khatmah"
             android:enabled="false"
             android:text="@string/btn_khatmah" />
 
         <Button
+            android:id="@+id/btn_tasbih"
+            style="@style/TileCard"
+            android:drawableTop="@drawable/ic_tasbih"
+            android:text="@string/btn_tasbih" />
+
+        <Button
+            android:id="@+id/btn_adhkar"
+            style="@style/TileCard"
+            android:drawableTop="@drawable/ic_adhkar"
+            android:text="@string/btn_adhkar" />
+
+        <Button
             android:id="@+id/btn_downloads"
-            style="@style/RowItem"
-            android:drawableStart="@drawable/ic_downloads"
+            style="@style/TileCard"
+            android:drawableTop="@drawable/ic_downloads"
             android:enabled="false"
             android:text="@string/btn_downloads" />
 
         <Button
             android:id="@+id/btn_settings"
-            style="@style/RowItem"
-            android:drawableStart="@drawable/ic_settings"
+            style="@style/TileCard"
+            android:drawableTop="@drawable/ic_settings"
             android:text="@string/btn_settings" />
+
+        <Button
+            android:id="@+id/btn_help"
+            style="@style/TileCard"
+            android:drawableTop="@drawable/ic_help"
+            android:text="@string/btn_help" />
+
+        </GridLayout>
 
         <TextView
             android:layout_width="match_parent"

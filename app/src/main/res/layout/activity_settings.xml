@@ -159,6 +159,20 @@
             android:thumbTint="?attr/accent" />
 
         <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_page_sound"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:text="@string/settings_page_sound"
+            android:textColor="?attr/textPrimary" />
+
+        <androidx.appcompat.widget.SwitchCompat
+            android:id="@+id/switch_exact"
+            android:layout_width="match_parent"
+            android:layout_height="52dp"
+            android:text="@string/settings_exact"
+            android:textColor="?attr/textPrimary" />
+
+        <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switch_kashida"
             android:layout_width="match_parent"
             android:layout_height="52dp"

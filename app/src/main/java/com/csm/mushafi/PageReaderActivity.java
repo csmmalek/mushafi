@@ -52,6 +52,7 @@ import androidx.viewpager2.widget.ViewPager2;
 import com.csm.mushafi.data.AyahEntity;
 import com.csm.mushafi.data.BookmarkEntity;
 import com.csm.mushafi.data.QuranRepository;
+import com.csm.mushafi.mushaf.MushafLines;
 import com.csm.mushafi.mushaf.MushafMeta;
 import com.csm.mushafi.mushaf.MuqattaatDisplay;
 import com.csm.mushafi.quran.ArabicDigits;
@@ -91,6 +92,9 @@ public class PageReaderActivity extends BaseActivity {
     private MushafMeta meta;
     private MuqattaatDisplay muqattaat;
     private String[][] texts;
+    private MushafLines lines;
+    private android.media.SoundPool soundPool;
+    private int flipSound;
     private String basmala;
     private int currentPage = 1;
 
@@ -147,6 +151,7 @@ public class PageReaderActivity extends BaseActivity {
     private boolean appliedMuq;
     private int appliedFont;
     private boolean appliedKashida;
+    private boolean appliedExact;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -186,6 +191,13 @@ public class PageReaderActivity extends BaseActivity {
             try {
                 MushafMeta loaded = MushafMeta.parse(readAsset("mushaf-meta.json"));
                 MuqattaatDisplay loadedMuq = MuqattaatDisplay.parse(readAsset("muqattaat-display.json"));
+                MushafLines loadedLines = null;
+                try {
+                    loadedLines = MushafLines.parse(readAsset("mushaf-lines.json"));
+                } catch (Exception ignored) {
+                    // بدون بيانات الأسطر يرجع العرض إلى التدفق الحر
+                }
+                final MushafLines linesFinal = loadedLines;
                 String[][] loadedTexts = new String[MushafMeta.SURAHS + 1][];
                 for (int s = 1; s <= MushafMeta.SURAHS; s++) {
                     List<AyahEntity> rows = repo.dao().ayahsOfSurah(s);
@@ -199,6 +211,7 @@ public class PageReaderActivity extends BaseActivity {
                 }
                 main.post(() -> {
                     muqattaat = loadedMuq;
+                    lines = linesFinal;
                     start(loaded, loadedTexts, surah, ayah);
                 });
             } catch (Exception e) {
@@ -218,17 +231,28 @@ public class PageReaderActivity extends BaseActivity {
         int theme = prefs.pageTheme();
         boolean muq = prefs.muqattaatUthmani();
         if (adapter != null && (theme != appliedTheme || muq != appliedMuq
-                || prefs.pageFontPercent() != appliedFont || prefs.kashida() != appliedKashida)) {
+                || prefs.pageFontPercent() != appliedFont || prefs.kashida() != appliedKashida || prefs.exactLayout() != appliedExact)) {
             adapter.notifyDataSetChanged();
         }
         appliedTheme = theme;
         appliedMuq = muq;
         appliedFont = prefs.pageFontPercent();
         appliedKashida = prefs.kashida();
+        appliedExact = prefs.exactLayout();
+    }
+
+    private void playFlip() {
+        if (soundPool != null && prefs.pageSound()) {
+            soundPool.play(flipSound, 0.8f, 0.8f, 1, 0, 1f);
+        }
     }
 
     @Override
     protected void onDestroy() {
+        if (soundPool != null) {
+            soundPool.release();
+            soundPool = null;
+        }
         io.shutdownNow();
         super.onDestroy();
     }
@@ -274,10 +298,23 @@ public class PageReaderActivity extends BaseActivity {
         adapter = new PageAdapter();
         pager.setAdapter(adapter);
         pager.setOffscreenPageLimit(1);
+        pager.setPageTransformer(new com.csm.mushafi.view.BookPageTransformer());
+        soundPool = new android.media.SoundPool.Builder().setMaxStreams(2).build();
+        flipSound = soundPool.load(this, R.raw.page_flip, 1);
+        Button soundButton = findViewById(R.id.btn_sound);
+        soundButton.setText(prefs.pageSound() ? R.string.sound_on : R.string.sound_off);
+        soundButton.setOnClickListener(v -> {
+            boolean on = !prefs.pageSound();
+            prefs.savePageSound(on);
+            soundButton.setText(on ? R.string.sound_on : R.string.sound_off);
+        });
         pager.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageSelected(int position) {
                 updatePage(position + 1);
+                if (pager.getScrollState() != ViewPager2.SCROLL_STATE_IDLE) {
+                    playFlip();
+                }
             }
         });
         seek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {
@@ -373,6 +410,10 @@ public class PageReaderActivity extends BaseActivity {
     }
 
     private void changeFont(int delta) {
+        if (lines != null && !quizMode && prefs.exactLayout()) {
+            Toast.makeText(this, R.string.exact_font_fixed, Toast.LENGTH_LONG).show();
+            return;
+        }
         int now = prefs.pageFontPercent();
         int next = Math.max(60, Math.min(160, now + delta));
         if (next == now) {
@@ -634,9 +675,7 @@ public class PageReaderActivity extends BaseActivity {
                 lastSurah = s;
             }
             String text = texts[s][a - 1];
-            if (a == 1 && s != 1 && s != 9 && text.startsWith(basmala)) {
-                text = text.substring(basmala.length()).trim();
-            }
+            text = MushafLines.stripBasmala(s, a, text);
             if (useMuq) {
                 text = muqattaat.apply(s, a, text);
             }
@@ -666,6 +705,97 @@ public class PageReaderActivity extends BaseActivity {
             sb.append(' ');
         }
         return sb;
+    }
+
+
+    /** صفحة مطابقة لمصحف المدينة: كل سطر مطبوع سطر في النص، مفصولة بـ \n. */
+    private CharSequence buildExactPage(int page, FitPageTextView host, PageTheme theme,
+                                        boolean useMuq) {
+        SpannableStringBuilder sb = new SpannableStringBuilder();
+        boolean first = true;
+        for (MushafLines.Line line : lines.page(page)) {
+            if (!first) {
+                sb.append('\n');
+            }
+            first = false;
+            int lineStart = sb.length();
+            if (line.kind == MushafLines.HEADER) {
+                sb.append("سُورَةُ ").append(meta.name(line.surah));
+                Typeface headerFont = null;
+                try {
+                    headerFont = ResourcesCompat.getFont(this, R.font.surah_header);
+                } catch (Exception ignored) {
+                    // يُستعمل الإطار المرسوم بالكود
+                }
+                Object frame = headerFont != null
+                        ? new SurahHeaderSpan(line.surah, ArabicDigits.format(line.surah),
+                                ArabicDigits.format(meta.ayahCount(line.surah)), headerFont, host, theme)
+                        : new SurahFrameSpan(sb.subSequence(lineStart, sb.length()).toString(),
+                                ArabicDigits.format(line.surah),
+                                ArabicDigits.format(meta.ayahCount(line.surah)), host, theme);
+                sb.setSpan(frame, lineStart, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                sb.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER),
+                        lineStart, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                continue;
+            }
+            if (line.kind == MushafLines.BASMALA) {
+                sb.append(basmala);
+                sb.setSpan(new ForegroundColorSpan(theme.basmala), lineStart, sb.length(),
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                sb.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER),
+                        lineStart, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                continue;
+            }
+            boolean firstSeg = true;
+            for (MushafLines.Seg seg : line.segs) {
+                if (!firstSeg) {
+                    sb.append(' ');
+                }
+                firstSeg = false;
+                String[] words = ayahWords(seg.surah, seg.ayah, useMuq);
+                int segStart = sb.length();
+                for (int w = seg.from; w < seg.to && w < words.length; w++) {
+                    if (w > seg.from) {
+                        sb.append(' ');
+                    }
+                    sb.append(words[w]);
+                }
+                if (seg.to >= words.length) {
+                    String number = ArabicDigits.format(seg.ayah);
+                    sb.append(' ');
+                    int numberStart = sb.length();
+                    sb.append(number);
+                    sb.setSpan(new AyahMarkerSpan(number, theme), numberStart, sb.length(),
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+                sb.setSpan(new AyahClick(seg.surah, seg.ayah), segStart, sb.length(),
+                        Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                if ((seg.surah == selSurah && seg.ayah == selAyah)
+                        || (seg.surah == playSurah && seg.ayah == playAyah)) {
+                    sb.setSpan(new BackgroundColorSpan(theme.highlight), segStart, sb.length(),
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+            }
+            if (line.centered) {
+                sb.setSpan(new AlignmentSpan.Standard(Layout.Alignment.ALIGN_CENTER),
+                        lineStart, sb.length(), Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+            }
+        }
+        return sb;
+    }
+
+    /** كلمات الآية بعد حذف البسملة (وبعد تعديل المدّ المعروض إن فُعّل) بنفس عدّ بيانات الأسطر. */
+    private String[] ayahWords(int s, int a, boolean useMuq) {
+        String text = texts[s][a - 1];
+        text = MushafLines.stripBasmala(s, a, text);
+        String[] base = text.trim().split("\\s+");
+        if (useMuq) {
+            String[] changed = muqattaat.apply(s, a, text).trim().split("\\s+");
+            if (changed.length == base.length) {
+                return changed;
+            }
+        }
+        return base;
     }
 
     private void toggleQuiz(Button button) {
@@ -808,7 +938,12 @@ public class PageReaderActivity extends BaseActivity {
             holder.text.setTextColor(theme.ink);
             holder.text.setKashidaEnabled(prefs.kashida());
             holder.text.setFontScale(prefs.pageFontPercent() / 100f);
-            holder.text.setText(buildPage(position + 1, holder.text, theme, prefs.muqattaatUthmani()));
+            boolean exact = lines != null && !quizMode && prefs.exactLayout();
+            int count = exact ? lines.page(position + 1).size() : 0;
+            holder.text.setExactLines(exact, count, count >= 15 ? 15 : 10);
+            holder.text.setText(exact
+                    ? buildExactPage(position + 1, holder.text, theme, prefs.muqattaatUthmani())
+                    : buildPage(position + 1, holder.text, theme, prefs.muqattaatUthmani()));
         }
 
         @Override

@@ -50,6 +50,24 @@ final class ReadingPrefs {
         prefs.edit().putInt("page_font_percent", Math.max(60, Math.min(160, percent))).apply();
     }
 
+    /** عرض الصفحات سطراً بسطر كمصحف المدينة (الافتراضي). */
+    boolean exactLayout() {
+        return prefs.getBoolean("exactLayout", true);
+    }
+
+    void saveExactLayout(boolean on) {
+        prefs.edit().putBoolean("exactLayout", on).apply();
+    }
+
+    /** صوت تقليب الصفحة (الافتراضي مفعّل). */
+    boolean pageSound() {
+        return prefs.getBoolean("pageSound", true);
+    }
+
+    void savePageSound(boolean on) {
+        prefs.edit().putBoolean("pageSound", on).apply();
+    }
+
     boolean kashida() {
         return prefs.getBoolean("kashida", true);
     }

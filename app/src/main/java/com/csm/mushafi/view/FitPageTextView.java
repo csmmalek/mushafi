@@ -2,6 +2,7 @@ package com.csm.mushafi.view;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.Paint;
 import android.text.Layout;
 import android.text.Spannable;
 import android.text.SpannableStringBuilder;
@@ -33,6 +34,10 @@ public class FitPageTextView extends AppCompatTextView {
     private float fontScale = 1f;
     private int viewportHeight;
     private View.OnLayoutChangeListener parentListener;
+    private boolean exact;
+    private int exactLines;
+    private int exactSlots;
+    private int exactTop;
 
     /** مقياس الخط بالنسبة للحجم الذي يملأ الصفحة: أقل من 1 يصغّر، وأكثر من 1 يكبّر مع تمرير عمودي. */
     public void setFontScale(float scale) {
@@ -41,6 +46,25 @@ public class FitPageTextView extends AppCompatTextView {
             fontScale = clamped;
             fit();
         }
+    }
+
+    /**
+     * وضع المصحف المطابق: كل سطر من النص (مفصول بـ \n) هو سطر مطبوع في مصحف المدينة، فيُختار أكبر خط
+     * يتسع لأعرض سطر دون التفاف، ثم يُوزَّع الباقي مدّاً وتباعداً بين الكلمات ليملأ كل سطر العرض.
+     *
+     * @param slots عدد خانات الأسطر المتساوية في ارتفاع الصفحة (15، أو أقل للصفحتين الأوليين)
+     * @param lines عدد أسطر النص الفعلية
+     */
+    public void setExactLines(boolean on, int lines, int slots) {
+        if (exact != on || exactLines != lines || exactSlots != slots) {
+            exact = on;
+            exactLines = lines;
+            exactSlots = slots;
+        }
+    }
+
+    public boolean isExact() {
+        return exact;
     }
 
     @Override
@@ -127,6 +151,10 @@ public class FitPageTextView extends AppCompatTextView {
     }
 
     private void fit() {
+        if (exact) {
+            fitExact();
+            return;
+        }
         CharSequence text = source != null ? source : getText();
         int width = contentWidth();
         int height = (viewportHeight > 0 ? viewportHeight : getHeight()) - getPaddingTop() - getPaddingBottom();
@@ -172,6 +200,184 @@ public class FitPageTextView extends AppCompatTextView {
             super.setText(shown, BufferType.SPANNABLE);
         }
         fitting = false;
+    }
+
+    // ---- وضع المصحف المطابق ----
+
+    private Layout buildExact(CharSequence text, float px, float extra, int width) {
+        TextPaint paint = new TextPaint(getPaint());
+        paint.setTextSize(px);
+        return StaticLayout.Builder.obtain(text, 0, text.length(), paint, width)
+                .setAlignment(Layout.Alignment.ALIGN_NORMAL)
+                .setTextDirection(TextDirectionHeuristics.RTL)
+                .setLineSpacing(extra, 1f)
+                .setJustificationMode(Layout.JUSTIFICATION_MODE_NONE)
+                .setBreakStrategy(Layout.BREAK_STRATEGY_SIMPLE)
+                .setHyphenationFrequency(Layout.HYPHENATION_FREQUENCY_NONE)
+                .setIncludePad(false)
+                .build();
+    }
+
+    private float fontHeight(float px) {
+        TextPaint paint = new TextPaint(getPaint());
+        paint.setTextSize(px);
+        Paint.FontMetrics fm = paint.getFontMetrics();
+        return fm.descent - fm.ascent;
+    }
+
+    private void fitExact() {
+        CharSequence text = source != null ? source : getText();
+        int width = contentWidth();
+        int fullHeight = viewportHeight > 0 ? viewportHeight : getHeight();
+        if (text == null || text.length() == 0 || width <= 0 || fullHeight <= 0 || exactLines <= 0) {
+            return;
+        }
+        int height = fullHeight - getPaddingBottom();
+        float slot = (float) height / Math.max(exactLines, exactSlots);
+        float lo = minPx * 0.6f;
+        float hi = 30 * getResources().getDisplayMetrics().scaledDensity;
+        for (int i = 0; i < 14; i++) {
+            float mid = (lo + hi) / 2f;
+            boolean ok = fontHeight(mid) <= slot * 0.92f
+                    && buildExact(text, mid, 0, width).getLineCount() == exactLines;
+            if (ok) {
+                lo = mid;
+            } else {
+                hi = mid;
+            }
+        }
+        float extra = Math.max(0, slot - fontHeight(lo));
+        int top = Math.max(0, Math.round((height - slot * exactLines) / 2f));
+        setMinHeight(fullHeight);
+        fitting = true;
+        setTextSize(TypedValue.COMPLEX_UNIT_PX, lo);
+        setLineSpacing(extra, 1f);
+        setIncludeFontPadding(false);
+        if (getPaddingTop() != top) {
+            setPadding(getPaddingLeft(), top, getPaddingRight(), getPaddingBottom());
+        }
+        CharSequence shown = stretchExact(text, lo, extra, width);
+        if (shown != getText()) {
+            super.setText(shown, BufferType.SPANNABLE);
+        }
+        fitting = false;
+    }
+
+    /** يمدّ الكلمات ثم يوسّع المسافات بين الكلمات حتى يملأ كل سطر العرض كاملاً دون أن يلتف. */
+    private CharSequence stretchExact(CharSequence src, float px, float extra, int width) {
+        if (!(src instanceof Spanned) || src.length() == 0) {
+            return src;
+        }
+        Layout plain = buildExact(src, px, extra, width);
+        if (plain.getLineCount() != exactLines) {
+            return src;
+        }
+        TextPaint paint = new TextPaint(getPaint());
+        paint.setTextSize(px);
+        float tatweelWidth = paint.measureText(String.valueOf(TATWEEL));
+        Spanned spanned = (Spanned) src;
+        float[] factors = kashidaEnabled ? new float[]{0.6f, 0.35f, 0f} : new float[]{0f};
+        for (float factor : factors) {
+            SpannableStringBuilder out = new SpannableStringBuilder(src);
+            int shift = 0;
+            if (factor > 0 && tatweelWidth > 0.5f) {
+                for (int line = 0; line < plain.getLineCount(); line++) {
+                    int start = plain.getLineStart(line);
+                    int end = plain.getLineEnd(line);
+                    if (end <= start || isCentered(spanned, start)) {
+                        continue;
+                    }
+                    float slack = width - plain.getLineMax(line);
+                    if (slack < tatweelWidth) {
+                        continue;
+                    }
+                    java.util.List<Integer> positions = candidates(src, start, end);
+                    if (positions.isEmpty()) {
+                        continue;
+                    }
+                    int total = (int) (slack * factor / tatweelWidth);
+                    int[] counts = new int[positions.size()];
+                    int given = 0;
+                    for (int round = 0; round < 3 && given < total; round++) {
+                        for (int k = 0; k < counts.length && given < total; k++) {
+                            if (counts[k] == round) {
+                                counts[k]++;
+                                given++;
+                            }
+                        }
+                    }
+                    int added = 0;
+                    for (int k = positions.size() - 1; k >= 0; k--) {
+                        if (counts[k] > 0) {
+                            StringBuilder t = new StringBuilder();
+                            for (int n = 0; n < counts[k]; n++) {
+                                t.append(TATWEEL);
+                            }
+                            out.insert(positions.get(k) + shift, t);
+                            added += counts[k];
+                        }
+                    }
+                    shift += added;
+                }
+            }
+            Layout mid = buildExact(out, px, extra, width);
+            if (mid.getLineCount() != exactLines) {
+                continue;
+            }
+            for (int line = 0; line < mid.getLineCount(); line++) {
+                int start = mid.getLineStart(line);
+                int end = mid.getLineEnd(line);
+                if (end <= start || isCentered(out, start)) {
+                    continue;
+                }
+                float slack = width - mid.getLineMax(line);
+                java.util.List<Integer> spaces = new java.util.ArrayList<>();
+                for (int i = start; i < end; i++) {
+                    if (out.charAt(i) == ' ') {
+                        spaces.add(i);
+                    }
+                }
+                if (spaces.isEmpty() || slack < 1f) {
+                    continue;
+                }
+                int each = (int) Math.floor((slack - 1f) / spaces.size());
+                if (each <= 0) {
+                    continue;
+                }
+                for (int i : spaces) {
+                    out.setSpan(new SpaceSpan(each), i, i + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+            }
+            if (buildExact(out, px, extra, width).getLineCount() == exactLines) {
+                return out;
+            }
+        }
+        return src;
+    }
+
+    private static boolean isCentered(Spanned text, int start) {
+        return text.getSpans(start, Math.min(text.length(), start + 1), AlignmentSpan.class).length > 0;
+    }
+
+    /** مسافة بين كلمتين بعرض الفراغ المعتاد مضافاً إليه توسيع ثابت. */
+    private static final class SpaceSpan extends android.text.style.ReplacementSpan {
+        private final int extra;
+
+        SpaceSpan(int extra) {
+            this.extra = extra;
+        }
+
+        @Override
+        public int getSize(Paint paint, CharSequence text, int start, int end,
+                           Paint.FontMetricsInt fm) {
+            return (int) Math.floor(paint.measureText(" ")) + extra;
+        }
+
+        @Override
+        public void draw(android.graphics.Canvas canvas, CharSequence text, int start, int end,
+                         float x, int top, int y, int bottom, Paint paint) {
+            // فراغ فقط
+        }
     }
 
     // ---- تمديد الكلمات ----

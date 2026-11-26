@@ -55,6 +55,18 @@
         <activity
             android:name=".playback.PlayerActivity"
             android:exported="false" />
+        <activity
+            android:name=".TasbihActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdhkarActivity"
+            android:exported="false" />
+        <activity
+            android:name=".AdhkarReadActivity"
+            android:exported="false" />
+        <activity
+            android:name=".HelpActivity"
+            android:exported="false" />
         <service
             android:name=".playback.PlaybackService"
             android:exported="false"

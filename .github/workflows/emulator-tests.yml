@@ -2,7 +2,7 @@ name: Emulator tests (Android 10)
 
 on:
   push:
-    branches: [stage-5, stage-6, stage-7, stage-8, stage-9, stage-10, stage-11, stage-12, stage-13]
+    branches: [stage-5, stage-6, stage-7, stage-8, stage-9, stage-10, stage-11, stage-12, stage-13, stage-14]
   workflow_dispatch:
 
 permissions:
@@ -50,19 +50,20 @@ jobs:
             ./gradlew :app:connectedDebugAndroidTest --no-daemon || echo "TESTS_FAILED" > tests_failed.flag
             mkdir -p shots
             adb pull /sdcard/shots/. ./shots/ || true
+            adb logcat -d -s AndroidRuntime:E ActivityManager:E libc:F DEBUG:F > shots/logcat.txt || true
             test ! -f tests_failed.flag
 
       - name: Publish screenshots branch
         if: always()
         run: |
-          if ls shots/*.png >/dev/null 2>&1; then
-            mkdir -p "$RUNNER_TEMP/shots" && cp shots/*.png "$RUNNER_TEMP/shots/"
+          if ls shots/*.png >/dev/null 2>&1 || ls shots/logcat.txt >/dev/null 2>&1; then
+            mkdir -p "$RUNNER_TEMP/shots" && cp shots/* "$RUNNER_TEMP/shots/"
             git config user.name "ci"; git config user.email "ci@users.noreply.github.com"
             git checkout --orphan screenshots-tmp
             git rm -rf -q . || true
-            cp "$RUNNER_TEMP"/shots/*.png .
+            cp "$RUNNER_TEMP"/shots/* .
             echo "${GITHUB_SHA}" > source-commit.txt
-            git add *.png source-commit.txt
+            git add source-commit.txt; git add -f *.png logcat.txt 2>/dev/null || true
             git commit -q -m "Screenshots for ${GITHUB_SHA}"
             git push -f origin HEAD:refs/heads/screenshots
           fi
