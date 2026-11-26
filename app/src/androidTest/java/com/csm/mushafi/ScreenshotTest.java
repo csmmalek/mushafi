@@ -119,6 +119,39 @@ public class ScreenshotTest {
         }
     }
 
+    @Test
+    public void captureNewScreens() throws Exception {
+        Context ctx = ApplicationProvider.getApplicationContext();
+        new QuranRepository(ctx).verifyAndImportIfNeeded();
+        shell("mkdir -p /sdcard/shots");
+        Class<?>[] screens = {TasbihActivity.class, AdhkarActivity.class, HelpActivity.class};
+        String[] names = {"tasbih", "adhkar", "help"};
+        for (int i = 0; i < screens.length; i++) {
+            try (ActivityScenario<?> s = ActivityScenario.launch(new Intent(ctx, screens[i]))) {
+                Thread.sleep(1500);
+                shell("screencap -p /sdcard/shots/" + names[i] + ".png");
+            }
+        }
+        Intent read = new Intent(ctx, AdhkarReadActivity.class);
+        read.putExtra(AdhkarReadActivity.EXTRA_INDEX, 0);
+        try (ActivityScenario<AdhkarReadActivity> s = ActivityScenario.launch(read)) {
+            Thread.sleep(1500);
+            shell("screencap -p /sdcard/shots/adhkar_read.png");
+        }
+        Intent page = new Intent(ctx, PageReaderActivity.class);
+        page.putExtra(ReaderActivity.EXTRA_SURAH, 18);
+        page.putExtra(ReaderActivity.EXTRA_AYAH, 1);
+        try (ActivityScenario<PageReaderActivity> s = ActivityScenario.launch(page)) {
+            Thread.sleep(3500);
+            s.onActivity(a -> {
+                a.findViewById(R.id.btn_menu).setVisibility(android.view.View.VISIBLE);
+                a.findViewById(R.id.btn_menu).performClick();
+            });
+            Thread.sleep(800);
+            shell("screencap -p /sdcard/shots/reader_menu.png");
+        }
+    }
+
     private static void shell(String cmd) throws Exception {
         Instrumentation inst = InstrumentationRegistry.getInstrumentation();
         ParcelFileDescriptor pfd = inst.getUiAutomation().executeShellCommand(cmd);
