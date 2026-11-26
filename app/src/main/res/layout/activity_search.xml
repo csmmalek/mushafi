@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/emerald_rich"
+    android:background="?attr/appBackground"
     android:orientation="vertical">
 
     <LinearLayout
@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/btn_search"
-            android:textColor="@color/gold_light"
+            android:textColor="?attr/accent"
             android:textSize="22sp"
             android:textStyle="bold" />
 
@@ -48,8 +48,8 @@
             android:hint="@string/search_hint"
             android:imeOptions="actionSearch"
             android:inputType="text"
-            android:textColor="@color/text_on_dark"
-            android:textColorHint="@color/text_muted_dark" />
+            android:textColor="?attr/textPrimary"
+            android:textColorHint="?attr/textMuted" />
 
         <Button
             android:id="@+id/btn_search"
@@ -64,7 +64,7 @@
         android:layout_height="wrap_content"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
-        android:textColor="@color/text_muted_dark"
+        android:textColor="?attr/textMuted"
         android:textSize="13sp" />
 
     <androidx.recyclerview.widget.RecyclerView

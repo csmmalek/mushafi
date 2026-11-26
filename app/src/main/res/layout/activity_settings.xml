@@ -2,7 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/emerald_rich">
+    android:background="?attr/appBackground">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -22,7 +22,7 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="@string/btn_settings"
-                android:textColor="@color/gold_light"
+                android:textColor="?attr/accent"
                 android:textSize="22sp"
                 android:textStyle="bold" />
 
@@ -38,8 +38,63 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
+            android:text="@string/settings_section_appearance"
+            android:textColor="?attr/accent"
+            android:textStyle="bold" />
+
+        <RadioGroup
+            android:id="@+id/settings_app_theme"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <RadioButton
+                android:id="@+id/app_theme_0"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:buttonTint="?attr/accent"
+                android:text="@string/app_theme_emerald"
+                android:textColor="?attr/textPrimary" />
+
+            <RadioButton
+                android:id="@+id/app_theme_1"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:buttonTint="?attr/accent"
+                android:text="@string/app_theme_night"
+                android:textColor="?attr/textPrimary" />
+
+            <RadioButton
+                android:id="@+id/app_theme_2"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:buttonTint="?attr/accent"
+                android:text="@string/app_theme_sapphire"
+                android:textColor="?attr/textPrimary" />
+
+            <RadioButton
+                android:id="@+id/app_theme_3"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:buttonTint="?attr/accent"
+                android:text="@string/app_theme_amber"
+                android:textColor="?attr/textPrimary" />
+
+            <RadioButton
+                android:id="@+id/app_theme_4"
+                android:layout_width="match_parent"
+                android:layout_height="48dp"
+                android:buttonTint="?attr/accent"
+                android:text="@string/app_theme_pearl"
+                android:textColor="?attr/textPrimary" />
+        </RadioGroup>
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
             android:text="@string/settings_section_reading"
-            android:textColor="@color/gold_light"
+            android:textColor="?attr/accent"
             android:textStyle="bold" />
 
         <TextView
@@ -47,7 +102,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/settings_page_theme"
-            android:textColor="@color/text_on_dark" />
+            android:textColor="?attr/textPrimary" />
 
         <RadioGroup
             android:id="@+id/settings_page_theme"
@@ -59,33 +114,33 @@
                 android:id="@+id/theme_0"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:buttonTint="@color/gold_light"
+                android:buttonTint="?attr/accent"
                 android:text="@string/theme_cream"
-                android:textColor="@color/text_on_dark" />
+                android:textColor="?attr/textPrimary" />
 
             <RadioButton
                 android:id="@+id/theme_1"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:buttonTint="@color/gold_light"
+                android:buttonTint="?attr/accent"
                 android:text="@string/theme_white"
-                android:textColor="@color/text_on_dark" />
+                android:textColor="?attr/textPrimary" />
 
             <RadioButton
                 android:id="@+id/theme_2"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:buttonTint="@color/gold_light"
+                android:buttonTint="?attr/accent"
                 android:text="@string/theme_sand"
-                android:textColor="@color/text_on_dark" />
+                android:textColor="?attr/textPrimary" />
 
             <RadioButton
                 android:id="@+id/theme_3"
                 android:layout_width="match_parent"
                 android:layout_height="48dp"
-                android:buttonTint="@color/gold_light"
+                android:buttonTint="?attr/accent"
                 android:text="@string/theme_night"
-                android:textColor="@color/text_on_dark" />
+                android:textColor="?attr/textPrimary" />
         </RadioGroup>
 
         <TextView
@@ -93,42 +148,42 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:textColor="@color/text_on_dark" />
+            android:textColor="?attr/textPrimary" />
 
         <SeekBar
             android:id="@+id/settings_font_seek"
             android:layout_width="match_parent"
             android:layout_height="48dp"
             android:max="20"
-            android:progressTint="@color/gold"
-            android:thumbTint="@color/gold_light" />
+            android:progressTint="?attr/accent"
+            android:thumbTint="?attr/accent" />
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switch_kashida"
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:text="@string/settings_kashida"
-            android:textColor="@color/text_on_dark" />
+            android:textColor="?attr/textPrimary" />
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switch_keep_screen"
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:text="@string/settings_keep_screen"
-            android:textColor="@color/text_on_dark" />
+            android:textColor="?attr/textPrimary" />
 
         <androidx.appcompat.widget.SwitchCompat
             android:id="@+id/switch_muqattaat"
             android:layout_width="match_parent"
             android:layout_height="52dp"
             android:text="@string/settings_muqattaat"
-            android:textColor="@color/text_on_dark" />
+            android:textColor="?attr/textPrimary" />
 
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/settings_muqattaat_note"
-            android:textColor="@color/text_muted_dark"
+            android:textColor="?attr/textMuted"
             android:textSize="12sp" />
 
         <TextView
@@ -136,7 +191,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:text="@string/settings_section_storage"
-            android:textColor="@color/gold_light"
+            android:textColor="?attr/accent"
             android:textStyle="bold" />
 
         <TextView
@@ -144,7 +199,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:textColor="@color/text_on_dark" />
+            android:textColor="?attr/textPrimary" />
 
         <Button
             style="@style/ChipButton"
@@ -160,7 +215,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:text="@string/settings_section_sources"
-            android:textColor="@color/gold_light"
+            android:textColor="?attr/accent"
             android:textStyle="bold" />
 
         <TextView
@@ -168,7 +223,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/settings_sources_text"
-            android:textColor="@color/text_on_dark"
+            android:textColor="?attr/textPrimary"
             android:textSize="14sp"
             android:lineSpacingMultiplier="1.4" />
 
@@ -177,7 +232,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:text="@string/settings_section_privacy"
-            android:textColor="@color/gold_light"
+            android:textColor="?attr/accent"
             android:textStyle="bold" />
 
         <TextView
@@ -185,7 +240,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:text="@string/settings_privacy_text"
-            android:textColor="@color/text_on_dark"
+            android:textColor="?attr/textPrimary"
             android:textSize="14sp"
             android:lineSpacingMultiplier="1.4" />
 
@@ -194,7 +249,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="24dp"
             android:text="@string/settings_version"
-            android:textColor="@color/text_muted_dark"
+            android:textColor="?attr/textMuted"
             android:textSize="12sp" />
     </LinearLayout>
 </ScrollView>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <attr name="appBackground" format="reference" />
+    <attr name="glassTop" format="color" />
+    <attr name="glassBottom" format="color" />
+    <attr name="glassStroke" format="color" />
+    <attr name="glassGloss" format="color" />
+    <attr name="textPrimary" format="color" />
+    <attr name="textMuted" format="color" />
+    <attr name="accent" format="color" />
+    <attr name="accentSoft" format="color" />
+    <attr name="onAccent" format="color" />
+</resources>

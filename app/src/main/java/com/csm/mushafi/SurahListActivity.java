@@ -7,7 +7,6 @@ import android.os.Looper;
 import android.view.View;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -19,7 +18,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /** فهرس السور: الرقم وعدد الآيات. الأسماء تظهر لاحقاً عند توفر مصدر معتمد. */
-public class SurahListActivity extends AppCompatActivity {
+public class SurahListActivity extends BaseActivity {
 
     private final ExecutorService io = Executors.newSingleThreadExecutor();
     private final Handler main = new Handler(Looper.getMainLooper());

@@ -2,7 +2,7 @@
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/emerald_rich"
+    android:background="?attr/appBackground"
     android:fillViewport="true">
 
     <LinearLayout
@@ -19,7 +19,7 @@
             android:layout_height="wrap_content"
             android:gravity="center"
             android:text="@string/app_title"
-            android:textColor="@color/gold_light"
+            android:textColor="?attr/accent"
             android:textSize="36sp"
             android:textStyle="bold" />
 
@@ -29,7 +29,7 @@
             android:layout_marginTop="8dp"
             android:gravity="center"
             android:text="@string/app_tagline"
-            android:textColor="@color/text_muted_dark"
+            android:textColor="?attr/textMuted"
             android:textSize="14sp" />
 
         <TextView
@@ -39,7 +39,7 @@
             android:layout_marginTop="24dp"
             android:gravity="center"
             android:text="@string/quran_loading"
-            android:textColor="@color/text_on_dark"
+            android:textColor="?attr/textPrimary"
             android:textSize="14sp" />
 
         <Button
@@ -58,7 +58,7 @@
             android:background="@drawable/bg_gold_button"
             android:enabled="false"
             android:text="@string/btn_continue"
-            android:textColor="@color/emerald_rich"
+            android:textColor="?attr/onAccent"
             android:textSize="18sp"
             android:textStyle="bold" />
 
@@ -123,7 +123,7 @@
             android:layout_marginTop="32dp"
             android:gravity="center"
             android:text="@string/verification_notice"
-            android:textColor="@color/gold_light"
+            android:textColor="?attr/accent"
             android:textSize="12sp" />
     </LinearLayout>
 </ScrollView>

@@ -10,7 +10,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
-import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SwitchCompat;
 
 import com.csm.mushafi.data.AppDatabase;
@@ -24,7 +23,7 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /** الإعدادات: المصادر والحقوق، والتخزين، وسياسة الخصوصية. */
-public class SettingsActivity extends AppCompatActivity {
+public class SettingsActivity extends BaseActivity {
 
     private final ExecutorService io = Executors.newSingleThreadExecutor();
     private final Handler main = new Handler(Looper.getMainLooper());
@@ -102,6 +101,17 @@ public class SettingsActivity extends AppCompatActivity {
 
     private void bindReadingSettings() {
         ReadingPrefs reading = new ReadingPrefs(this);
+        int[] appIds = {R.id.app_theme_0, R.id.app_theme_1, R.id.app_theme_2, R.id.app_theme_3, R.id.app_theme_4};
+        RadioGroup appGroup = findViewById(R.id.settings_app_theme);
+        appGroup.check(appIds[reading.appTheme()]);
+        appGroup.setOnCheckedChangeListener((g, checkedId) -> {
+            for (int i = 0; i < appIds.length; i++) {
+                if (appIds[i] == checkedId && reading.appTheme() != i) {
+                    reading.saveAppTheme(i);
+                    recreate();
+                }
+            }
+        });
         int[] themeIds = {R.id.theme_0, R.id.theme_1, R.id.theme_2, R.id.theme_3};
         RadioGroup group = findViewById(R.id.settings_page_theme);
         group.check(themeIds[Math.max(0, Math.min(themeIds.length - 1, reading.pageTheme()))]);

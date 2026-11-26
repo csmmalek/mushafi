@@ -2,7 +2,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@color/emerald_rich"
+    android:background="?attr/appBackground"
     android:orientation="vertical">
 
     <LinearLayout
@@ -20,7 +20,7 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/btn_bookmarks"
-            android:textColor="@color/gold_light"
+            android:textColor="?attr/accent"
             android:textSize="22sp"
             android:textStyle="bold" />
 
@@ -39,7 +39,7 @@
         android:padding="24dp"
         android:gravity="center"
         android:text="@string/bookmark_empty"
-        android:textColor="@color/text_muted_dark"
+        android:textColor="?attr/textMuted"
         android:visibility="gone" />
 
     <androidx.recyclerview.widget.RecyclerView

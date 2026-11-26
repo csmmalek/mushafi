@@ -58,6 +58,14 @@ final class ReadingPrefs {
         prefs.edit().putBoolean("kashida", on).apply();
     }
 
+    int appTheme() {
+        return Math.max(0, Math.min(AppThemes.COUNT - 1, prefs.getInt("app_theme", 0)));
+    }
+
+    void saveAppTheme(int index) {
+        prefs.edit().putInt("app_theme", index).apply();
+    }
+
     String readerReciter() {
         return prefs.getString("reader_reciter", "alafasy");
     }

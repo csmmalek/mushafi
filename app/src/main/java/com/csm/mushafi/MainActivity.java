@@ -11,7 +11,6 @@ import android.text.style.RelativeSizeSpan;
 import android.widget.Button;
 import android.widget.TextView;
 
-import androidx.appcompat.app.AppCompatActivity;
 
 import com.csm.mushafi.data.QuranRepository;
 import com.csm.mushafi.quran.ArabicDigits;
@@ -24,7 +23,7 @@ import java.util.concurrent.Executors;
  * المرحلة الثالثة: التحقق من النص القرآني واستيراده، ثم فتح القارئ أو الفهرس.
  * الأزرار غير المنفذة بعد (التلاوات والمحفوظات والإعدادات) تبقى معطّلة.
  */
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends BaseActivity {
 
     private final ExecutorService io = Executors.newSingleThreadExecutor();
     private final Handler main = new Handler(Looper.getMainLooper());
