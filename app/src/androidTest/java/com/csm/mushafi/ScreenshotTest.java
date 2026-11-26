@@ -67,6 +67,16 @@ public class ScreenshotTest {
             shell("screencap -p /sdcard/shots/surah_list.png");
         }
 
+        Intent quizIntent = new Intent(ctx, PageReaderActivity.class);
+        quizIntent.putExtra(ReaderActivity.EXTRA_SURAH, 112);
+        quizIntent.putExtra(ReaderActivity.EXTRA_AYAH, 1);
+        try (ActivityScenario<PageReaderActivity> s = ActivityScenario.launch(quizIntent)) {
+            Thread.sleep(3500);
+            s.onActivity(a -> a.findViewById(com.csm.mushafi.R.id.btn_quiz).performClick());
+            Thread.sleep(2500);
+            shell("screencap -p /sdcard/shots/quiz_hidden.png");
+        }
+
         ReadingPrefs reading = new ReadingPrefs(ctx);
         for (int theme = 0; theme < 5; theme++) {
             reading.saveAppTheme(theme);

@@ -139,4 +139,12 @@
     <string name="app_theme_sapphire">ياقوتي أزرق</string>
     <string name="app_theme_amber">كهرماني دافئ</string>
     <string name="app_theme_pearl">لؤلؤي فاتح</string>
+    <string name="quiz_start">اختبار</string>
+    <string name="quiz_stop">إنهاء</string>
+    <string name="quiz_hint">وضع الاختبار: الآيات مخفية. اضغط رقم الآية لكشفها، ثم اضغطها مرة أخرى لتقييم نفسك.</string>
+    <string name="quiz_rate_title">الآية %s: كيف كان حفظك؟</string>
+    <string name="quiz_right">أصبت</string>
+    <string name="quiz_wrong">أخطأت (تلوين أحمر)</string>
+    <string name="quiz_hide">إخفاء الآية</string>
+    <string name="quiz_score">أصبت %1$s · أخطأت %2$s</string>
 </resources>

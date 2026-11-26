@@ -104,6 +104,12 @@ public class PageReaderActivity extends BaseActivity {
     private MediaController controller;
     private Button listenButton;
     private Button reciterButton;
+    private boolean quizMode;
+    private final java.util.Map<Integer, Integer> quiz = new java.util.HashMap<>();
+    private static final int Q_HIDDEN = 0;
+    private static final int Q_REVEALED = 1;
+    private static final int Q_RIGHT = 2;
+    private static final int Q_WRONG = 3;
     private int playSurah;
     private int playAyah;
 
@@ -160,6 +166,8 @@ public class PageReaderActivity extends BaseActivity {
         findViewById(R.id.btn_sel_share).setOnClickListener(v -> shareSelected());
         findViewById(R.id.btn_sel_bookmark).setOnClickListener(v -> bookmarkSelected());
         findViewById(R.id.btn_sel_clear).setOnClickListener(v -> clearSelection());
+        Button quizButton = findViewById(R.id.btn_quiz);
+        quizButton.setOnClickListener(v -> toggleQuiz(quizButton));
         findViewById(R.id.btn_reader_search).setOnClickListener(
                 v -> startActivity(new Intent(this, SearchActivity.class)));
         findViewById(R.id.btn_font_smaller).setOnClickListener(v -> changeFont(-10));
@@ -294,8 +302,22 @@ public class PageReaderActivity extends BaseActivity {
     }
 
     private void showPosition(int page) {
-        positionText.setText(getString(R.string.page_position,
-                ArabicDigits.format(page), ArabicDigits.format(MushafMeta.PAGES)));
+        String position = getString(R.string.page_position,
+                ArabicDigits.format(page), ArabicDigits.format(MushafMeta.PAGES));
+        if (quizMode) {
+            int right = 0;
+            int wrong = 0;
+            for (int v : quiz.values()) {
+                if (v == Q_RIGHT) {
+                    right++;
+                } else if (v == Q_WRONG) {
+                    wrong++;
+                }
+            }
+            position += "  ·  " + getString(R.string.quiz_score,
+                    ArabicDigits.format(right), ArabicDigits.format(wrong));
+        }
+        positionText.setText(position);
     }
 
     private void updatePage(int page) {
@@ -580,6 +602,10 @@ public class PageReaderActivity extends BaseActivity {
 
         @Override
         public void onClick(@NonNull View widget) {
+            if (quizMode) {
+                onQuizTap(surah, ayah);
+                return;
+            }
             selectAyah(surah, ayah);
         }
 
@@ -615,7 +641,18 @@ public class PageReaderActivity extends BaseActivity {
                 text = muqattaat.apply(s, a, text);
             }
             int ayahStart = sb.length();
-            sb.append(text).append(' ');
+            int quizState = !quizMode ? Q_REVEALED : (quiz.containsKey(s * 1000 + a)
+                    ? quiz.get(s * 1000 + a) : Q_HIDDEN);
+            if (quizState != Q_HIDDEN) {
+                sb.append(text).append(' ');
+                if (quizState == Q_WRONG) {
+                    sb.setSpan(new ForegroundColorSpan(0xFFE53935), ayahStart, sb.length() - 1,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                } else if (quizState == Q_RIGHT) {
+                    sb.setSpan(new ForegroundColorSpan(0xFF43A047), ayahStart, sb.length() - 1,
+                            Spanned.SPAN_EXCLUSIVE_EXCLUSIVE);
+                }
+            }
             int numberStart = sb.length();
             String number = ArabicDigits.format(a);
             sb.append(number);
@@ -629,6 +666,52 @@ public class PageReaderActivity extends BaseActivity {
             sb.append(' ');
         }
         return sb;
+    }
+
+    private void toggleQuiz(Button button) {
+        quizMode = !quizMode;
+        quiz.clear();
+        clearSelection();
+        button.setText(quizMode ? R.string.quiz_stop : R.string.quiz_start);
+        if (quizMode) {
+            Toast.makeText(this, R.string.quiz_hint, Toast.LENGTH_LONG).show();
+        }
+        showPosition(currentPage);
+        if (adapter != null) {
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    private void onQuizTap(int surah, int ayah) {
+        final int key = surah * 1000 + ayah;
+        int state = quiz.containsKey(key) ? quiz.get(key) : Q_HIDDEN;
+        if (state == Q_HIDDEN) {
+            quiz.put(key, Q_REVEALED);
+            refreshQuizPage(surah, ayah);
+            return;
+        }
+        new AlertDialog.Builder(this)
+                .setTitle(getString(R.string.quiz_rate_title, ArabicDigits.format(ayah)))
+                .setItems(new String[]{getString(R.string.quiz_right),
+                        getString(R.string.quiz_wrong), getString(R.string.quiz_hide)},
+                        (dialog, which) -> {
+                            if (which == 0) {
+                                quiz.put(key, Q_RIGHT);
+                            } else if (which == 1) {
+                                quiz.put(key, Q_WRONG);
+                            } else {
+                                quiz.remove(key);
+                            }
+                            refreshQuizPage(surah, ayah);
+                        })
+                .show();
+    }
+
+    private void refreshQuizPage(int surah, int ayah) {
+        showPosition(currentPage);
+        if (adapter != null) {
+            adapter.notifyItemChanged(meta.pageOf(surah, ayah) - 1);
+        }
     }
 
     private void endParagraph(SpannableStringBuilder sb) {
@@ -689,6 +772,9 @@ public class PageReaderActivity extends BaseActivity {
                 });
                 // ضغط مطوّل على آية: تُحدَّد وتُنسخ مباشرة
                 text.setOnLongClickListener(v -> {
+                    if (quizMode) {
+                        return false;
+                    }
                     int offset = text.getOffsetForPosition(touch[0], touch[1]);
                     CharSequence shown = text.getText();
                     if (offset < 0 || !(shown instanceof Spanned)) {
