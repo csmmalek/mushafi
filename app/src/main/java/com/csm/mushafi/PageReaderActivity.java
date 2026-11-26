@@ -161,6 +161,8 @@ public class PageReaderActivity extends AppCompatActivity {
         findViewById(R.id.btn_sel_share).setOnClickListener(v -> shareSelected());
         findViewById(R.id.btn_sel_bookmark).setOnClickListener(v -> bookmarkSelected());
         findViewById(R.id.btn_sel_clear).setOnClickListener(v -> clearSelection());
+        findViewById(R.id.btn_reader_search).setOnClickListener(
+                v -> startActivity(new Intent(this, SearchActivity.class)));
         findViewById(R.id.btn_font_smaller).setOnClickListener(v -> changeFont(-10));
         findViewById(R.id.btn_font_larger).setOnClickListener(v -> changeFont(10));
         listenButton = findViewById(R.id.btn_listen);
@@ -680,6 +682,27 @@ public class PageReaderActivity extends AppCompatActivity {
                 super(view);
                 root = view.findViewById(R.id.page_root);
                 text = view.findViewById(R.id.page_text);
+                final float[] touch = new float[2];
+                text.setOnTouchListener((v, event) -> {
+                    touch[0] = event.getX();
+                    touch[1] = event.getY();
+                    return false;
+                });
+                // ضغط مطوّل على آية: تُحدَّد وتُنسخ مباشرة
+                text.setOnLongClickListener(v -> {
+                    int offset = text.getOffsetForPosition(touch[0], touch[1]);
+                    CharSequence shown = text.getText();
+                    if (offset < 0 || !(shown instanceof Spanned)) {
+                        return false;
+                    }
+                    AyahClick[] hit = ((Spanned) shown).getSpans(offset, offset, AyahClick.class);
+                    if (hit.length == 0) {
+                        return false;
+                    }
+                    selectAyah(hit[0].surah, hit[0].ayah);
+                    copySelected();
+                    return true;
+                });
             }
         }
 

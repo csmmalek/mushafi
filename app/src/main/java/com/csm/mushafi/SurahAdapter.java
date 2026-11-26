@@ -37,8 +37,7 @@ final class SurahAdapter extends RecyclerView.Adapter<SurahAdapter.Holder> {
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int position) {
         SurahEntity s = surahs.get(position);
-        holder.title.setText(holder.itemView.getContext()
-                .getString(R.string.surah_number_format, ArabicDigits.format(s.number)));
+        holder.title.setText(SurahNames.title(holder.itemView.getContext(), s.number));
         holder.subtitle.setText(holder.itemView.getContext()
                 .getString(R.string.ayah_count_format, ArabicDigits.format(s.ayahCount)));
         holder.itemView.setOnClickListener(v -> listener.onClick(s.number));

@@ -80,7 +80,7 @@ public class DownloadsActivity extends AppCompatActivity {
             labels = new String[]{getString(R.string.download_delete)};
         }
         new AlertDialog.Builder(this)
-                .setTitle(getString(R.string.surah_number_format, ArabicDigits.format(item.surah)))
+                .setTitle(SurahNames.title(this, item.surah))
                 .setItems(labels, (d, which) -> {
                     String label = labels[which];
                     io.execute(() -> {
