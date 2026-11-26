@@ -35,3 +35,9 @@
 - docs/test-report.md
 - docs/privacy-policy.md
 - docs/store/data-safety-draft.md، docs/store/store-listing.md
+
+## 0.9.0 — ملاحظات
+- أسطر المصحف: tools/layout/build_lines.py يولّد assets/mushaf-lines.json من مكتبة quran-library (ترخيص MIT، لكن أصل بياناتها QUL/KFGQPC: تُراجع شروط الاستعمال قبل النشر الرسمي).
+- الأذكار: assets/adhkar.json من مستودع rn0x/Adhkar-json (نص حصن المسلم، بلا ملف ترخيص صريح): يلزم التحقق من الإذن قبل النشر الرسمي، ومراجعة النص من مصدر موثوق.
+- assets/support.json: روابط الدعم فارغة حتى يضيفها صاحب التطبيق.
+- لم يُجرَّب على جهاز حقيقي؛ الاختبار الآلي على أندرويد 10 فقط.
