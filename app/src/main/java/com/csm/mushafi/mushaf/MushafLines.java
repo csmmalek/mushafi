@@ -74,6 +74,37 @@ public final class MushafLines {
         }
     }
 
+    /**
+     * يحذف البسملة الملصوقة بأول آية (كل السور عدا الفاتحة والتوبة). يقارن حروف أول كلمة دون
+     * الحركات لأن النص في سورتي التين والقدر يبدأ بـ«بِّسْمِ» بحركات مختلفة.
+     */
+    public static String stripBasmala(int surah, int ayah, String text) {
+        if (ayah != 1 || surah == 1 || surah == 9) {
+            return text;
+        }
+        String[] words = text.trim().split("\\s+");
+        if (words.length <= 4) {
+            return text;
+        }
+        StringBuilder letters = new StringBuilder();
+        for (char c : words[0].toCharArray()) {
+            if (Character.getType(c) != Character.NON_SPACING_MARK && c != '\u0640') {
+                letters.append(c);
+            }
+        }
+        if (!letters.toString().equals("بسم")) {
+            return text;
+        }
+        StringBuilder out = new StringBuilder();
+        for (int i = 4; i < words.length; i++) {
+            if (out.length() > 0) {
+                out.append(' ');
+            }
+            out.append(words[i]);
+        }
+        return out.toString();
+    }
+
     public static MushafLines parse(String json) {
         Raw raw = new Gson().fromJson(json, Raw.class);
         if (raw == null || raw.pages == null || raw.pages.size() != MushafMeta.PAGES) {

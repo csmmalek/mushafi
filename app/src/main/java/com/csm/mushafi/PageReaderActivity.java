@@ -650,9 +650,7 @@ public class PageReaderActivity extends BaseActivity {
                 lastSurah = s;
             }
             String text = texts[s][a - 1];
-            if (a == 1 && s != 1 && s != 9 && text.startsWith(basmala)) {
-                text = text.substring(basmala.length()).trim();
-            }
+            text = MushafLines.stripBasmala(s, a, text);
             if (useMuq) {
                 text = muqattaat.apply(s, a, text);
             }
@@ -764,9 +762,7 @@ public class PageReaderActivity extends BaseActivity {
     /** كلمات الآية بعد حذف البسملة (وبعد تعديل المدّ المعروض إن فُعّل) بنفس عدّ بيانات الأسطر. */
     private String[] ayahWords(int s, int a, boolean useMuq) {
         String text = texts[s][a - 1];
-        if (a == 1 && s != 1 && s != 9 && text.startsWith(basmala)) {
-            text = text.substring(basmala.length()).trim();
-        }
+        text = MushafLines.stripBasmala(s, a, text);
         String[] base = text.trim().split("\\s+");
         if (useMuq) {
             String[] changed = muqattaat.apply(s, a, text).trim().split("\\s+");

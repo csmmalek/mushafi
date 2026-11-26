@@ -35,12 +35,8 @@ public class MushafLinesTest {
         byte[] bytes = Files.readAllBytes(Paths.get("src/main/assets/quran-simple.txt"));
         QuranVerifier.Result result = QuranVerifier.parse(bytes, 6236, 114);
         Map<Integer, Integer> words = new HashMap<>();
-        String basmala = result.verses.get(0).text;
         for (QuranVerifier.Verse v : result.verses) {
-            String t = v.text;
-            if (v.ayah == 1 && v.surah != 1 && v.surah != 9 && t.startsWith(basmala)) {
-                t = t.substring(basmala.length()).trim();
-            }
+            String t = MushafLines.stripBasmala(v.surah, v.ayah, v.text);
             words.put(v.surah * 1000 + v.ayah, t.split("\\s+").length);
         }
         MushafLines l = lines();
