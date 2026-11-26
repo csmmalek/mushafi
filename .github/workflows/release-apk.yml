@@ -1,0 +1,45 @@
+name: Publish APK
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Install Android SDK packages
+        run: |
+          yes | "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" --licenses > /dev/null || true
+          "$ANDROID_HOME/cmdline-tools/latest/bin/sdkmanager" "platforms;android-36" "build-tools;36.0.0"
+
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+
+      - name: Generate Gradle Wrapper
+        run: gradle wrapper --gradle-version 8.9
+
+      - name: Build debug APK
+        run: ./gradlew :app:assembleDebug --no-daemon
+
+      - name: Publish as the latest pre-release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          cp app/build/outputs/apk/debug/app-debug.apk mushafi-latest.apk
+          gh release delete latest --yes --cleanup-tag || true
+          gh release create latest mushafi-latest.apk --prerelease \
+            --title "مصحفي - أحدث نسخة تجريبية" \
+            --notes "نسخة تجريبية موقّعة بمفتاح debug، بُنيت من الفرع main (${GITHUB_SHA::7}). إن رفض أندرويد التحديث فوق نسخة قديمة فاحذفها ثم ثبّت."
