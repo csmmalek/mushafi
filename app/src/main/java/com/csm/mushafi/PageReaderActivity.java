@@ -245,13 +245,13 @@ public class PageReaderActivity extends BaseActivity {
 
     // ---- قراءة بملء الشاشة: لا شيء على الصفحة، والنقر يُظهر زر القائمة (ثلاثة خطوط) ----
 
+    private boolean menuOpen;
     private final Runnable hideMenuButton = () -> {
         View b = findViewById(R.id.btn_menu);
         if (b != null && !menuOpen) {
             b.setVisibility(View.GONE);
         }
     };
-    private boolean menuOpen;
 
     private void setupImmersive() {
         androidx.core.view.WindowCompat.setDecorFitsSystemWindows(getWindow(), false);
