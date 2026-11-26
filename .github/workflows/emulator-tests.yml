@@ -2,7 +2,7 @@ name: Emulator tests (Android 10)
 
 on:
   push:
-    branches: [stage-5, stage-6, stage-7, stage-8, stage-9, stage-10, stage-11, stage-12]
+    branches: [stage-5, stage-6, stage-7, stage-8, stage-9, stage-10, stage-11, stage-12, stage-13]
   workflow_dispatch:
 
 permissions:
