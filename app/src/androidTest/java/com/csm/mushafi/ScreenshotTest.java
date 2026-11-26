@@ -40,7 +40,7 @@ public class ScreenshotTest {
             shell("screencap -p /sdcard/shots/reader.png");
         }
 
-        int[][] pagesToShoot = {{1, 1}, {2, 1}, {36, 1}, {114, 1}};
+        int[][] pagesToShoot = {{1, 1}, {2, 1}, {2, 142}, {36, 1}, {18, 1}, {114, 1}};
         for (int[] sa : pagesToShoot) {
             Intent page = new Intent(ctx, PageReaderActivity.class);
             page.putExtra(ReaderActivity.EXTRA_SURAH, sa[0]);

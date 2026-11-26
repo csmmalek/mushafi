@@ -144,6 +144,9 @@ public class SettingsActivity extends BaseActivity {
             public void onStopTrackingTouch(SeekBar bar) {
             }
         });
+        SwitchCompat exactSwitch = findViewById(R.id.switch_exact);
+        exactSwitch.setChecked(reading.exactLayout());
+        exactSwitch.setOnCheckedChangeListener((b, on) -> reading.saveExactLayout(on));
         SwitchCompat kashida = findViewById(R.id.switch_kashida);
         kashida.setChecked(reading.kashida());
         kashida.setOnCheckedChangeListener((b, on) -> reading.saveKashida(on));
