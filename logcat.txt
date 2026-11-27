@@ -1,0 +1,23 @@
+--------- beginning of main
+--------- beginning of system
+11-27 11:49:09.946  1904  2780 E ActivityManager: Sending non-protected broadcast com.android.systemui.demo from system 2046:com.android.systemui/u0a102 pkg com.android.systemui
+11-27 11:49:09.946  1904  2780 E ActivityManager: java.lang.Throwable
+11-27 11:49:09.946  1904  2780 E ActivityManager: 	at com.android.server.am.ActivityManagerService.checkBroadcastFromSystem(ActivityManagerService.java:14783)
+11-27 11:49:09.946  1904  2780 E ActivityManager: 	at com.android.server.am.ActivityManagerService.broadcastIntentLocked(ActivityManagerService.java:15330)
+11-27 11:49:09.946  1904  2780 E ActivityManager: 	at com.android.server.am.ActivityManagerService.broadcastIntentLocked(ActivityManagerService.java:14800)
+11-27 11:49:09.946  1904  2780 E ActivityManager: 	at com.android.server.am.ActivityManagerService.broadcastIntent(ActivityManagerService.java:15566)
+11-27 11:49:09.946  1904  2780 E ActivityManager: 	at android.app.IActivityManager$Stub.onTransact(IActivityManager.java:1950)
+11-27 11:49:09.946  1904  2780 E ActivityManager: 	at com.android.server.am.ActivityManagerService.onTransact(ActivityManagerService.java:2741)
+11-27 11:49:09.946  1904  2780 E ActivityManager: 	at android.os.Binder.execTransactInternal(Binder.java:1021)
+11-27 11:49:09.946  1904  2780 E ActivityManager: 	at android.os.Binder.execTransact(Binder.java:994)
+11-27 11:49:09.951  1904  2780 E ActivityManager: Sending non-protected broadcast com.android.systemui.demo from system 2046:com.android.systemui/u0a102 pkg com.android.systemui
+11-27 11:49:09.951  1904  2780 E ActivityManager: java.lang.Throwable
+11-27 11:49:09.951  1904  2780 E ActivityManager: 	at com.android.server.am.ActivityManagerService.checkBroadcastFromSystem(ActivityManagerService.java:14783)
+11-27 11:49:09.951  1904  2780 E ActivityManager: 	at com.android.server.am.ActivityManagerService.broadcastIntentLocked(ActivityManagerService.java:15424)
+11-27 11:49:09.951  1904  2780 E ActivityManager: 	at com.android.server.am.ActivityManagerService.broadcastIntentLocked(ActivityManagerService.java:14800)
+11-27 11:49:09.951  1904  2780 E ActivityManager: 	at com.android.server.am.ActivityManagerService.broadcastIntent(ActivityManagerService.java:15566)
+11-27 11:49:09.951  1904  2780 E ActivityManager: 	at android.app.IActivityManager$Stub.onTransact(IActivityManager.java:1950)
+11-27 11:49:09.951  1904  2780 E ActivityManager: 	at com.android.server.am.ActivityManagerService.onTransact(ActivityManagerService.java:2741)
+11-27 11:49:09.951  1904  2780 E ActivityManager: 	at android.os.Binder.execTransactInternal(Binder.java:1021)
+11-27 11:49:09.951  1904  2780 E ActivityManager: 	at android.os.Binder.execTransact(Binder.java:994)
+11-27 11:51:09.171  3527  3547 E PAGECHECK: bad=0 []
