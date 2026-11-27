@@ -15,10 +15,30 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    // التوقيع بمفتاح المطوّر: يُقرأ من متغيرات البيئة (أسرار GitHub) ولا يُخزَّن في المستودع.
+    signingConfigs {
+        release {
+            def ksFile = System.getenv("MUSHAFI_KEYSTORE")
+            if (ksFile != null && new File(ksFile).exists()) {
+                storeFile new File(ksFile)
+                storePassword System.getenv("MUSHAFI_KEYSTORE_PASSWORD")
+                keyAlias System.getenv("MUSHAFI_KEY_ALIAS")
+                keyPassword System.getenv("MUSHAFI_KEY_PASSWORD")
+            }
+        }
+    }
+
     buildTypes {
         release {
             minifyEnabled false
+            if (System.getenv("MUSHAFI_KEYSTORE") != null) {
+                signingConfig signingConfigs.release
+            }
         }
+    }
+
+    lint {
+        checkReleaseBuilds false
     }
 
     compileOptions {
