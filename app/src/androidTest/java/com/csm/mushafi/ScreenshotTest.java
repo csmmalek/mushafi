@@ -164,13 +164,13 @@ public class ScreenshotTest {
             Thread.sleep(3500);
             Thread t = new Thread(() -> {
                 try {
-                    shell("input swipe 60 1200 560 1200 3000");
+                    shell("input swipe 40 2100 620 1500 4000");
                 } catch (Exception ignored) {
                     // لقطة فقط
                 }
             });
             t.start();
-            Thread.sleep(1500);
+            Thread.sleep(2600);
             shell("screencap -p /sdcard/shots/curl_mid.png");
             t.join();
             Thread.sleep(1200);

@@ -369,7 +369,7 @@ public class PageReaderActivity extends BaseActivity {
                     boolean towards = curlDir > 0 ? vx > 900 : vx < -900;
                     boolean away = curlDir > 0 ? vx < -900 : vx > 900;
                     boolean complete = towards || (!away && (curlDir > 0
-                            ? curl.progress() > 0.3f : curl.progress() < 0.6f));
+                            ? curl.progress() > 0.22f : curl.progress() < 0.65f));
                     if (ev.getActionMasked() == MotionEvent.ACTION_CANCEL) {
                         complete = false;
                     }
