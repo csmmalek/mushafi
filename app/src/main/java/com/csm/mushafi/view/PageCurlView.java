@@ -64,12 +64,12 @@ public final class PageCurlView extends View {
         paper = paperColor;
         forward = forwardTurn;
         ax = 0f;
-        ay = bottomCorner ? getHeight() : 0f;
+        ay = bottomCorner ? topPage.getHeight() : 0f;
         if (forward) {
             fx = ax;
             fy = ay;
         } else {
-            fx = 2.3f * getWidth();
+            fx = 2.3f * topPage.getWidth();
             fy = ay;
         }
         setVisibility(VISIBLE);
@@ -83,27 +83,35 @@ public final class PageCurlView extends View {
         under = null;
     }
 
+    private int pw() {
+        return top != null ? top.getWidth() : getWidth();
+    }
+
+    private int ph() {
+        return top != null ? top.getHeight() : getHeight();
+    }
+
     public boolean isBusy() {
         return animator != null && animator.isRunning();
     }
 
     /** الزاوية تتبع الإصبع: dx إزاحته الأفقية عن نقطة اللمس، dy إزاحته الرأسية. */
     public void dragForward(float dx, float dy) {
-        fx = clamp(ax + Math.max(0f, dx), 0f, 2.3f * getWidth());
-        fy = clamp(ay + dy * 0.9f, 0f, getHeight());
+        fx = clamp(ax + Math.max(0f, dx), 0f, 2.3f * pw());
+        fy = clamp(ay + dy * 0.9f, 0f, ph());
         invalidate();
     }
 
     /** للخلف: خطّ الطيّ يتبع الإصبع؛ left = مسافة سحب الإصبع نحو اليسار من الحافة اليمنى. */
     public void dragBackward(float left, float dy) {
-        fx = clamp(2.3f * getWidth() - 2f * Math.max(0f, left) , 0f, 2.3f * getWidth());
-        fy = clamp(ay + dy * 0.5f, 0f, getHeight());
+        fx = clamp(2.3f * pw() - 2f * Math.max(0f, left) , 0f, 2.3f * pw());
+        fy = clamp(ay + dy * 0.5f, 0f, ph());
         invalidate();
     }
 
     /** نسبة امتداد الطيّ: موضع خطّ الطيّ الأفقي ÷ العرض (0 مستوية، 1 انصرفت). */
     public float progress() {
-        return clamp(((ax + fx) / 2f) / Math.max(1f, getWidth()), 0f, 1f);
+        return clamp(((ax + fx) / 2f) / Math.max(1f, pw()), 0f, 1f);
     }
 
     /** يُكمل الحركة بعد رفع الإصبع إلى الإتمام أو العودة، بسرعة تناسب المسافة المتبقية. */
@@ -113,14 +121,14 @@ public final class PageCurlView extends View {
         final float ty = ay;
         // الإتمام: للأمام تنصرف الصفحة (F بعيدة)، وللخلف تستقرّ (F = الزاوية)
         if (complete == forward) {
-            tx = 2.3f * getWidth();
+            tx = 2.3f * pw();
         } else {
             tx = ax;
         }
         final float sx = fx;
         final float sy = fy;
         animator = ValueAnimator.ofFloat(0f, 1f);
-        float dist = Math.abs(tx - sx) / (2.3f * Math.max(1, getWidth()));
+        float dist = Math.abs(tx - sx) / (2.3f * Math.max(1, pw()));
         animator.setDuration((long) (140 + 380 * dist));
         animator.setInterpolator(new DecelerateInterpolator(1.4f));
         animator.addUpdateListener(a -> {
