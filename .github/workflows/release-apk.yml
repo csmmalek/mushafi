@@ -37,23 +37,46 @@ jobs:
       - name: Generate Gradle Wrapper
         run: gradle wrapper --gradle-version 8.9
 
-      - name: Build debug APK
-        run: ./gradlew :app:assembleDebug --no-daemon
+      - name: Build APK (signed with the developer key when secrets exist)
+        env:
+          KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.KEY_PASSWORD }}
+        run: |
+          if [[ -n "$KEYSTORE_BASE64" ]]; then
+            echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/mushafi.jks"
+            export MUSHAFI_KEYSTORE="$RUNNER_TEMP/mushafi.jks"
+            export MUSHAFI_KEYSTORE_PASSWORD="$KEYSTORE_PASSWORD"
+            export MUSHAFI_KEY_ALIAS="$KEY_ALIAS"
+            export MUSHAFI_KEY_PASSWORD="$KEY_PASSWORD"
+            ./gradlew :app:assembleRelease :app:bundleRelease --no-daemon
+            echo "SIGNED=1" >> "$GITHUB_ENV"
+          else
+            ./gradlew :app:assembleDebug --no-daemon
+          fi
 
       - name: Publish the APK
         env:
           GH_TOKEN: ${{ github.token }}
           INPUT_VERSION: ${{ github.event.inputs.version }}
         run: |
-          cp app/build/outputs/apk/debug/app-debug.apk mushafi-latest.apk
+          if [[ "${SIGNED:-0}" == "1" ]]; then
+            cp app/build/outputs/apk/release/app-release.apk mushafi-latest.apk
+            cp app/build/outputs/bundle/release/app-release.aab mushafi-latest.aab
+          else
+            cp app/build/outputs/apk/debug/app-debug.apk mushafi-latest.apk
+          fi
           if [[ "${GITHUB_REF}" == refs/tags/v* || -n "${INPUT_VERSION}" ]]; then
             if [[ -n "${INPUT_VERSION}" ]]; then VER="${INPUT_VERSION#v}"; TAG="v${VER}"; else TAG="${GITHUB_REF#refs/tags/}"; VER="${TAG#v}"; fi
             cp mushafi-latest.apk "mushafi-${VER}.apk"
             awk -v v="$VER" '$0 ~ "^## "v" " {f=1; next} /^## / {f=0} f' CHANGELOG.md > notes.md
-            gh release create "$TAG" "mushafi-${VER}.apk" --target "$GITHUB_SHA" --title "مصحفي ${VER}" --notes-file notes.md
+            ASSETS="mushafi-${VER}.apk"
+            if [[ -f mushafi-latest.aab ]]; then cp mushafi-latest.aab "mushafi-${VER}.aab"; ASSETS="$ASSETS mushafi-${VER}.aab"; fi
+            gh release create "$TAG" $ASSETS --target "$GITHUB_SHA" --title "مصحفي ${VER}" --notes-file notes.md
           else
             gh release delete latest --yes --cleanup-tag || true
             gh release create latest mushafi-latest.apk --prerelease \
               --title "مصحفي - أحدث نسخة تجريبية" \
-              --notes "نسخة تجريبية موقّعة بمفتاح debug، بُنيت من الفرع main (${GITHUB_SHA::7}). إن رفض أندرويد التحديث فوق نسخة قديمة فاحذفها ثم ثبّت."
+              --notes "نسخة تجريبية (موقّعة بمفتاح المطوّر إن توفّر وإلا بمفتاح debug)، بُنيت من الفرع main (${GITHUB_SHA::7}). إن رفض أندرويد التحديث فوق نسخة قديمة فاحذفها ثم ثبّت."
           fi
