@@ -26,6 +26,7 @@ public class ScreenshotTest {
         Context ctx = ApplicationProvider.getApplicationContext();
         new QuranRepository(ctx).verifyAndImportIfNeeded();
         shell("mkdir -p /sdcard/shots");
+        shell("settings put secure immersive_mode_confirmations confirmed");
 
         try (ActivityScenario<MainActivity> s = ActivityScenario.launch(MainActivity.class)) {
             Thread.sleep(3000);
@@ -124,6 +125,7 @@ public class ScreenshotTest {
         Context ctx = ApplicationProvider.getApplicationContext();
         new QuranRepository(ctx).verifyAndImportIfNeeded();
         shell("mkdir -p /sdcard/shots");
+        shell("settings put secure immersive_mode_confirmations confirmed");
         Class<?>[] screens = {TasbihActivity.class, AdhkarActivity.class, HelpActivity.class};
         String[] names = {"tasbih", "adhkar", "help"};
         for (int i = 0; i < screens.length; i++) {
@@ -171,6 +173,7 @@ public class ScreenshotTest {
         Context ctx = ApplicationProvider.getApplicationContext();
         new QuranRepository(ctx).verifyAndImportIfNeeded();
         shell("mkdir -p /sdcard/shots");
+        shell("settings put secure immersive_mode_confirmations confirmed");
         shell("settings put secure immersive_mode_confirmations confirmed");
         Intent page = new Intent(ctx, PageReaderActivity.class);
         page.putExtra(ReaderActivity.EXTRA_SURAH, 36);
