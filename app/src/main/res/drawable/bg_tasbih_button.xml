@@ -1,18 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
-<ripple xmlns:android="http://schemas.android.com/apk/res/android" android:color="?attr/accentSoft">
-    <item>
+<selector xmlns:android="http://schemas.android.com/apk/res/android">
+    <item android:state_pressed="true">
         <layer-list>
-            <item>
+            <item android:top="10dp">
                 <shape android:shape="oval">
-                    <gradient android:angle="315" android:startColor="?attr/accent" android:endColor="?attr/accentSoft" />
-                    <stroke android:width="3dp" android:color="?attr/glassStroke" />
-                </shape>
-            </item>
-            <item android:left="14dp" android:right="14dp" android:top="10dp" android:bottom="120dp">
-                <shape android:shape="oval">
-                    <gradient android:angle="270" android:startColor="#88FFFFFF" android:endColor="#00FFFFFF" />
+                    <gradient android:angle="270" android:startColor="?attr/accentSoft" android:endColor="?attr/accent" />
+                    <stroke android:width="2dp" android:color="#66FFFFFF" />
                 </shape>
             </item>
         </layer-list>
     </item>
-</ripple>
+    <item>
+        <layer-list>
+            <item android:top="10dp">
+                <shape android:shape="oval">
+                    <solid android:color="#66000000" />
+                </shape>
+            </item>
+            <item android:bottom="10dp">
+                <shape android:shape="oval">
+                    <gradient android:angle="270" android:startColor="?attr/accentSoft" android:endColor="?attr/accent" />
+                    <stroke android:width="2dp" android:color="#88FFFFFF" />
+                </shape>
+            </item>
+        </layer-list>
+    </item>
+</selector>

@@ -152,6 +152,32 @@ public class ScreenshotTest {
         }
     }
 
+    @Test
+    public void captureCurl() throws Exception {
+        Context ctx = ApplicationProvider.getApplicationContext();
+        new QuranRepository(ctx).verifyAndImportIfNeeded();
+        shell("mkdir -p /sdcard/shots");
+        Intent page = new Intent(ctx, PageReaderActivity.class);
+        page.putExtra(ReaderActivity.EXTRA_SURAH, 36);
+        page.putExtra(ReaderActivity.EXTRA_AYAH, 1);
+        try (ActivityScenario<PageReaderActivity> s = ActivityScenario.launch(page)) {
+            Thread.sleep(3500);
+            Thread t = new Thread(() -> {
+                try {
+                    shell("input swipe 60 1200 560 1200 3000");
+                } catch (Exception ignored) {
+                    // لقطة فقط
+                }
+            });
+            t.start();
+            Thread.sleep(1500);
+            shell("screencap -p /sdcard/shots/curl_mid.png");
+            t.join();
+            Thread.sleep(1200);
+            shell("screencap -p /sdcard/shots/curl_done.png");
+        }
+    }
+
     private static void shell(String cmd) throws Exception {
         Instrumentation inst = InstrumentationRegistry.getInstrumentation();
         ParcelFileDescriptor pfd = inst.getUiAutomation().executeShellCommand(cmd);

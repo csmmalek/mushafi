@@ -9,6 +9,12 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent" />
 
+    <com.csm.mushafi.view.PageCurlView
+        android:id="@+id/page_curl"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:visibility="gone" />
+
     <LinearLayout
         android:id="@+id/reader_top"
         android:layout_width="match_parent"

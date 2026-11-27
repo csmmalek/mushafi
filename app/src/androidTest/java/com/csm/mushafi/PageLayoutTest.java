@@ -27,13 +27,23 @@ import java.util.List;
 @RunWith(AndroidJUnit4.class)
 public class PageLayoutTest {
 
+    private static byte[] readAll(InputStream in) throws java.io.IOException {
+        java.io.ByteArrayOutputStream out = new java.io.ByteArrayOutputStream();
+        byte[] buf = new byte[8192];
+        int n;
+        while ((n = in.read(buf)) != -1) {
+            out.write(buf, 0, n);
+        }
+        return out.toByteArray();
+    }
+
     @Test
     public void everyPageKeepsItsPrintedLineCount() throws Exception {
         Context ctx = ApplicationProvider.getApplicationContext();
         new QuranRepository(ctx).verifyAndImportIfNeeded();
         MushafLines lines;
         try (InputStream in = ctx.getAssets().open("mushaf-lines.json")) {
-            lines = MushafLines.parse(new String(in.readAllBytes(), "UTF-8"));
+            lines = MushafLines.parse(new String(readAll(in), "UTF-8"));
         }
         Intent intent = new Intent(ctx, PageReaderActivity.class);
         intent.putExtra(ReaderActivity.EXTRA_SURAH, 1);
