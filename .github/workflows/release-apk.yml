@@ -37,6 +37,13 @@ jobs:
       - name: Generate Gradle Wrapper
         run: gradle wrapper --gradle-version 8.9
 
+      - name: Which signing secrets are visible (names only)
+        run: |
+          echo "KEYSTORE_BASE64 set: ${{ secrets.KEYSTORE_BASE64 != '' }}"
+          echo "KEYSTORE_PASSWORD set: ${{ secrets.KEYSTORE_PASSWORD != '' }}"
+          echo "KEY_ALIAS set: ${{ secrets.KEY_ALIAS != '' }}"
+          echo "KEY_PASSWORD set: ${{ secrets.KEY_PASSWORD != '' }}"
+
       - name: Build APK (signed with the developer key when secrets exist)
         env:
           KEYSTORE_BASE64: ${{ secrets.KEYSTORE_BASE64 }}
