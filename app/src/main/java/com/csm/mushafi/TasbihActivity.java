@@ -36,7 +36,7 @@ public class TasbihActivity extends BaseActivity {
         phrase = store.getInt("phrase", 0);
         targetIndex = store.getInt("target", 0);
         phraseText = findViewById(R.id.tasbih_phrase);
-        countText = findViewById(R.id.tasbih_count);
+        countText = findViewById(R.id.tasbih_tap);
         totalText = findViewById(R.id.tasbih_total);
         targetText = findViewById(R.id.tasbih_target);
         findViewById(R.id.btn_back).setOnClickListener(v -> finish());
@@ -75,9 +75,13 @@ public class TasbihActivity extends BaseActivity {
 
     @SuppressWarnings("deprecation")
     private void buzz(long ms) {
-        Vibrator vib = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-        if (vib != null && vib.hasVibrator()) {
-            vib.vibrate(VibrationEffect.createOneShot(ms, VibrationEffect.DEFAULT_AMPLITUDE));
+        try {
+            Vibrator vib = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
+            if (vib != null && vib.hasVibrator()) {
+                vib.vibrate(VibrationEffect.createOneShot(ms, VibrationEffect.DEFAULT_AMPLITUDE));
+            }
+        } catch (RuntimeException ignored) {
+            // الاهتزاز اختياري ولا يجب أن يوقف العدّ
         }
     }
 

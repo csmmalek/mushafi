@@ -38,6 +38,9 @@ import android.text.style.ClickableSpan;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.view.LayoutInflater;
+import android.graphics.Bitmap;
+import android.graphics.Canvas;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.WindowManager;
@@ -80,6 +83,7 @@ public class PageReaderActivity extends BaseActivity {
     private final Handler main = new Handler(Looper.getMainLooper());
 
     private ViewPager2 pager;
+    private com.csm.mushafi.view.PageCurlView curl;
     private SeekBar seek;
     private TextView positionText;
     private TextView titleText;
@@ -297,6 +301,146 @@ public class PageReaderActivity extends BaseActivity {
         }
     }
 
+
+    // ---- تقليب الصفحة بطيّ ورقي ----
+
+    private float downX;
+    private float downY;
+    private boolean tracking;
+    private boolean curling;
+    private boolean bottomGrab;
+    private int curlDir;
+    private android.view.VelocityTracker velocity;
+
+    @Override
+    public boolean dispatchTouchEvent(MotionEvent ev) {
+        if (menuOpen || curl == null || pager == null) {
+            return super.dispatchTouchEvent(ev);
+        }
+        switch (ev.getActionMasked()) {
+            case MotionEvent.ACTION_DOWN:
+                tracking = !curl.isBusy() && !curling;
+                downX = ev.getX();
+                downY = ev.getY();
+                bottomGrab = downY > pager.getHeight() / 2f;
+                if (velocity != null) {
+                    velocity.recycle();
+                }
+                velocity = android.view.VelocityTracker.obtain();
+                velocity.addMovement(ev);
+                break;
+            case MotionEvent.ACTION_MOVE:
+                if (velocity != null) {
+                    velocity.addMovement(ev);
+                }
+                if (tracking && !curling) {
+                    float dx = ev.getX() - downX;
+                    float dy = ev.getY() - downY;
+                    int slop = android.view.ViewConfiguration.get(this).getScaledTouchSlop();
+                    if (Math.abs(dx) > slop * 2 && Math.abs(dx) > Math.abs(dy) * 1.4f) {
+                        if (startCurl(dx > 0 ? 1 : -1)) {
+                            MotionEvent cancel = MotionEvent.obtain(ev);
+                            cancel.setAction(MotionEvent.ACTION_CANCEL);
+                            super.dispatchTouchEvent(cancel);
+                            cancel.recycle();
+                        } else {
+                            tracking = false;
+                        }
+                    }
+                }
+                if (curling) {
+                    float dx = ev.getX() - downX;
+                    float dy = ev.getY() - downY;
+                    if (curlDir > 0) {
+                        curl.dragForward(dx, bottomGrab ? dy : dy);
+                    } else {
+                        curl.dragBackward(-dx, dy);
+                    }
+                    return true;
+                }
+                break;
+            case MotionEvent.ACTION_UP:
+            case MotionEvent.ACTION_CANCEL:
+                tracking = false;
+                if (curling) {
+                    velocity.addMovement(ev);
+                    velocity.computeCurrentVelocity(1000);
+                    float vx = velocity.getXVelocity();
+                    boolean towards = curlDir > 0 ? vx > 900 : vx < -900;
+                    boolean away = curlDir > 0 ? vx < -900 : vx > 900;
+                    boolean complete = towards || (!away && (curlDir > 0
+                            ? curl.progress() > 0.22f : curl.progress() < 0.65f));
+                    if (ev.getActionMasked() == MotionEvent.ACTION_CANCEL) {
+                        complete = false;
+                    }
+                    finishCurl(complete);
+                    return true;
+                }
+                break;
+            default:
+                break;
+        }
+        return super.dispatchTouchEvent(ev);
+    }
+
+    private Bitmap capturePage(int position) {
+        RecyclerView rv = (RecyclerView) pager.getChildAt(0);
+        RecyclerView.ViewHolder h = rv.findViewHolderForAdapterPosition(position);
+        int w = pager.getWidth();
+        int hgt = pager.getHeight();
+        if (h == null || w <= 0 || hgt <= 0) {
+            return null;
+        }
+        Bitmap b = Bitmap.createBitmap(w, hgt, Bitmap.Config.ARGB_8888);
+        Canvas canvas = new Canvas(b);
+        View root = (View) pager.getParent();
+        if (root.getBackground() != null) {
+            root.getBackground().setBounds(0, 0, w, hgt);
+            root.getBackground().draw(canvas);
+        }
+        View item = h.itemView;
+        canvas.save();
+        canvas.translate(-item.getLeft(), -item.getTop());
+        canvas.translate(item.getLeft(), item.getTop());
+        item.draw(canvas);
+        canvas.restore();
+        return b;
+    }
+
+    private boolean startCurl(int dir) {
+        int pos = pager.getCurrentItem();
+        int other = pos + dir;
+        if (other < 0 || other >= MushafMeta.PAGES) {
+            return false;
+        }
+        Bitmap current = capturePage(pos);
+        Bitmap neighbour = capturePage(other);
+        if (current == null || neighbour == null) {
+            return false;
+        }
+        int paper = PageTheme.of(prefs.pageTheme()).paper;
+        if (dir > 0) {
+            curl.begin(current, neighbour, paper, true, bottomGrab);
+        } else {
+            curl.begin(neighbour, current, paper, false, bottomGrab);
+        }
+        curling = true;
+        curlDir = dir;
+        playFlip();
+        return true;
+    }
+
+    private void finishCurl(boolean complete) {
+        final int target = pager.getCurrentItem() + (complete ? curlDir : 0);
+        curl.finish(complete, done -> {
+            if (complete) {
+                pager.setCurrentItem(target, false);
+            }
+            curl.post(() -> curl.end());
+            curling = false;
+        });
+    }
+
     private void playFlip() {
         if (soundPool != null && prefs.pageSound()) {
             soundPool.play(flipSound, 0.8f, 0.8f, 1, 0, 1f);
@@ -354,7 +498,8 @@ public class PageReaderActivity extends BaseActivity {
         adapter = new PageAdapter();
         pager.setAdapter(adapter);
         pager.setOffscreenPageLimit(1);
-        pager.setPageTransformer(new com.csm.mushafi.view.BookPageTransformer());
+        pager.setUserInputEnabled(false);
+        curl = findViewById(R.id.page_curl);
         soundPool = new android.media.SoundPool.Builder().setMaxStreams(2).build();
         flipSound = soundPool.load(this, R.raw.page_flip, 1);
         Button soundButton = findViewById(R.id.btn_sound);
@@ -368,9 +513,7 @@ public class PageReaderActivity extends BaseActivity {
             @Override
             public void onPageSelected(int position) {
                 updatePage(position + 1);
-                if (pager.getScrollState() != ViewPager2.SCROLL_STATE_IDLE) {
-                    playFlip();
-                }
+
             }
         });
         seek.setOnSeekBarChangeListener(new SeekBar.OnSeekBarChangeListener() {

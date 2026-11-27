@@ -2,7 +2,7 @@ name: Emulator tests (Android 10)
 
 on:
   push:
-    branches: [stage-5, stage-6, stage-7, stage-8, stage-9, stage-10, stage-11, stage-12, stage-13, stage-14, stage-15]
+    branches: [stage-5, stage-6, stage-7, stage-8, stage-9, stage-10, stage-11, stage-12, stage-13, stage-14, stage-15, stage-16]
   workflow_dispatch:
 
 permissions:
@@ -50,7 +50,7 @@ jobs:
             ./gradlew :app:connectedDebugAndroidTest --no-daemon || echo "TESTS_FAILED" > tests_failed.flag
             mkdir -p shots
             adb pull /sdcard/shots/. ./shots/ || true
-            adb logcat -d -s AndroidRuntime:E ActivityManager:E libc:F DEBUG:F > shots/logcat.txt || true
+            adb logcat -d -s PAGECHECK:E AndroidRuntime:E ActivityManager:E libc:F DEBUG:F > shots/logcat.txt || true
             test ! -f tests_failed.flag
 
       - name: Publish screenshots branch

@@ -119,6 +119,92 @@ public class ScreenshotTest {
         }
     }
 
+    @Test
+    public void captureNewScreens() throws Exception {
+        Context ctx = ApplicationProvider.getApplicationContext();
+        new QuranRepository(ctx).verifyAndImportIfNeeded();
+        shell("mkdir -p /sdcard/shots");
+        Class<?>[] screens = {TasbihActivity.class, AdhkarActivity.class, HelpActivity.class};
+        String[] names = {"tasbih", "adhkar", "help"};
+        for (int i = 0; i < screens.length; i++) {
+            try (ActivityScenario<?> s = ActivityScenario.launch(new Intent(ctx, screens[i]))) {
+                Thread.sleep(1500);
+                shell("screencap -p /sdcard/shots/" + names[i] + ".png");
+            }
+        }
+        Intent read = new Intent(ctx, AdhkarReadActivity.class);
+        read.putExtra(AdhkarReadActivity.EXTRA_INDEX, 0);
+        try (ActivityScenario<AdhkarReadActivity> s = ActivityScenario.launch(read)) {
+            Thread.sleep(1500);
+            shell("screencap -p /sdcard/shots/adhkar_read.png");
+        }
+        Intent page = new Intent(ctx, PageReaderActivity.class);
+        page.putExtra(ReaderActivity.EXTRA_SURAH, 18);
+        page.putExtra(ReaderActivity.EXTRA_AYAH, 1);
+        try (ActivityScenario<PageReaderActivity> s = ActivityScenario.launch(page)) {
+            Thread.sleep(3500);
+            s.onActivity(a -> {
+                a.findViewById(R.id.btn_menu).setVisibility(android.view.View.VISIBLE);
+                a.findViewById(R.id.btn_menu).performClick();
+            });
+            Thread.sleep(800);
+            shell("screencap -p /sdcard/shots/reader_menu.png");
+        }
+    }
+
+    private static long downTime;
+
+    private static void touch(ActivityScenario<PageReaderActivity> s, int action, float x, float y) {
+        s.onActivity(a -> {
+            long now = android.os.SystemClock.uptimeMillis();
+            if (action == android.view.MotionEvent.ACTION_DOWN) {
+                downTime = now;
+            }
+            android.view.MotionEvent e = android.view.MotionEvent.obtain(downTime, now, action, x, y, 0);
+            a.dispatchTouchEvent(e);
+            e.recycle();
+        });
+    }
+
+    @Test
+    public void captureCurl() throws Exception {
+        Context ctx = ApplicationProvider.getApplicationContext();
+        new QuranRepository(ctx).verifyAndImportIfNeeded();
+        shell("mkdir -p /sdcard/shots");
+        shell("settings put secure immersive_mode_confirmations confirmed");
+        Intent page = new Intent(ctx, PageReaderActivity.class);
+        page.putExtra(ReaderActivity.EXTRA_SURAH, 36);
+        page.putExtra(ReaderActivity.EXTRA_AYAH, 1);
+        try (ActivityScenario<PageReaderActivity> s = ActivityScenario.launch(page)) {
+            Thread.sleep(3500);
+            float w = ctx.getResources().getDisplayMetrics().widthPixels;
+            float h = ctx.getResources().getDisplayMetrics().heightPixels;
+            touch(s, android.view.MotionEvent.ACTION_DOWN, 30, h - 120);
+            float[][] path = {{120, h - 180}, {260, h - 300}, {420, h - 430}, {560, h - 560}};
+            for (float[] p : path) {
+                Thread.sleep(50);
+                touch(s, android.view.MotionEvent.ACTION_MOVE, p[0], p[1]);
+            }
+            Thread.sleep(400);
+            shell("screencap -p /sdcard/shots/curl_mid.png");
+            // الرجوع بالإصبع: يجب أن تتبعه الصفحة للخلف
+            for (float[] p : new float[][]{{380, h - 400}, {220, h - 280}}) {
+                Thread.sleep(50);
+                touch(s, android.view.MotionEvent.ACTION_MOVE, p[0], p[1]);
+            }
+            Thread.sleep(400);
+            shell("screencap -p /sdcard/shots/curl_back.png");
+            // ثم يتقدّم ويفلت بعد العتبة فتكتمل الصفحة
+            for (float[] p : new float[][]{{500, h - 500}, {700, h - 650}}) {
+                Thread.sleep(50);
+                touch(s, android.view.MotionEvent.ACTION_MOVE, p[0], p[1]);
+            }
+            touch(s, android.view.MotionEvent.ACTION_UP, 700, h - 650);
+            Thread.sleep(1500);
+            shell("screencap -p /sdcard/shots/curl_done.png");
+        }
+    }
+
     private static void shell(String cmd) throws Exception {
         Instrumentation inst = InstrumentationRegistry.getInstrumentation();
         ParcelFileDescriptor pfd = inst.getUiAutomation().executeShellCommand(cmd);
