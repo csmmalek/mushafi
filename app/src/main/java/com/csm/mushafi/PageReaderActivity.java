@@ -308,6 +308,7 @@ public class PageReaderActivity extends BaseActivity {
     private float downY;
     private boolean tracking;
     private boolean curling;
+    private boolean bottomGrab;
     private int curlDir;
     private android.view.VelocityTracker velocity;
 
@@ -321,6 +322,7 @@ public class PageReaderActivity extends BaseActivity {
                 tracking = !curl.isBusy() && !curling;
                 downX = ev.getX();
                 downY = ev.getY();
+                bottomGrab = downY > pager.getHeight() / 2f;
                 if (velocity != null) {
                     velocity.recycle();
                 }
@@ -348,10 +350,11 @@ public class PageReaderActivity extends BaseActivity {
                 }
                 if (curling) {
                     float dx = ev.getX() - downX;
+                    float dy = ev.getY() - downY;
                     if (curlDir > 0) {
-                        curl.dragForward(dx);
+                        curl.dragForward(dx, bottomGrab ? dy : dy);
                     } else {
-                        curl.dragBackward(-dx / (pager.getWidth() * 0.8f));
+                        curl.dragBackward(-dx, dy);
                     }
                     return true;
                 }
@@ -366,7 +369,7 @@ public class PageReaderActivity extends BaseActivity {
                     boolean towards = curlDir > 0 ? vx > 900 : vx < -900;
                     boolean away = curlDir > 0 ? vx < -900 : vx > 900;
                     boolean complete = towards || (!away && (curlDir > 0
-                            ? curl.progress() > 0.3f : curl.progress() < 0.7f));
+                            ? curl.progress() > 0.3f : curl.progress() < 0.6f));
                     if (ev.getActionMasked() == MotionEvent.ACTION_CANCEL) {
                         complete = false;
                     }
@@ -417,9 +420,9 @@ public class PageReaderActivity extends BaseActivity {
         }
         int paper = PageTheme.of(prefs.pageTheme()).paper;
         if (dir > 0) {
-            curl.begin(current, neighbour, paper, true);
+            curl.begin(current, neighbour, paper, true, bottomGrab);
         } else {
-            curl.begin(neighbour, current, paper, false);
+            curl.begin(neighbour, current, paper, false, bottomGrab);
         }
         curling = true;
         curlDir = dir;
